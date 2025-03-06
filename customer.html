@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户资料管理</title>
+    <link rel="stylesheet" href="customer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header class="top-bar">
+        <h1>管理系统</h1>
+    </header>
+    <nav class="sidebar">
+        <ul>
+            <li class="dropdown">
+                <a href="#system" class="dropdown-toggle">系统管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="codemanagement.html">代码管理</a></li>
+                    <li><a href="#" data-page="authmanagement.html">授权管理</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#customer" class="dropdown-toggle">客户管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="ccategoria.html">客户类别</a></li>
+                    <li><a href="#" data-page="customer.html">客户资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#supplier" class="dropdown-toggle">供应商管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="scategoria.html">供应商类别</a></li>
+                    <li><a href="#" data-page="supplier.html">供应商资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#product" class="dropdown-toggle">产品管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="pcategoria.html">产品类别</a></li>
+                    <li><a href="#" data-page="product.html">产品资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#price" class="dropdown-toggle">价格管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="prcategoria.html">价格表分类</a></li>
+                    <li><a href="#" data-page="price.html">价格表资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#purchase" class="dropdown-toggle">采购管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="purchaseprice.html">采购报价管理</a></li>
+                    <li><a href="#" data-page="purchaseorder.html">采购订单管理</a></li>
+                    <li><a href="#" data-page="purchaseorderinstocklist.html">采购入库</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#sales" class="dropdown-toggle">销售管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="cotation.html">报价管理</a></li>
+                    <li><a href="#" data-page="order.html">订单管理</a></li>
+                    <li><a href="#" data-page="despatch.html">出货管理</a></li>
+                </ul>
+            </li>
+            <li><a href="#" data-page="stockmanagement.html">库存管理</a></li>
+            <li class="dropdown">
+                <a href="#invoice" class="dropdown-toggle">发票管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="salesinvoicelist.html">销售发票</a></li>
+                    <li><a href="#" data-page="purchaseinvoice.html">采购发票</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#finance" class="dropdown-toggle">财务管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="receivables.html">应收管理</a></li>
+                    <li><a href="#" data-page="payables.html">应付管理</a></li>
+                    <li><a href="#" data-page="financialreport.html">财务报表</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <main class="content">
+        <div class="content-wrapper">
+            <div class="table-header">
+                <h2>客户资料列表</h2>
+                <button class="add-btn">添加客户</button>
+            </div>
+            <div class="table-container">
+                <table class="customer-table">
+                    <thead>
+                        <tr>
+                            <th>客户代码</th>
+                            <th>客户名称</th>
+                            <th>客户类别</th>
+                            <th>客户地址</th>
+                            <th>客户电话</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 初始数据示例 -->
+                        <tr>
+                            <td>CUS001</td>
+                            <td>张三</td>
+                            <td>零售客户</td>
+                            <td>北京市朝阳区</td>
+                            <td>13812345678</td>
+                            <td>
+                                <span class="action-icon view-icon"><i class="fas fa-eye"></i></span>
+                                <span class="action-icon edit-icon"><i class="fas fa-edit"></i></span>
+                                <span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 固定分页控件 -->
+            <div class="pagination">
+                <button class="page-btn prev-btn" disabled>上一页</button>
+                <span>第 1 页 / 共 1 页</span>
+                <button class="page-btn next-btn" disabled>下一页</button>
+            </div>
+        </div>
+
+        <!-- 添加/编辑客户模态框 -->
+        <div class="modal" id="addCustomerModal">
+            <div class="modal-content">
+                <h3>添加新客户</h3>
+                <form id="customerForm">
+                    <div class="form-container">
+                        <!-- 第一组：基本信息 -->
+                        <div class="form-section">
+                            <h4>基本信息</h4>
+                            <div class="form-group">
+                                <label for="customerCode">客户代码</label>
+                                <div style="position: relative;">
+                                    <input type="text" id="customerCode" name="customerCode" placeholder="请输入客户代码" required>
+                                    <button type="button" id="generateCodeBtn" class="generate-btn">生成</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerName">客户名称</label>
+                                <input type="text" id="customerName" name="customerName" placeholder="请输入客户名称" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="taxNumber">税号</label>
+                                <input type="text" id="taxNumber" name="taxNumber" placeholder="请输入税号" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerCategory">客户类别</label>
+                                <select id="customerCategory" name="customerCategory" required>
+                                    <option value="">请选择类别</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 第二组：地址信息 -->
+                        <div class="form-section">
+                            <h4>地址信息</h4>
+                            <div class="form-group">
+                                <label for="customerAddress">地址</label>
+                                <input type="text" id="customerAddress" name="customerAddress" placeholder="请输入地址" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">城市</label>
+                                <input type="text" id="city" name="city" placeholder="请输入城市" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="province">省份</label>
+                                <input type="text" id="province" name="province" placeholder="请输入省份" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">国家</label>
+                                <input type="text" id="country" name="country" placeholder="请输入国家" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="postalCode">邮编</label>
+                                <input type="text" id="postalCode" name="postalCode" placeholder="请输入邮编" required>
+                            </div>
+                        </div>
+
+                        <!-- 第三组：联系信息 -->
+                        <div class="form-section">
+                            <h4>联系信息</h4>
+                            <div class="form-group">
+                                <label for="customerPhone">电话</label>
+                                <input type="text" id="customerPhone" name="customerPhone" placeholder="请输入电话" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">电子邮件</label>
+                                <input type="email" id="email" name="email" placeholder="请输入电子邮件" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactPerson">联系人</label>
+                                <input type="text" id="contactPerson" name="contactPerson" placeholder="请输入联系人">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactPhone">联系人电话</label>
+                                <input type="text" id="contactPhone" name="contactPhone" placeholder="请输入联系人电话">
+                            </div>
+                        </div>
+
+                        <!-- 第四组：其他信息 -->
+                        <div class="form-section">
+                            <h4>其他信息</h4>
+                            <div class="form-group">
+                                <label for="priceCategory">价格表信息</label>
+                                <select id="priceCategory" name="priceCategory">
+                                    <option value="">请选择价格表类别</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">状态</label>
+                                <select id="status" name="status" required>
+                                    <option value="">请选择状态</option>
+                                    <option value="启用">启用</option>
+                                    <option value="停止">停止</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentTerms">付款条件</label>
+                                <input type="text" id="paymentTerms" name="paymentTerms" placeholder="请输入付款条件">
+                            </div>
+                            <div class="form-group">
+                                <label for="remarks">备注</label>
+                                <input type="text" id="remarks" name="remarks" placeholder="请输入备注">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="cancel-btn">取消</button>
+                        <button type="submit" class="save-btn">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="customer.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91bad0a61dafb093',t:'MTc0MTE5MDMwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

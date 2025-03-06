@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加出货单</title>
+    <link rel="stylesheet" href="despatchout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <main class="content">
+        <div class="table-header">
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
+            <button class="invoice-btn"><i class="fas fa-file-invoice"></i> 转发票</button>
+            <h2>出货单明细列表</h2>
+            <div class="button-group">
+                <button class="add-btn"><i class="fas fa-plus"></i></button>
+                <button class="print-btn"><i class="fas fa-print"></i></button>
+                <button class="save-all-btn"><i class="fas fa-save"></i></button>
+            </div>
+        </div>
+        <div class="order-info">
+            <div class="form-group">
+                <label for="despatchCode">出货单编号:</label>
+                <div style="position: relative;">
+                    <input type="text" id="despatchCode" name="despatchCode" placeholder="请输入出货单编号" required>
+                    <button type="button" id="generateCodeBtn" class="generate-btn">生成</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="customerCode">客户代码:</label>
+                <select id="customerCode" name="customerCode" required>
+                    <option value="">请选择客户</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="customerName">客户名称:</label>
+                <input type="text" id="customerName" name="customerName" placeholder="请输入客户名称" readonly>
+            </div>
+            <div class="form-group">
+                <label for="despatchDate">出货日期:</label>
+                <input type="date" id="despatchDate" name="despatchDate" required>
+            </div>
+            <div class="form-group">
+                <label for="status">状态:</label>
+                <select id="status" name="status" required>
+                    <option value="未开票">未开票</option>
+                    <option value="已开票">已开票</option>
+                </select>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>产品代码</th>
+                        <th>产品名称</th>
+                        <th>LOTE</th>
+                        <th>库存</th>
+                        <th>数量</th>
+                        <th>销售价格</th>
+                        <th>税率</th>
+                        <th>总价</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 动态加载出货单明细 -->
+                </tbody>
+            </table>
+        </div>
+        <div class="totals-section">
+            <h3>出货总额: <span class="grand-total">0.00</span></h3>
+            <div id="totals-container">
+                <!-- 动态生成税率分组总额 -->
+            </div>
+        </div>
+    </main>
+    <script src="despatchout.js"></script>
+</body>
+</html>

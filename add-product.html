@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加新产品</title>
+    <link rel="stylesheet" href="add-product.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header class="top-bar">
+        <h1>管理系统</h1>
+    </header>
+    <nav class="sidebar">
+        <ul>
+            <li class="dropdown">
+                <a href="#system" class="dropdown-toggle">系统管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="codemanagement.html">代码管理</a></li>
+                    <li><a href="#" data-page="authmanagement.html">授权管理</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#customer" class="dropdown-toggle">客户管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="ccategoria.html">客户类别</a></li>
+                    <li><a href="#" data-page="customer.html">客户资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#supplier" class="dropdown-toggle">供应商管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="scategoria.html">供应商类别</a></li>
+                    <li><a href="#" data-page="supplier.html">供应商资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#product" class="dropdown-toggle">产品管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="pcategoria.html">产品类别</a></li>
+                    <li><a href="#" data-page="product.html">产品资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#price" class="dropdown-toggle">价格管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="prcategoria.html">价格表分类</a></li>
+                    <li><a href="#" data-page="price.html">价格表资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#purchase" class="dropdown-toggle">采购管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="purchaseprice.html">采购报价管理</a></li>
+                    <li><a href="#" data-page="purchaseorder.html">采购订单管理</a></li>
+                    <li><a href="#" data-page="purchaseorderinstocklist.html">采购入库</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#sales" class="dropdown-toggle">销售管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="cotation.html">报价管理</a></li>
+                    <li><a href="#" data-page="order.html">订单管理</a></li>
+                    <li><a href="#" data-page="despatch.html">出货管理</a></li>
+                </ul>
+            </li>
+            <li><a href="#" data-page="stockmanagement.html">库存管理</a></li>
+            <li class="dropdown">
+                <a href="#invoice" class="dropdown-toggle">发票管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="salesinvoicelist.html">销售发票</a></li>
+                    <li><a href="#" data-page="purchaseinvoice.html">采购发票</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#finance" class="dropdown-toggle">财务管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="receivables.html">应收管理</a></li>
+                    <li><a href="#" data-page="payables.html">应付管理</a></li>
+                    <li><a href="#" data-page="financialreport.html">财务报表</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <main class="content">
+        <div class="add-product-container">
+            <h2 class="page-title">添加新产品</h2>
+            <form id="productForm">
+                <div class="form-container">
+                    <div class="form-section">
+                        <h4>基本信息</h4>
+                        <div class="form-group">
+                            <label for="productCode">产品编码</label>
+                            <div style="position: relative;">
+                                <input type="text" id="productCode" name="productCode" placeholder="请输入产品编码" required>
+                                <button type="button" id="generateCodeBtn" class="generate-btn">生成</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="productName">产品名称</label>
+                            <input type="text" id="productName" name="productName" placeholder="请输入产品名称" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierProductCode">供应商产品编码</label>
+                            <input type="text" id="supplierProductCode" name="supplierProductCode" placeholder="请输入供应商产品编码" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierProductName">供应商产品名称</label>
+                            <input type="text" id="supplierProductName" name="supplierProductName" placeholder="请输入供应商产品名称" required>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h4>规格信息</h4>
+                        <div class="form-group">
+                            <label for="unit">单位</label>
+                            <input type="text" id="unit" name="unit" placeholder="请输入单位（如：个、件）" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="specification">规格</label>
+                            <input type="text" id="specification" name="specification" placeholder="请输入规格（如：500ml）" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productCategory">产品类别</label>
+                            <select id="productCategory" name="productCategory" required>
+                                <option value="">请选择类别</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h4>价格信息</h4>
+                        <div class="form-group">
+                            <label for="purchasePrice">采购价格</label>
+                            <input type="number" id="purchasePrice" name="purchasePrice" placeholder="请输入采购价格" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sellingPrice">销售价格</label>
+                            <input type="number" id="sellingPrice" name="sellingPrice" placeholder="请输入销售价格" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="retailPrice">零售价格</label>
+                            <input type="number" id="retailPrice" name="retailPrice" placeholder="请输入零售价格" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="taxRate">税率</label>
+                            <select id="taxRate" name="taxRate">
+                                <option value="">请选择税率</option>
+                                <option value="0">0%</option>
+                                <option value="0.05">5%</option>
+                                <option value="0.10">10%</option>
+                                <option value="0.21">21%</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="currency">币种</label>
+                            <div class="currency-container">
+                                <input type="text" id="currency" name="currency" placeholder="请选择币种" readonly required>
+                                <div class="currency-dropdown" id="currencyDropdown">
+                                    <div class="currency-option" data-value="EUR">欧元 (EUR)</div>
+                                    <div class="currency-option" data-value="USD">美元 (USD)</div>
+                                    <div class="currency-option" data-value="JPY">日元 (JPY)</div>
+                                    <div class="currency-option" data-value="CNY">人民币 (CNY)</div>
+                                    <div class="currency-option" data-value="GBP">英镑 (GBP)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h4>其他信息</h4>
+                        <div class="form-group">
+                            <label for="safetyStock">安全库存</label>
+                            <input type="number" id="safetyStock" name="safetyStock" placeholder="请输入安全库存" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription">产品描述</label>
+                            <textarea id="productDescription" name="productDescription" placeholder="请输入产品描述" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPhoto">上传照片</label>
+                            <input type="file" id="productPhoto" name="productPhoto" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="cancel-btn" id="cancelBtn">取消</button>
+                    <button type="submit" class="save-btn">确认</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script src="add-product.js"></script>
+</body>
+</html>

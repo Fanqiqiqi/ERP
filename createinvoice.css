@@ -1,0 +1,375 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+.content {
+    padding: 5px 40px 40px 40px; /* 顶部为 5px，与 despatchout.css 一致 */
+    position: relative;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.table-header h2 {
+    font-size: 28px;
+    color: #2e3b3e;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.back-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.back-btn i {
+    margin-right: 5px;
+}
+
+.back-btn:hover {
+    background-color: #0093b3;
+    transform: scale(1.05);
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.add-btn, .save-all-btn, .print-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.add-btn:hover, .save-all-btn:hover, .print-btn:hover {
+    background-color: #0093b3;
+    transform: scale(1.05);
+}
+
+.save-all-btn {
+    background-color: #28a745;
+}
+
+.save-all-btn:hover {
+    background-color: #218838;
+}
+
+.print-btn {
+    background-color: #ff9500;
+}
+
+.print-btn:hover {
+    background-color: #e08700;
+}
+
+/* 发票信息区域 */
+.invoice-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    flex: 1 1 200px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.form-group input,
+.form-group select {
+    flex-grow: 1;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #00b4d8;
+    box-shadow: 0 0 5px rgba(0,180,216,0.3);
+}
+
+/* 生成按钮样式 */
+.generate-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 5px 10px;
+    background: #00b4d8;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.generate-btn:hover {
+    background-color: #0093b3;
+}
+
+/* 表格容器 */
+.table-container {
+    position: relative;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    max-height: calc(100vh - 340px);
+}
+
+/* 表格 */
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.invoice-table th,
+.invoice-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    width: 12.5%; /* 8列平均分配 */
+}
+
+.invoice-table th {
+    background-color: #f8f8f8;
+    font-weight: 600;
+    color: #2e3b3e;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.invoice-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* 输入框样式 */
+.invoice-table input {
+    width: 70px;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    text-align: center;
+}
+
+/* 产品代码、产品名称和LOTE输入框特定样式 */
+.invoice-table input.product-code,
+.invoice-table input.product-name,
+.invoice-table input.lote {
+    width: 140px;
+}
+
+.invoice-table input:focus {
+    border-color: #00b4d8;
+    box-shadow: 0 0 5px rgba(0,180,216,0.3);
+}
+
+/* 货币单位样式 */
+.invoice-table .currency-span {
+    display: inline-block;
+    margin-left: 5px;
+    color: #666;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+/* 自动补全提示 */
+.autocomplete-suggestions {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 2000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.autocomplete-suggestions div {
+    padding: 8px 15px;
+    cursor: pointer;
+}
+
+.autocomplete-suggestions div:hover {
+    background-color: #f0f0f0;
+}
+
+/* 操作图标 */
+.action-icon {
+    margin: 0 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-icon {
+    color: #e63946;
+}
+
+.delete-icon:hover {
+    color: #b32d38;
+    transform: scale(1.2);
+}
+
+/* 总额区域 */
+.totals-section {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    width: 550px;
+    z-index: 100;
+}
+
+.totals-section h3 {
+    font-size: 18px;
+    color: #2e3b3e;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.totals-section .grand-total {
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.totals-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px 0;
+}
+
+.totals-row div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.totals-row label {
+    font-size: 14px;
+    color: #333;
+    margin-right: 5px;
+    white-space: nowrap;
+}
+
+.totals-row span {
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+    min-width: 80px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .content {
+        padding: 5px 20px 20px 20px;
+    }
+    .table-container {
+        max-height: calc(100vh - 240px);
+    }
+    .invoice-table {
+        font-size: 14px;
+    }
+    .action-icon {
+        font-size: 14px;
+        margin: 0 5px;
+    }
+    .invoice-table input {
+        font-size: 12px;
+        padding: 6px;
+        width: 60px;
+    }
+    .invoice-table input.product-code,
+    .invoice-table input.product-name,
+    .invoice-table input.lote {
+        width: 120px;
+    }
+    .invoice-table .currency-span {
+        font-size: 12px;
+        margin-left: 3px;
+    }
+    .table-header h2 {
+        font-size: 20px;
+    }
+    .add-btn, .back-btn, .save-all-btn, .print-btn {
+        padding: 8px;
+        font-size: 14px;
+    }
+    .invoice-info {
+        gap: 10px;
+        padding: 10px;
+    }
+    .form-group {
+        flex: 1 1 100%;
+    }
+    .totals-section {
+        width: 100%;
+        right: 0;
+        bottom: 0;
+        border-radius: 5px 5px 0 0;
+        padding: 10px;
+    }
+    .totals-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}

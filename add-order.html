@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加订单</title>
+    <link rel="stylesheet" href="add-order.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header class="top-bar">
+        <h1>添加订单</h1>
+    </header>
+    <main class="content">
+        <div class="table-header">
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
+            <h2>订单明细列表</h2>
+            <div class="button-group">
+                <button class="add-btn"><i class="fas fa-plus"></i></button>
+                <button class="save-all-btn"><i class="fas fa-save"></i></button>
+            </div>
+        </div>
+        <div class="order-info">
+            <div class="form-group">
+                <label for="orderCode">订单编号:</label>
+                <div style="position: relative;">
+                    <input type="text" id="orderCode" name="orderCode" placeholder="请输入订单编号" required readonly>
+                    <button type="button" id="generateCodeBtn" class="generate-btn">生成</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="customerCode">客户代码:</label>
+                <select id="customerCode" name="customerCode" required>
+                    <option value="">请选择客户</option>
+                    <!-- 动态加载客户 -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="customerName">客户名称:</label>
+                <input type="text" id="customerName" name="customerName" placeholder="请输入客户名称">
+            </div>
+            <div class="form-group">
+                <label for="orderDate">订单日期:</label>
+                <input type="date" id="orderDate" name="orderDate" required>
+            </div>
+            <div class="form-group">
+                <label for="priceListCode">价格表信息:</label>
+                <input type="text" id="priceListCode" name="priceListCode" placeholder="请输入价格表代码">
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>产品代码</th>
+                        <th>产品名称</th>
+                        <th>LOTE</th>
+                        <th>库存</th>
+                        <th>数量</th>
+                        <th>销售价格</th>
+                        <th>税率</th>
+                        <th>总价</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 动态加载订单明细 -->
+                </tbody>
+            </table>
+        </div>
+        <div class="totals-section">
+            <h3>订单总额: <span class="grand-total">0.00</span></h3>
+            <div id="totals-container">
+                <!-- 动态生成税率分组总额 -->
+            </div>
+        </div>
+    </main>
+    <script src="add-order.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'919a397aefd7add7',t:'MTc0MDg0ODU3Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91a2340fbba57dee',t:'MTc0MDkzMjIzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

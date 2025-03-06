@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>报价明细</title>
+    <link rel="stylesheet" href="cotationlist.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header class="top-bar">
+        <h1>报价明细</h1>
+    </header>
+    <main class="content">
+        <div class="table-header">
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
+            <h2>报价明细列表</h2>
+            <div class="button-group">
+                <button class="add-btn add-product-btn"><i class="fas fa-plus"></i></button>
+                <button class="save-all-btn save-btn"><i class="fas fa-save"></i></button>
+                <button class="print-btn"><i class="fas fa-print"></i></button>
+            </div>
+        </div>
+        <div class="cotation-info">
+            <div class="form-group">
+                <label for="cotationCode">销售报价单代码:</label>
+                <div style="position: relative;">
+                    <input type="text" id="cotationCode" name="cotationCode" placeholder="请点击生成按钮" readonly>
+                    <button type="button" id="generateCodeBtn" class="generate-btn">生成</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="customerCode">客户代码:</label>
+                <select id="customerCode" name="customerCode" required>
+                    <option value="">请选择客户代码</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="customerName">客户名称:</label>
+                <input type="text" id="customerName" name="customerName" readonly>
+            </div>
+            <div class="form-group">
+                <label for="cotationDate">日期:</label>
+                <input type="date" id="cotationDate" name="cotationDate" required>
+            </div>
+            <div class="form-group">
+                <label for="priceCategory">价格表类别:</label>
+                <select id="priceCategory" name="priceCategory" required>
+                    <option value="">请选择价格表类别</option>
+                </select>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="cotationlist-table">
+                <thead>
+                    <tr>
+                        <th>产品代码</th>
+                        <th>产品名称</th>
+                        <th>产品规格</th>
+                        <th>单位</th>
+                        <th>价格</th>
+                        <th>税率</th>
+                        <th>总价</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 动态加载产品数据 -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script src="cotationlist.js"></script>
+</body>
+</html>

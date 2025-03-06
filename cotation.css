@@ -1,0 +1,328 @@
+/* cotation.css */
+/* 全局样式与 customer.css 一致 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 顶部横条 */
+.top-bar {
+    background-color: #d3d3d3;
+    height: 60px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.top-bar h1 {
+    font-size: 22px;
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* 左侧菜单栏 */
+.sidebar {
+    background-color: #1c2526;
+    width: 220px;
+    height: calc(100vh - 60px); /* 修改：减去顶部横条高度 */
+    position: fixed;
+    top: 60px;
+    left: 0;
+    padding-top: 20px;
+    transition: width 0.3s ease;
+    overflow-y: auto; /* 新增：侧边栏整体可滚动 */
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    margin: 15px 0;
+}
+
+.sidebar > ul > li > a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 20px;
+    display: block;
+    transition: background 0.3s ease;
+}
+
+.sidebar > ul > li > a:hover {
+    background-color: #2e3b3e;
+    border-left: 4px solid #00b4d8;
+}
+
+/* 下拉菜单样式 */
+.dropdown-menu {
+    display: none; /* 默认隐藏 */
+    background-color: #2e3b3e;
+    padding-left: 20px;
+    max-height: calc(100vh - 120px); /* 修改：动态适应剩余高度 */
+    overflow-y: auto; /* 新增 */
+}
+
+.dropdown-menu li {
+    margin: 10px 0;
+}
+
+.dropdown-menu a {
+    color: #ddd;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px 20px;
+    display: block;
+    transition: background 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #3a4b4e;
+    border-left: 4px solid #00b4d8;
+}
+
+/* 主内容区域 */
+.content {
+    margin-left: 220px;
+    margin-top: 60px;
+    padding: 40px;
+}
+
+.content-wrapper {
+    position: relative;
+    min-height: calc(100vh - 60px); /* 减去顶部横条高度 */
+    padding-bottom: 60px; /* 为分页控件留出空间 */
+}
+
+.table-container {
+    min-height: 360px; /* 假设每行高度约40px，9行约为360px */
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.table-header h2 {
+    font-size: 28px;
+    color: #2e3b3e;
+}
+
+.add-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.add-btn:hover {
+    background-color: #0093b3;
+}
+
+/* 表格样式 */
+.cotation-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 确保表头和内容的背景色贯穿整个行 */
+.cotation-table thead tr {
+    background-color: #f8f8f8; /* 表头背景色贯穿 */
+}
+
+.cotation-table tbody tr {
+    background-color: #fff; /* 内容背景色贯穿 */
+    position: relative; /* 确保下划线定位基于行 */
+}
+
+.cotation-table tbody tr:hover {
+    background-color: #f9f9f9; /* 悬停背景色贯穿 */
+}
+
+/* 确保下划线贯穿整个行 */
+.cotation-table tbody tr::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background-color: #ddd; /* 下划线颜色与 border-bottom 一致 */
+    z-index: 1; /* 确保下划线在内容之上 */
+}
+
+.cotation-table th,
+.cotation-table td {
+    padding: 12px 15px;
+    text-align: center; /* 所有列居中对齐 */
+    border-bottom: none; /* 移除单元格默认下划线，使用 tr::after 替代 */
+}
+
+.cotation-table th {
+    font-weight: 600;
+    color: #2e3b3e;
+}
+
+/* 调整列宽（5列分布） */
+.cotation-table th:nth-child(1),
+.cotation-table td:nth-child(1) { width: 20%; } /* 报价编号 */
+.cotation-table th:nth-child(2),
+.cotation-table td:nth-child(2) { width: 30%; } /* 客户名称 */
+.cotation-table th:nth-child(3),
+.cotation-table td:nth-child(3) { width: 20%; } /* 价格表类别 */
+.cotation-table th:nth-child(4),
+.cotation-table td:nth-child(4) { width: 20%; } /* 报价日期 */
+.cotation-table th:nth-child(5),
+.cotation-table td:nth-child(5) { 
+    width: 10%; /* 操作列宽度减小以适应剩余空间 */
+    white-space: nowrap; /* 防止换行 */
+}
+
+/* 操作列表头和内容居中对齐 */
+.cotation-table th:nth-child(5) {
+    display: flex;
+    justify-content: center; /* 表头文本水平居中 */
+    align-items: center; /* 表头文本垂直居中 */
+    background-color: inherit; /* 继承 thead tr 的背景色 */
+}
+
+/* 操作图标样式 - 强制左右排列 */
+.cotation-table td:nth-child(5) {
+    display: flex; /* 使用 flex 布局强制水平排列 */
+    justify-content: center; /* 图标水平居中 */
+    align-items: center; /* 图标垂直居中 */
+    background-color: inherit; /* 继承 tbody tr 的背景色 */
+}
+
+.action-icon {
+    display: inline-block; /* 确保图标为行内块元素 */
+    margin: 0 8px; /* 左右间距 */
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.view-icon {
+    color: #00b4d8;
+}
+
+.view-icon:hover {
+    color: #007b9a;
+    transform: scale(1.2);
+}
+
+.edit-icon {
+    color: #ffc107; /* 编辑图标使用黄色，与 price.css 一致 */
+}
+
+.edit-icon:hover {
+    color: #e0a800;
+    transform: scale(1.2);
+}
+
+.delete-icon {
+    color: #e63946;
+}
+
+.delete-icon:hover {
+    color: #b32d38;
+    transform: scale(1.2);
+}
+
+/* 分页控件样式 */
+.pagination {
+    position: fixed;
+    bottom: 0;
+    left: 220px; /* 与 sidebar 宽度一致 */
+    right: 0;
+    background-color: #fff;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.page-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.page-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.page-btn:hover:not(:disabled) {
+    background-color: #0093b3;
+    transform: translateY(-2px);
+}
+
+.pagination span {
+    font-size: 14px;
+    color: #2e3b3e;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80px;
+    }
+    .sidebar > ul > li > a {
+        font-size: 14px;
+        padding: 10px;
+        text-align: center;
+    }
+    .dropdown-menu {
+        padding-left: 10px;
+    }
+    .dropdown-menu a {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+    .content {
+        margin-left: 80px;
+    }
+    .cotation-table {
+        font-size: 14px;
+    }
+    .action-icon {
+        font-size: 14px;
+        margin: 0 5px;
+    }
+    .pagination {
+        left: 80px; /* 与响应式 sidebar 宽度一致 */
+    }
+}

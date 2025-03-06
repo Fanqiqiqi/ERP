@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码编辑</title>
+    <link rel="stylesheet" href="codeeditor.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="title">创建代码规则</h2>
+        <form id="codeForm">
+            <div class="form-group">
+                <label for="category">项目:</label>
+                <select id="category" name="category" required>
+                    <option value="">请选择项目</option>
+                    <option value="customer">客户</option>
+                    <option value="supplier">供应商</option>
+                    <option value="product">产品</option>
+                    <option value="price">价格表</option>
+                    <option value="purchasequote">采购报价单</option>
+                    <option value="purchaseorder">采购订单</option>
+                    <option value="instock">入库单</option>
+                    <option value="salesquote">销售报价单</option>
+                    <option value="salesorder">销售订单</option>
+                    <option value="salesdespatch">销售出货单</option>
+                    <option value="salesinvoice">销售发票</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="prefix">前缀:</label>
+                <input type="text" id="prefix" name="prefix" placeholder="请输入前缀" required>
+            </div>
+            <div class="form-group">
+                <label for="digits">数字位数:</label>
+                <input type="number" id="digits" name="digits" min="1" placeholder="请输入数字位数" required>
+            </div>
+            <div class="form-group">
+                <label for="suffix">后缀:</label>
+                <input type="text" id="suffix" name="suffix" placeholder="请输入后缀（可选）">
+            </div>
+            <div class="form-buttons">
+                <button type="button" class="cancel-btn">取消</button>
+                <button type="submit" class="save-btn">保存</button>
+            </div>
+        </form>
+    </div>
+    <script src="codeeditor.js"></script>
+</body>
+</html>
