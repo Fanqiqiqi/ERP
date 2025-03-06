@@ -1,0 +1,432 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+.top-bar {
+    background-color: #d3d3d3;
+    height: 60px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.top-bar h1 {
+    font-size: 22px;
+    color: #333;
+    font-weight: 500;
+}
+
+.content {
+    margin-top: 60px;
+    padding: 40px;
+    position: relative;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.table-header h2 {
+    font-size: 28px;
+    color: #2e3b3e;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.back-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.back-btn i {
+    margin-right: 5px;
+}
+
+.back-btn:hover {
+    background-color: #0093b3;
+    transform: scale(1.05);
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.add-btn, .save-all-btn, .print-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.add-btn:hover, .save-all-btn:hover, .print-btn:hover {
+    background-color: #0093b3;
+    transform: scale(1.05);
+}
+
+.save-all-btn {
+    background-color: #28a745;
+}
+
+.save-all-btn:hover {
+    background-color: #218838;
+}
+
+.print-btn {
+    background-color: #6c757d;
+}
+
+.print-btn:hover {
+    background-color: #5a6268;
+}
+
+.order-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    flex: 1 1 200px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.form-group input,
+.form-group select {
+    flex-grow: 1;
+    padding: 8px;
+    padding-right: 70px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+/* 确保预计到达日期与其他输入框一致 */
+.form-group input#expectedArrivalDate {
+    padding-right: 8px;
+    max-width: 150px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #00b4d8;
+    box-shadow: 0 0 5px rgba(0,180,216,0.3);
+}
+
+.form-group input[readonly] {
+    background-color: #f8f8f8;
+}
+
+.generate-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 5px 10px;
+    background: #00b4d8;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.generate-btn:hover {
+    background-color: #0093b3;
+}
+
+.table-container {
+    position: relative;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.purchaseorderlist-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.purchaseorderlist-table th,
+.purchaseorderlist-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+}
+
+.purchaseorderlist-table th,
+.purchaseorderlist-table td {
+    width: 14.29%;
+}
+
+.purchaseorderlist-table.view-mode th,
+.purchaseorderlist-table.view-mode td {
+    width: 16.67%;
+}
+
+.purchaseorderlist-table th {
+    background-color: #f8f8f8;
+    font-weight: 600;
+    color: #2e3b3e;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.purchaseorderlist-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.purchaseorderlist-table input {
+    width: 80px;
+    padding: 8px;
+    margin-right: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    text-align: center;
+}
+
+.purchaseorderlist-table input.product-code,
+.purchaseorderlist-table input.product-name {
+    width: 200px;
+}
+
+.purchaseorderlist-table input:focus {
+    border-color: #00b4d8;
+    box-shadow: 0 0 5px rgba(0,180,216,0.3);
+}
+
+.purchaseorderlist-table input + span {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 14px;
+}
+
+.autocomplete-suggestions {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 2000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.autocomplete-suggestions div {
+    padding: 8px 15px;
+    cursor: pointer;
+}
+
+.autocomplete-suggestions div:hover {
+    background-color: #f0f0f0;
+}
+
+.action-icon {
+    margin: 0 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.view-icon {
+    color: #00b4d8;
+}
+
+.view-icon:hover {
+    color: #007b9a;
+    transform: scale(1.2);
+}
+
+.delete-icon {
+    color: #e63946;
+}
+
+.delete-icon:hover {
+    color: #b32d38;
+    transform: scale(1.2);
+}
+
+.totals-section {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    width: 550px;
+    z-index: 100;
+}
+
+.totals-section h3 {
+    font-size: 18px;
+    color: #2e3b3e;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.totals-section .grand-total {
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.totals-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px 0;
+}
+
+.totals-row div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.totals-row label {
+    font-size: 14px;
+    color: #333;
+    margin-right: 5px;
+    white-space: nowrap;
+}
+
+.totals-row span {
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+    min-width: 80px;
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding: 20px;
+    }
+    .table-container {
+        max-height: calc(100vh - 250px);
+    }
+    .purchaseorderlist-table {
+        font-size: 14px;
+    }
+    .action-icon {
+        font-size: 14px;
+        margin: 0 5px;
+    }
+    .purchaseorderlist-table input {
+        font-size: 12px;
+        padding: 6px;
+        width: 60px;
+        margin-right: 8px;
+    }
+    .purchaseorderlist-table input.product-code,
+    .purchaseorderlist-table input.product-name {
+        width: 120px;
+    }
+    .purchaseorderlist-table input + span {
+        font-size: 12px;
+        right: 10px;
+    }
+    .table-header h2 {
+        font-size: 20px;
+    }
+    .add-btn, .back-btn, .save-all-btn, .print-btn {
+        padding: 8px;
+        font-size: 14px;
+        margin-left: 5px;
+    }
+    .order-info {
+        gap: 10px;
+        padding: 10px;
+    }
+    .form-group {
+        flex: 1 1 100%;
+    }
+    .form-group label {
+        font-size: 12px;
+    }
+    .form-group input,
+    .form-group select {
+        font-size: 12px;
+        padding: 6px;
+    }
+    .form-group input#expectedArrivalDate {
+        padding-right: 6px;
+        max-width: 120px;
+    }
+    .totals-section {
+        width: 100%;
+        right: 0;
+        bottom: 0;
+        border-radius: 5px 5px 0 0;
+        padding: 10px;
+    }
+    .totals-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+    }
+    .generate-btn {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+}

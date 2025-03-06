@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>采购报价表明细</title>
+    <link rel="stylesheet" href="purchasepricelist.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header class="top-bar">
+        <h1>采购报价表明细</h1>
+    </header>
+    <main class="content">
+        <div class="table-header">
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
+            <h2>采购报价表明细列表</h2>
+            <div class="button-group">
+                <button class="add-btn"><i class="fas fa-plus"></i></button>
+                <button class="save-all-btn"><i class="fas fa-save"></i></button>
+                <button class="print-btn"><i class="fas fa-print"></i></button>
+            </div>
+        </div>
+        <div class="quote-info">
+            <div class="form-group">
+                <label for="quoteCode">采购报价单号:</label>
+                <div style="position: relative;">
+                    <input type="text" id="quoteCode" name="quoteCode" placeholder="请输入报价单号" required>
+                    <button type="button" id="generateCodeBtn" class="generate-btn">生成</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="supplierCode">供应商代码:</label>
+                <select id="supplierCode" name="supplierCode" required>
+                    <option value="">供应商代码</option>
+                    <!-- 动态加载供应商 -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="supplierName">供应商名称:</label>
+                <input type="text" id="supplierName" name="supplierName" readonly>
+            </div>
+            <div class="form-group">
+                <label for="quoteDate">日期:</label>
+                <input type="date" id="quoteDate" name="quoteDate" required>
+            </div>
+            <div class="form-group">
+                <label for="status">状态:</label>
+                <select id="status" name="status" required>
+                    <option value="待确认">待确认</option>
+                    <option value="确认">确认</option>
+                </select>
+            </div>
+        </div>
+        <table class="purchasepricelist-table">
+            <thead>
+                <tr>
+                    <th>产品代码</th>
+                    <th>产品名称</th>
+                    <th>产品采购价格</th>
+                    <th>新采购价格</th>
+                    <th>税率</th> <!-- 新增 -->
+                    <th>总价</th> <!-- 新增 -->
+                    <th>报价日期</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 动态加载采购报价表明细 -->
+            </tbody>
+        </table>
+    </main>
+    <script src="purchasepricelist.js"></script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* 顶部横条 */
+.top-bar {
+  background-color: #d3d3d3;
+  height: 60px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.top-bar h1 {
+  font-size: 22px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 主内容区域 */
+.content {
+  margin-top: 60px;
+  padding: 40px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.table-header h2 {
+  font-size: 28px;
+  color: #2e3b3e;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.add-btn, .back-btn, .save-all-btn, .print-btn {
+  background-color: #00b4d8;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-left: 10px;
+}
+
+.add-btn:hover, .back-btn:hover, .save-all-btn:hover, .print-btn:hover {
+  background-color: #0093b3;
+  transform: scale(1.05);
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+}
+
+.back-btn i {
+  margin-right: 5px;
+}
+
+.save-all-btn {
+  background-color: #28a745;
+}
+
+.save-all-btn:hover {
+  background-color: #218838;
+}
+
+.print-btn {
+  background-color: #6c757d;
+}
+
+.print-btn:hover {
+  background-color: #5a6268;
+}
+
+/* 价格表类别选择框 */
+.category-select {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.category-select label {
+  font-size: 14px;
+  color: #333;
+  margin-right: 10px;
+}
+
+.category-select select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.category-select select:focus {
+  border-color: #00b4d8;
+  box-shadow: 0 0 5px rgba(0,180,216,0.3);
+}
+
+/* 表格 */
+.pricelist-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.pricelist-table th,
+.pricelist-table td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  position: relative; /* 为货币单位定位 */
+}
+
+/* 默认 6 列布局 */
+.pricelist-table th,
+.pricelist-table td {
+  width: 16.67%; /* 6 列平均分配，每列占 16.67% */
+}
+
+/* 查看模式 5 列布局 */
+.pricelist-table.view-mode th,
+.pricelist-table.view-mode td {
+  width: 20%; /* 5 列平均分配，每列占 20% */
+}
+
+.pricelist-table th {
+  background-color: #f8f8f8;
+  font-weight: 600;
+  color: #2e3b3e;
+}
+
+.pricelist-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* 输入框通用样式 */
+.pricelist-table input {
+  width: 120px; /* 默认宽度，适用于价格输入框 */
+  padding: 8px;
+  margin-right: 10px; /* 与货币单位保持间距 */
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  text-align: center; /* 输入框内容居中 */
+}
+
+/* 产品代码和产品名称输入框特定样式 */
+.pricelist-table input.product-code,
+.pricelist-table input.product-name {
+  width: 180px; /* 增大宽度，比价格输入框宽 */
+}
+
+/* 输入框焦点样式 */
+.pricelist-table input:focus {
+  border-color: #00b4d8;
+  box-shadow: 0 0 5px rgba(0,180,216,0.3);
+}
+
+.pricelist-table input + span {
+  position: absolute;
+  right: 15px; /* 与 margin-right 配合，确保间距 */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 14px;
+}
+
+/* 自动补全提示 */
+.autocomplete-suggestions {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.autocomplete-suggestions div {
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+.autocomplete-suggestions div:hover {
+  background-color: #f0f0f0;
+}
+
+/* 操作图标 */
+.action-icon {
+  margin: 0 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.view-icon {
+  color: #00b4d8;
+}
+
+.view-icon:hover {
+  color: #007b9a;
+  transform: scale(1.2);
+}
+
+.delete-icon {
+  color: #e63946;
+}
+
+.delete-icon:hover {
+  color: #b32d38;
+  transform: scale(1.2);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .content {
+    padding: 20px;
+  }
+  .pricelist-table {
+    font-size: 14px;
+  }
+  .action-icon {
+    font-size: 14px;
+    margin: 0 5px;
+  }
+  .pricelist-table input {
+    font-size: 12px;
+    padding: 6px;
+    width: 60px; /* 默认宽度在小屏幕下 */
+    margin-right: 8px;
+    text-align: center; /* 小屏幕下保持居中 */
+  }
+  .pricelist-table input.product-code,
+  .pricelist-table input.product-name {
+    width: 90px; /* 响应式下增大产品代码和名称的宽度 */
+  }
+  .pricelist-table input + span {
+    font-size: 12px;
+    right: 10px;
+  }
+  .table-header h2 {
+    font-size: 20px;
+  }
+  .add-btn, .back-btn, .save-all-btn, .print-btn {
+    padding: 8px;
+    font-size: 14px;
+    margin-left: 5px;
+  }
+  .category-select {
+    margin-right: 10px;
+  }
+  .category-select label {
+    font-size: 12px;
+    margin-right: 5px;
+  }
+  .category-select select {
+    padding: 6px;
+    font-size: 12px;
+  }
+}

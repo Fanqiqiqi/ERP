@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订单管理</title>
+    <link rel="stylesheet" href="order.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header class="top-bar">
+        <h1>管理系统</h1>
+    </header>
+    <nav class="sidebar">
+        <!-- Sidebar content remains unchanged -->
+        <ul>
+            <li class="dropdown">
+                <a href="#system" class="dropdown-toggle">系统管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="codemanagement.html">代码管理</a></li>
+                    <li><a href="#" data-page="authmanagement.html">授权管理</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#customer" class="dropdown-toggle">客户管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="ccategoria.html">客户类别</a></li>
+                    <li><a href="#" data-page="customer.html">客户资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#supplier" class="dropdown-toggle">供应商管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="scategoria.html">供应商类别</a></li>
+                    <li><a href="#" data-page="supplier.html">供应商资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#product" class="dropdown-toggle">产品管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="pcategoria.html">产品类别</a></li>
+                    <li><a href="#" data-page="product.html">产品资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#price" class="dropdown-toggle">价格管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="prcategoria.html">价格表分类</a></li>
+                    <li><a href="#" data-page="price.html">价格表资料</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#purchase" class="dropdown-toggle">采购管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="purchaseprice.html">采购报价管理</a></li>
+                    <li><a href="#" data-page="purchaseorder.html">采购订单管理</a></li>
+                    <li><a href="#" data-page="purchaseorderinstocklist.html">采购入库</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#sales" class="dropdown-toggle">销售管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="cotation.html">报价管理</a></li>
+                    <li><a href="#" data-page="order.html">订单管理</a></li>
+                    <li><a href="#" data-page="despatch.html">出货管理</a></li>
+                </ul>
+            </li>
+            <li><a href="#" data-page="stockmanagement.html">库存管理</a></li>
+            <li class="dropdown">
+                <a href="#invoice" class="dropdown-toggle">发票管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="salesinvoicelist.html">销售发票</a></li>
+                    <li><a href="#" data-page="purchaseinvoice.html">采购发票</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#finance" class="dropdown-toggle">财务管理</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="receivables.html">应收管理</a></li>
+                    <li><a href="#" data-page="payables.html">应付管理</a></li>
+                    <li><a href="#" data-page="financialreport.html">财务报表</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <main class="content">
+        <div class="content-wrapper">
+            <div class="table-header">
+                <h2>订单列表</h2>
+                <div class="button-group">
+                    <button class="search-btn">查询</button>
+                    <button class="add-btn">添加订单</button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="order-table">
+                    <thead>
+                        <tr>
+                            <th>订单编号</th>
+                            <th>客户名称</th>
+                            <th>总金额</th>
+                            <th>订单日期</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 动态加载订单数据 -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- 固定分页控件 -->
+            <div class="pagination">
+                <button class="page-btn prev-btn" disabled>上一页</button>
+                <span>第 1 页 / 共 1 页</span>
+                <button class="page-btn next-btn" disabled>下一页</button>
+            </div>
+
+            <!-- 筛选框 -->
+            <div class="filter-panel" id="filterPanel">
+                <div class="filter-header">
+                    <h3>筛选条件</h3>
+                    <span class="close-filter"><i class="fas fa-arrow-right"></i></span>
+                </div>
+                <form id="filterForm">
+                    <div class="filter-content">
+                        <div class="form-group">
+                            <label for="filterOrderCode">订单编号</label>
+                            <input type="text" id="filterOrderCode" name="orderCode" placeholder="请输入订单编号">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterCustomerName">客户名称</label>
+                            <input type="text" id="filterCustomerName" name="customerName" placeholder="请输入客户名称">
+                        </div>
+                        <div class="form-group">
+                            <label>订单日期</label>
+                            <div class="date-range">
+                                <input type="date" id="filterOrderDateFrom" name="orderDateFrom" placeholder="从">
+                                <span>至</span>
+                                <input type="date" id="filterOrderDateTo" name="orderDateTo" placeholder="到">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterTotalAmount">金额</label>
+                            <input type="number" id="filterTotalAmount" name="totalAmount" placeholder="请输入金额" step="0.01">
+                        </div>
+                        <!-- 注意：订单页面没有“状态”字段，但需求中提到需要状态筛选。这里假设订单可以有状态（如“未出货”、“已出货”），如果不需要状态，可以移除此部分 -->
+                        <div class="form-group">
+                            <label for="filterStatus">状态</label>
+                            <select id="filterStatus" name="status">
+                                <option value="">全部</option>
+                                <option value="未出货">未出货</option>
+                                <option value="已出货">已出货</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-footer">
+                        <div class="filter-buttons">
+                            <button type="button" class="reset-btn">重置</button>
+                            <button type="submit" class="confirm-btn">确认</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 添加/编辑订单模态框 (保持不变) -->
+        <div class="modal" id="addOrderModal">
+            <div class="modal-content">
+                <h3>添加新订单</h3>
+                <form id="orderForm">
+                    <div class="form-columns">
+                        <div class="form-column">
+                            <div class="form-group">
+                                <label for="orderCode">订单编号</label>
+                                <input type="text" id="orderCode" name="orderCode" placeholder="请输入订单编号" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerName">客户名称</label>
+                                <select id="customerName" name="customerName" required>
+                                    <option value="">请选择客户</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="totalAmount">总金额</label>
+                                <input type="number" id="totalAmount" name="totalAmount" placeholder="请输入总金额" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-column">
+                            <div class="form-group">
+                                <label for="orderDate">订单日期</label>
+                                <input type="date" id="orderDate" name="orderDate" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="cancel-btn">取消</button>
+                        <button type="submit" class="save-btn">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="order.js"></script>
+    <!-- Cloudflare scripts remain unchanged -->
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91c24df1ec0653b9',t:'MTc0MTI2ODg0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91c2677f2db3673b',t:'MTc0MTI2OTg4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>

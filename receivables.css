@@ -1,0 +1,618 @@
+/* 重用全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 顶部横条 */
+.top-bar {
+    background-color: #d3d3d3;
+    height: 60px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.top-bar h1 {
+    font-size: 22px;
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* 左侧菜单栏 */
+.sidebar {
+    background-color: #1c2526;
+    width: 220px;
+    height: calc(100vh - 60px);
+    position: fixed;
+    top: 60px;
+    left: 0;
+    padding-top: 20px;
+    transition: width 0.3s ease;
+    overflow-y: auto;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    margin: 15px 0;
+}
+
+.sidebar > ul > li > a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 20px;
+    display: block;
+    transition: background 0.3s ease;
+}
+
+.sidebar > ul > li > a:hover {
+    background-color: #2e3b3e;
+    border-left: 4px solid #00b4d8;
+}
+
+/* 下拉菜单样式 */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    background-color: #2e3b3e;
+    padding-left: 20px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.dropdown-menu li {
+    margin: 10px 0;
+}
+
+.dropdown-menu a {
+    color: #ddd;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px 20px;
+    display: block;
+    transition: background 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #3a4b4e;
+    border-left: 4px solid #00b4d8;
+}
+
+/* 主内容区域 */
+.content {
+    margin-left: 220px;
+    margin-top: 60px;
+    padding: 40px;
+}
+
+.content-wrapper {
+    position: relative;
+    min-height: calc(100vh - 60px); /* 减去顶部横条高度 */
+    padding-bottom: 60px; /* 为分页控件留出空间 */
+}
+
+.table-container {
+    min-height: 360px; /* 假设每行高度约40px，9行约为360px */
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.table-header h2 {
+    font-size: 28px;
+    color: #2e3b3e;
+}
+
+.add-btn {
+    background-color: #ff9800;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.add-btn:hover {
+    background-color: #e68900;
+    transform: scale(1.05);
+}
+
+/* 表格样式 */
+.receivables-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.receivables-table th {
+    padding: 12px 10px; /* 减小内边距以适应更多列 */
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    background-color: #f8f8f8;
+    font-weight: 600;
+    color: #2e3b3e;
+    width: 14%; /* 设置每列平均宽度，7列共100% */
+}
+
+.receivables-table td {
+    padding: 12px 10px; /* 减小内边距以适应更多列 */
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    width: 14%; /* 设置每列平均宽度，7列共100% */
+}
+
+/* 针对特定列微调宽度 */
+.receivables-table th:nth-child(1), /* 发票号 */
+.receivables-table td:nth-child(1) {
+    width: 15%;
+}
+.receivables-table th:nth-child(2), /* 客户 */
+.receivables-table td:nth-child(2) {
+    width: 20%;
+}
+.receivables-table th:nth-child(3), /* 日期 */
+.receivables-table td:nth-child(3) {
+    width: 15%;
+}
+.receivables-table th:nth-child(4), /* 到期日期 */
+.receivables-table td:nth-child(4) {
+    width: 15%;
+}
+.receivables-table th:nth-child(5), /* 金额 */
+.receivables-table td:nth-child(5) {
+    width: 15%;
+}
+.receivables-table th:nth-child(6), /* 付款状态 */
+.receivables-table td:nth-child(6) {
+    width: 15%;
+}
+.receivables-table th:nth-child(7), /* 操作 */
+.receivables-table td:nth-child(7) {
+    width: 10%;
+}
+
+.receivables-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.receivables-table .status-paid {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.receivables-table .status-unpaid {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.receivables-table .status-partial {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+/* 操作图标 */
+.action-icon {
+    margin: 0 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.view-icon {
+    color: #00b4d8;
+}
+
+.view-icon:hover {
+    color: #007b9a;
+    transform: scale(1.2);
+}
+
+.adjust-icon {
+    color: #ff9800;
+}
+
+.adjust-icon:hover {
+    color: #e68900;
+    transform: scale(1.2);
+}
+
+/* 模态框 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease-out;
+}
+
+.modal-content h3 {
+    font-size: 22px;
+    color: #2e3b3e;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #00b4d8;
+    box-shadow: 0 0 5px rgba(0, 180, 216, 0.3);
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.save-btn,
+.cancel-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.save-btn {
+    background-color: #00b4d8;
+    color: #fff;
+}
+
+.save-btn:hover {
+    background-color: #0093b3;
+    transform: translateY(-2px);
+}
+
+.cancel-btn {
+    background-color: #e63946;
+    color: #fff;
+}
+
+.cancel-btn:hover {
+    background-color: #b32d38;
+    transform: translateY(-2px);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 分页控件样式 */
+.pagination {
+    position: fixed;
+    bottom: 0;
+    left: 220px; /* 与 sidebar 宽度一致 */
+    right: 0;
+    background-color: #fff;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.page-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.page-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.page-btn:hover:not(:disabled) {
+    background-color: #0093b3;
+    transform: translateY(-2px);
+}
+
+.pagination span {
+    font-size: 14px;
+    color: #2e3b3e;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80px;
+    }
+    .sidebar > ul > li > a {
+        font-size: 14px;
+        padding: 10px;
+        text-align: center;
+    }
+    .dropdown-menu {
+        padding-left: 10px;
+    }
+    .dropdown-menu a {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+    .content {
+        margin-left: 80px;
+    }
+    .receivables-table th,
+    .receivables-table td {
+        font-size: 12px; /* 减小字体以适应更多列 */
+        padding: 8px 5px;
+        width: 14%; /* 保持平均分配 */
+    }
+    .action-icon {
+        font-size: 14px;
+        margin: 0 5px;
+    }
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .add-btn {
+        margin-top: 10px;
+        align-self: flex-end;
+    }
+    .pagination {
+        left: 80px; /* 与响应式 sidebar 宽度一致 */
+    }
+}
+/* receivables.css */
+/* 保持原有样式不变，仅追加以下内容 */
+
+/* 添加 button-group 和 search-btn 样式 */
+.button-group {
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
+}
+
+.search-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.search-btn:hover {
+    background-color: #0093b3;
+    transform: scale(1.05);
+}
+
+/* 筛选框样式 */
+.filter-panel {
+    position: fixed;
+    top: 60px;
+    right: -400px;
+    width: 400px;
+    height: calc(100vh - 60px);
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    z-index: 1500;
+    transition: right 0.3s ease-in-out;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.filter-panel.active {
+    right: 0;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter-header h3 {
+    font-size: 20px;
+    color: #2e3b3e;
+}
+
+.close-filter {
+    cursor: pointer;
+    font-size: 20px;
+    color: #333;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.close-filter:hover {
+    color: #00b4d8;
+    transform: scale(1.2);
+}
+
+.filter-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #2e3b3e;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-range input {
+    flex: 1;
+}
+
+.date-range span {
+    font-size: 14px;
+    color: #2e3b3e;
+}
+
+.filter-footer {
+    padding-top: 20px;
+}
+
+.filter-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.reset-btn {
+    width: 48%;
+    background-color: #e63946;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.reset-btn:hover {
+    background-color: #b32d38;
+    transform: scale(1.05);
+}
+
+.confirm-btn {
+    width: 48%;
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.confirm-btn:hover {
+    background-color: #0093b3;
+    transform: scale(1.05);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .filter-panel {
+        width: 300px;
+        right: -300px;
+    }
+    .filter-panel.active {
+        right: 0;
+    }
+    .filter-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .reset-btn,
+    .confirm-btn {
+        width: 100%;
+    }
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .button-group {
+        margin-top: 10px;
+        margin-left: 0;
+        align-self: flex-end;
+    }
+}

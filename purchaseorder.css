@@ -1,0 +1,279 @@
+/* purchaseorder.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 顶部横条 */
+.top-bar {
+    background-color: #d3d3d3;
+    height: 60px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.top-bar h1 {
+    font-size: 22px;
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* 左侧菜单栏 */
+.sidebar {
+    background-color: #1c2526;
+    width: 220px;
+    height: calc(100vh - 60px); /* 修改：减去顶部横条高度 */
+    position: fixed;
+    top: 60px;
+    left: 0;
+    padding-top: 20px;
+    transition: width 0.3s ease;
+    overflow-y: auto; /* 新增：侧边栏整体可滚动 */
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    margin: 15px 0;
+}
+
+.sidebar > ul > li > a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 20px;
+    display: block;
+    transition: background 0.3s ease;
+}
+
+.sidebar > ul > li > a:hover {
+    background-color: #2e3b3e;
+    border-left: 4px solid #00b4d8;
+}
+
+.dropdown-menu {
+    display: none; /* 默认隐藏 */
+    background-color: #2e3b3e;
+    padding-left: 20px;
+    max-height: calc(100vh - 120px); /* 修改：动态适应剩余高度 */
+    overflow-y: auto; /* 新增 */
+}
+
+.dropdown-menu li {
+    margin: 10px 0;
+}
+
+.dropdown-menu a {
+    color: #ddd;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px 20px;
+    display: block;
+    transition: background 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #3a4b4e;
+    border-left: 4px solid #00b4d8;
+}
+
+/* 主内容 */
+.content {
+    margin-left: 220px;
+    margin-top: 60px;
+    padding: 40px;
+}
+
+.content-wrapper {
+    position: relative;
+    min-height: calc(100vh - 60px); /* 减去顶部横条高度 */
+    padding-bottom: 60px; /* 为分页控件留出空间 */
+}
+
+.table-container {
+    min-height: 360px; /* 假设每行高度约40px，9行约为360px */
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.table-header h2 {
+    font-size: 28px;
+    color: #2e3b3e;
+}
+
+.add-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.add-btn:hover {
+    background-color: #0093b3;
+}
+
+/* 表格 */
+.purchaseorder-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.purchaseorder-table th,
+.purchaseorder-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.purchaseorder-table th,
+.purchaseorder-table td {
+    width: 16.67%; /* 6 列平均分配 */
+}
+
+.purchaseorder-table th {
+    background-color: #f8f8f8;
+    font-weight: 600;
+    color: #2e3b3e;
+}
+
+.purchaseorder-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* 操作图标 */
+.action-icon {
+    margin: 0 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.view-icon {
+    color: #00b4d8;
+}
+
+.view-icon:hover {
+    color: #007b9a;
+    transform: scale(1.2);
+}
+
+.edit-icon {
+    color: #ffc107;
+}
+
+.edit-icon:hover {
+    color: #e0a800;
+    transform: scale(1.2);
+}
+
+.delete-icon {
+    color: #e63946;
+}
+
+.delete-icon:hover {
+    color: #b32d38;
+    transform: scale(1.2);
+}
+
+/* 分页控件样式 */
+.pagination {
+    position: fixed;
+    bottom: 0;
+    left: 220px; /* 与 sidebar 宽度一致 */
+    right: 0;
+    background-color: #fff;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.page-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.page-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.page-btn:hover:not(:disabled) {
+    background-color: #0093b3;
+    transform: translateY(-2px);
+}
+
+.pagination span {
+    font-size: 14px;
+    color: #2e3b3e;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80px;
+    }
+    .sidebar > ul > li > a {
+        font-size: 14px;
+        padding: 10px;
+        text-align: center;
+    }
+    .dropdown-menu {
+        padding-left: 10px;
+    }
+    .dropdown-menu a {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+    .content {
+        margin-left: 80px;
+    }
+    .purchaseorder-table {
+        font-size: 14px;
+    }
+    .action-icon {
+        font-size: 14px;
+        margin: 0 5px;
+    }
+    .pagination {
+        left: 80px; /* 与响应式 sidebar 宽度一致 */
+    }
+}

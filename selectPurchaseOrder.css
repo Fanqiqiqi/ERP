@@ -1,0 +1,77 @@
+/* selectPurchaseOrder.css */
+.order-list-container {
+    padding: 20px;
+}
+
+.header-wrapper {
+    display: flex;
+    justify-content: space-between; /* 标题居左，按钮居右 */
+    align-items: center; /* 垂直居中对齐 */
+    margin-bottom: 20px; /* 与表格之间的间距 */
+}
+
+.table-wrapper {
+    display: flex;
+    align-items: flex-start; /* 顶部对齐 */
+}
+
+.order-table {
+    flex-grow: 1; /* 表格占据剩余空间 */
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 100%; /* 确保表格占满容器 */
+}
+
+.order-table th,
+.order-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.order-table th {
+    background-color: #f8f8f8;
+    font-weight: 600;
+    color: #2e3b3e;
+}
+
+.order-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.confirm-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    white-space: nowrap; /* 防止按钮文本换行 */
+}
+
+.confirm-btn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.confirm-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.radio-circle {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #00b4d8;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.radio-circle.selected {
+    background-color: #00b4d8;
+}
