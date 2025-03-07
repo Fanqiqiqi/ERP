@@ -39,13 +39,13 @@ body {
 .sidebar {
     background-color: #1c2526;
     width: 220px;
-    height: calc(100vh - 60px); /* 修改：减去顶部横条高度 */
+    height: calc(100vh - 60px);
     position: fixed;
     top: 60px;
     left: 0;
     padding-top: 20px;
     transition: width 0.3s ease;
-    overflow-y: auto; /* 新增：侧边栏整体可滚动 */
+    overflow-y: auto;
 }
 
 .sidebar ul {
@@ -72,11 +72,11 @@ body {
 
 /* 下拉菜单样式 */
 .dropdown-menu {
-    display: none; /* 默认隐藏 */
+    display: none;
     background-color: #2e3b3e;
     padding-left: 20px;
-    max-height: calc(100vh - 120px); /* 修改：动态适应剩余高度 */
-    overflow-y: auto; /* 新增 */
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
 }
 
 .dropdown-menu li {
@@ -106,12 +106,12 @@ body {
 
 .content-wrapper {
     position: relative;
-    min-height: calc(100vh - 60px); /* 减去顶部横条高度 */
-    padding-bottom: 60px; /* 为分页控件留出空间 */
+    min-height: calc(100vh - 60px);
+    padding-bottom: 60px;
 }
 
 .table-container {
-    min-height: 360px; /* 假设每行高度约40px，9行约为360px */
+    min-height: 360px;
 }
 
 .table-header {
@@ -126,6 +126,12 @@ body {
     color: #2e3b3e;
 }
 
+.button-group {
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
+}
+
 .add-btn {
     background-color: #00b4d8;
     color: #fff;
@@ -134,11 +140,28 @@ body {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .add-btn:hover {
     background-color: #0093b3;
+    transform: scale(1.05);
+}
+
+.search-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.search-btn:hover {
+    background-color: #0093b3;
+    transform: scale(1.05);
 }
 
 /* 表格样式 */
@@ -149,21 +172,19 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 确保表头和内容的背景色贯穿整个行 */
 .cotation-table thead tr {
-    background-color: #f8f8f8; /* 表头背景色贯穿 */
+    background-color: #f8f8f8;
 }
 
 .cotation-table tbody tr {
-    background-color: #fff; /* 内容背景色贯穿 */
-    position: relative; /* 确保下划线定位基于行 */
+    background-color: #fff;
+    position: relative;
 }
 
 .cotation-table tbody tr:hover {
-    background-color: #f9f9f9; /* 悬停背景色贯穿 */
+    background-color: #f9f9f9;
 }
 
-/* 确保下划线贯穿整个行 */
 .cotation-table tbody tr::after {
     content: '';
     position: absolute;
@@ -171,15 +192,15 @@ body {
     right: 0;
     bottom: 0;
     height: 1px;
-    background-color: #ddd; /* 下划线颜色与 border-bottom 一致 */
-    z-index: 1; /* 确保下划线在内容之上 */
+    background-color: #ddd;
+    z-index: 1;
 }
 
 .cotation-table th,
 .cotation-table td {
     padding: 12px 15px;
-    text-align: center; /* 所有列居中对齐 */
-    border-bottom: none; /* 移除单元格默认下划线，使用 tr::after 替代 */
+    text-align: center;
+    border-bottom: none;
 }
 
 .cotation-table th {
@@ -187,56 +208,73 @@ body {
     color: #2e3b3e;
 }
 
-/* 调整列宽（5列分布） */
+/* 调整列宽（6列分布） */
 .cotation-table th:nth-child(1),
-.cotation-table td:nth-child(1) { width: 20%; } /* 报价编号 */
+.cotation-table td:nth-child(1) { width: 18%; }
 .cotation-table th:nth-child(2),
-.cotation-table td:nth-child(2) { width: 30%; } /* 客户名称 */
+.cotation-table td:nth-child(2) { width: 25%; }
 .cotation-table th:nth-child(3),
-.cotation-table td:nth-child(3) { width: 20%; } /* 价格表类别 */
+.cotation-table td:nth-child(3) { width: 15%; }
 .cotation-table th:nth-child(4),
-.cotation-table td:nth-child(4) { width: 20%; } /* 报价日期 */
+.cotation-table td:nth-child(4) { width: 15%; }
 .cotation-table th:nth-child(5),
-.cotation-table td:nth-child(5) { 
-    width: 10%; /* 操作列宽度减小以适应剩余空间 */
-    white-space: nowrap; /* 防止换行 */
+.cotation-table td:nth-child(5) { width: 25%; }
+.cotation-table th:nth-child(6),
+.cotation-table td:nth-child(6) {
+    width: 12%;
+    white-space: nowrap;
 }
 
-/* 操作列表头和内容居中对齐 */
-.cotation-table th:nth-child(5) {
+.cotation-table th:nth-child(6) {
     display: flex;
-    justify-content: center; /* 表头文本水平居中 */
-    align-items: center; /* 表头文本垂直居中 */
-    background-color: inherit; /* 继承 thead tr 的背景色 */
+    justify-content: center;
+    align-items: center;
+    background-color: inherit;
 }
 
-/* 操作图标样式 - 强制左右排列 */
-.cotation-table td:nth-child(5) {
-    display: flex; /* 使用 flex 布局强制水平排列 */
-    justify-content: center; /* 图标水平居中 */
-    align-items: center; /* 图标垂直居中 */
-    background-color: inherit; /* 继承 tbody tr 的背景色 */
+/* 操作列样式 - 按钮和图标混合排列 */
+.cotation-table td:nth-child(6) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: inherit;
+    gap: 5px; /* 调整按钮和图标之间的间距 */
 }
 
 .action-icon {
-    display: inline-block; /* 确保图标为行内块元素 */
-    margin: 0 8px; /* 左右间距 */
+    display: inline-block;
+    margin: 0 8px;
     cursor: pointer;
     font-size: 16px;
     transition: color 0.3s ease, transform 0.2s ease;
 }
 
-.view-icon {
-    color: #00b4d8;
+/* 下载按钮样式 */
+.download-btn {
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.view-icon:hover {
-    color: #007b9a;
-    transform: scale(1.2);
+.download-btn:hover {
+    background-color: #0093b3;
+    transform: scale(1.05);
+}
+
+.download-btn i {
+    margin: 0;
 }
 
 .edit-icon {
-    color: #ffc107; /* 编辑图标使用黄色，与 price.css 一致 */
+    color: #ffc107;
 }
 
 .edit-icon:hover {
@@ -257,7 +295,7 @@ body {
 .pagination {
     position: fixed;
     bottom: 0;
-    left: 220px; /* 与 sidebar 宽度一致 */
+    left: 220px;
     right: 0;
     background-color: #fff;
     padding: 10px 0;
@@ -295,6 +333,165 @@ body {
     color: #2e3b3e;
 }
 
+/* 筛选框样式 */
+.filter-panel {
+    position: fixed;
+    top: 60px;
+    right: -400px;
+    width: 400px;
+    height: calc(100vh - 60px);
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    z-index: 1500;
+    transition: right 0.3s ease-in-out;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.filter-panel.active {
+    right: 0;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter-header h3 {
+    font-size: 20px;
+    color: #2e3b3e;
+}
+
+.close-filter {
+    cursor: pointer;
+    font-size: 20px;
+    color: #333;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.close-filter:hover {
+    color: #00b4d8;
+    transform: scale(1.2);
+}
+
+.filter-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #2e3b3e;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-range input {
+    flex: 1;
+}
+
+.date-range span {
+    font-size: 14px;
+    color: #2e3b3e;
+}
+
+.filter-footer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.filter-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.reset-btn {
+    width: 48%;
+    background-color: #e63946;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.reset-btn:hover {
+    background-color: #b32d38;
+    transform: scale(1.05);
+}
+
+.confirm-btn {
+    width: 48%;
+    background-color: #00b4d8;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.confirm-btn:hover {
+    background-color: #0093b3;
+    transform: scale(1.05);
+}
+
+/* 自动提示样式 */
+.suggestions {
+    position: absolute;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 2000;
+    display: none;
+    top: 100%;
+    left: 0;
+}
+
+.suggestion-item {
+    padding: 8px 10px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.suggestion-item:hover {
+    background-color: #f4f4f4;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     .sidebar {
@@ -322,7 +519,35 @@ body {
         font-size: 14px;
         margin: 0 5px;
     }
+    .download-btn {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
     .pagination {
-        left: 80px; /* 与响应式 sidebar 宽度一致 */
+        left: 80px;
+    }
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .button-group {
+        margin-top: 10px;
+        margin-left: 0;
+        align-self: flex-end;
+    }
+    .filter-panel {
+        width: 300px;
+        right: -300px;
+    }
+    .filter-panel.active {
+        right: 0;
+    }
+    .filter-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .reset-btn,
+    .confirm-btn {
+        width: 100%;
     }
 }
