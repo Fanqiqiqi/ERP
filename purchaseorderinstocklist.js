@@ -1,55 +1,7 @@
 // purchaseorderinstocklist.js
 document.addEventListener('DOMContentLoaded', function() {
     init();
-    setupSidebarNavigation();
 });
-
-// 设置侧边栏导航逻辑
-function setupSidebarNavigation() {
-    const dropdownToggles = document.querySelectorAll('.sidebar .dropdown-toggle');
-    const sidebar = document.querySelector('.sidebar');
-
-    dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            const dropdownMenu = this.nextElementSibling;
-            if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
-                const isOpen = dropdownMenu.style.display === 'block';
-
-                document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                    if (menu !== dropdownMenu) {
-                        menu.style.display = 'none';
-                    }
-                });
-
-                dropdownMenu.style.display = isOpen ? 'none' : 'block';
-
-                if (!isOpen && sidebar) {
-                    const togglePosition = toggle.getBoundingClientRect().top;
-                    const sidebarPosition = sidebar.getBoundingClientRect().top;
-                    const offset = togglePosition - sidebarPosition;
-                    sidebar.scrollTo({
-                        top: offset,
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        });
-    });
-
-    const sidebarLinks = document.querySelectorAll('.sidebar a[data-page]');
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const page = this.getAttribute('data-page');
-            if (page) {
-                window.location.href = page;
-            }
-        });
-    });
-}
 
 // 初始化采购入库单数据
 let purchaseInstocks = JSON.parse(localStorage.getItem('purchaseInstocks')) || [];
@@ -134,12 +86,18 @@ function updateTable() {
         const supplier = suppliers.find(s => s.code === instock.supplierCode);
         const supplierName = supplier ? supplier.name : '未知供应商';
 
+        // 格式化金额为千位制，保留两位小数
+        const formattedPrice = Number(instock.totalPrice).toLocaleString('zh-CN', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${instock.instockCode}</td>
             <td>${instock.instockDate}</td>
             <td>${supplierName}</td>
-            <td>${instock.totalPrice} €</td>
+            <td>${formattedPrice} €</td>
             <td>
                 <span class="action-icon view-icon" data-index="${globalIndex}"><i class="fas fa-eye"></i></span>
                 <span class="action-icon edit-icon" data-index="${globalIndex}"><i class="fas fa-edit"></i></span>
@@ -331,8 +289,4 @@ window.addEventListener('storage', function() {
     purchaseInstocks = JSON.parse(localStorage.getItem('purchaseInstocks')) || [];
     filteredData = [...purchaseInstocks];
     updateTable();
-});
-
-document.querySelector('.top-bar h1').addEventListener('click', function() {
-    window.location.href = 'index.html';
 });
