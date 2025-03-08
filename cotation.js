@@ -1,60 +1,4 @@
-// 初始化下拉菜单为隐藏状态
-document.querySelectorAll('.dropdown-menu').forEach(menu => {
-  menu.style.display = 'none';
-});
 
-// 下拉菜单切换功能 - 绑定所有下拉菜单
-document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-  toggle.addEventListener('click', function(e) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    const dropdownMenu = this.nextElementSibling;
-    const sidebar = document.querySelector('.sidebar');
-    const isOpen = dropdownMenu.style.display === 'block';
-
-    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-      if (menu !== dropdownMenu) {
-        menu.style.display = 'none';
-      }
-    });
-
-    dropdownMenu.style.display = isOpen ? 'none' : 'block';
-
-    if (!isOpen) {
-      const togglePosition = toggle.getBoundingClientRect().top;
-      const sidebarPosition = sidebar.getBoundingClientRect().top;
-      const offset = togglePosition - sidebarPosition;
-      sidebar.scrollTo({
-        top: offset,
-        behavior: 'smooth'
-      });
-    }
-  });
-});
-
-// 点击菜单项跳转或切换内容
-document.querySelectorAll('.sidebar a').forEach(link => {
-  link.addEventListener('click', function(e) {
-    if (this.classList.contains('dropdown-toggle')) return;
-    e.preventDefault();
-    const page = this.getAttribute('data-page');
-    if (page) {
-      window.location.href = page;
-    } else {
-      const section = this.textContent;
-      const content = document.querySelector('.content');
-      content.innerHTML = `
-          <h2>${section}</h2>
-          <p>这里是${section}的内容区域。</p>
-        `;
-    }
-  });
-});
-
-// 点击顶部标题跳转到主页
-document.querySelector('.top-bar h1').addEventListener('click', function() {
-  window.location.href = 'index.html';
-});
 
 // 页面元素
 const addBtn = document.querySelector('.add-btn');
@@ -176,7 +120,7 @@ function updateTable() {
       <td>${cotation.priceCategory || '无'}</td>
       <td>${cotation.date}</td>
       <td>
-        <button class="download-btn" data-index="${globalIndex}"><i class="fas fa-download"></i></button>
+        <span class="action-icon view-icon" data-index="${globalIndex}"><i class="fas fa-eye"></i></span>
         <span class="action-icon edit-icon" data-index="${globalIndex}"><i class="fas fa-edit"></i></span>
         <span class="action-icon delete-icon" data-index="${globalIndex}"><i class="fas fa-trash-alt"></i></span>
       </td>
@@ -222,8 +166,8 @@ addBtn.addEventListener('click', function() {
 
 // 操作图标事件绑定
 function bindIconEvents() {
-  document.querySelectorAll('.download-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
+  document.querySelectorAll('.view-icon').forEach(icon => {
+    icon.addEventListener('click', function() {
       const index = this.getAttribute('data-index');
       const cotations = JSON.parse(localStorage.getItem('cotations') || '[]');
       const cotation = cotations[index];
