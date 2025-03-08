@@ -295,53 +295,6 @@ function init() {
   filterPanel.addEventListener('click', (e) => {
     e.stopPropagation();
   });
-
-  // 初始化下拉菜单为隐藏状态并添加滚动功能
-  document.querySelectorAll('.dropdown-menu').forEach(menu => {
-    menu.style.display = 'none';
-  });
-
-  document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-    toggle.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      const dropdownMenu = this.nextElementSibling;
-      const sidebar = document.querySelector('.sidebar');
-      const isOpen = dropdownMenu.style.display === 'block';
-
-      // 关闭其他所有下拉菜单
-      document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        if (menu !== dropdownMenu) {
-          menu.style.display = 'none';
-        }
-      });
-
-      // 切换当前下拉菜单状态
-      dropdownMenu.style.display = isOpen ? 'none' : 'block';
-
-      // 如果打开菜单，自动滚动侧边栏
-      if (!isOpen) {
-        const togglePosition = toggle.getBoundingClientRect().top;
-        const sidebarPosition = sidebar.getBoundingClientRect().top;
-        const offset = togglePosition - sidebarPosition;
-        sidebar.scrollTo({
-          top: offset,
-          behavior: 'smooth'
-        });
-      }
-    });
-  });
-
-  // 侧边栏跳转逻辑
-  document.querySelectorAll('.sidebar a').forEach(link => {
-    if (!link.classList.contains('dropdown-toggle')) {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const page = this.getAttribute('data-page');
-        if (page) window.location.href = page;
-      });
-    }
-  });
 }
 
 // 页面加载时初始化

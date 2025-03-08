@@ -1,99 +1,3 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-}
-
-body {
-    background-color: #f4f4f4;
-    color: #333;
-    line-height: 1.6;
-}
-
-/* 顶部横条 */
-.top-bar {
-    background-color: #d3d3d3;
-    height: 60px;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    z-index: 1000;
-}
-
-.top-bar h1 {
-    font-size: 22px;
-    color: #333;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-/* 左侧菜单栏 */
-.sidebar {
-    background-color: #1c2526;
-    width: 220px;
-    height: calc(100vh - 60px);
-    position: fixed;
-    top: 60px;
-    left: 0;
-    padding-top: 20px;
-    transition: width 0.3s ease;
-    overflow-y: auto;
-}
-
-.sidebar ul {
-    list-style: none;
-}
-
-.sidebar li {
-    margin: 15px 0;
-}
-
-.sidebar > ul > li > a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 10px 20px;
-    display: block;
-    transition: background 0.3s ease;
-}
-
-.sidebar > ul > li > a:hover {
-    background-color: #2e3b3e;
-    border-left: 4px solid #00b4d8;
-}
-
-/* 下拉菜单样式 */
-.dropdown-menu {
-    display: none;
-    background-color: #2e3b3e;
-    padding-left: 20px;
-    max-height: calc(100vh - 120px);
-    overflow-y: auto;
-}
-
-.dropdown-menu li {
-    margin: 10px 0;
-}
-
-.dropdown-menu a {
-    color: #ddd;
-    text-decoration: none;
-    font-size: 14px;
-    padding: 8px 20px;
-    display: block;
-    transition: background 0.3s ease;
-}
-
-.dropdown-menu a:hover {
-    background-color: #3a4b4e;
-    border-left: 4px solid #00b4d8;
-}
 
 /* 主内容区域 */
 .content {
@@ -582,5 +486,140 @@ body {
     .reset-btn,
     .confirm-btn {
         width: 100%;
+    }
+}
+/* 针对公司资料模态框的特定样式 */
+#companyProfileModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+#companyProfileModal .modal-content {
+    background-color: #fff;
+    width: 90%;
+    max-width: 1200px; /* 与 supplier.css 一致 */
+    max-height: 80vh;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s ease-out;
+    overflow-x: auto;
+}
+
+#companyProfileModal .modal-content h3 {
+    font-size: 22px;
+    color: #2e3b3e;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* 表单容器 */
+#companyProfileModal .form-container {
+    display: flex;
+    flex-wrap: nowrap; /* 与 supplier.html 一致 */
+    gap: 20px;
+    justify-content: space-between;
+}
+
+/* 表单分组 */
+#companyProfileModal .form-section {
+    flex: 1;
+    min-width: 250px;
+}
+
+#companyProfileModal .form-section h4 {
+    font-size: 16px;
+    color: #2e3b3e;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+#companyProfileModal .form-group {
+    margin-bottom: 15px;
+}
+
+#companyProfileModal .form-group label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+#companyProfileModal .form-group input,
+#companyProfileModal .form-group select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#companyProfileModal .form-group input:focus,
+#companyProfileModal .form-group select:focus {
+    border-color: #00b4d8;
+    box-shadow: 0 0 5px rgba(0,180,216,0.3);
+}
+
+/* 按钮样式 */
+#companyProfileModal .modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#companyProfileModal .close-btn,
+#companyProfileModal .save-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#companyProfileModal .close-btn {
+    background-color: #e63946;
+    color: #fff;
+}
+
+#companyProfileModal .close-btn:hover {
+    background-color: #b32d38;
+    transform: translateY(-2px);
+}
+
+#companyProfileModal .save-btn {
+    background-color: #00b4d8;
+    color: #fff;
+}
+
+#companyProfileModal .save-btn:hover {
+    background-color: #0093b3;
+    transform: translateY(-2px);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    #companyProfileModal .modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+    #companyProfileModal .form-container {
+        flex-wrap: wrap; /* 与 supplier.css 一致 */
+    }
+    #companyProfileModal .form-section {
+        min-width: 100%;
     }
 }

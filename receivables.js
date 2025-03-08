@@ -14,45 +14,6 @@ let currentPage = 1;
 let filteredData = [...receivablesData]; // 用于筛选的数据副本
 
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        menu.style.display = 'none';
-    });
-
-    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-        toggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            const dropdownMenu = this.nextElementSibling;
-            const sidebar = document.querySelector('.sidebar');
-            const isOpen = dropdownMenu.style.display === 'block';
-
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                if (menu !== dropdownMenu) menu.style.display = 'none';
-            });
-
-            dropdownMenu.style.display = isOpen ? 'none' : 'block';
-
-            if (!isOpen) {
-                const togglePosition = toggle.getBoundingClientRect().top;
-                const sidebarPosition = sidebar.getBoundingClientRect().top;
-                const offset = togglePosition - sidebarPosition;
-                sidebar.scrollTo({ top: offset, behavior: 'smooth' });
-            }
-        });
-    });
-
-    document.querySelectorAll('.sidebar a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            if (this.classList.contains('dropdown-toggle')) return;
-            e.preventDefault();
-            const page = this.getAttribute('data-page');
-            if (page) window.location.href = page;
-        });
-    });
-
-    document.querySelector('.top-bar h1').addEventListener('click', function() {
-        window.location.href = 'index.html';
-    });
 
     updateTable();
 

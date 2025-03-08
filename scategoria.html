@@ -4,13 +4,78 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>供应商类别管理</title>
+  <link rel="stylesheet" href="common.css">
   <link rel="stylesheet" href="scategoria.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
   <header class="top-bar">
     <h1>管理系统</h1>
+    <button class="company-profile-btn">公司资料</button>
   </header>
+  <div class="modal" id="companyProfileModal">
+    <div class="modal-content">
+      <h3>公司资料</h3>
+      <form id="companyProfileForm">
+        <div class="form-container">
+          <!-- 第一组：基本信息 -->
+          <div class="form-section">
+            <h4>基本信息</h4>
+            <div class="form-group">
+              <label for="companyName">公司名称</label>
+              <input type="text" id="companyName" name="companyName" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="taxNumber">税号</label>
+              <input type="text" id="taxNumber" name="taxNumber" placeholder="请输入税号" required>
+            </div>
+          </div>
+  
+          <!-- 第二组：地址信息 -->
+          <div class="form-section">
+            <h4>地址信息</h4>
+            <div class="form-group">
+              <label for="companyAddress">地址</label>
+              <input type="text" id="companyAddress" name="companyAddress" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="city">城市</label>
+              <input type="text" id="city" name="city" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="province">省份</label>
+              <input type="text" id="province" name="province" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="country">国家</label>
+              <input type="text" id="country" name="country" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="postalCode">邮编</label>
+              <input type="text" id="postalCode" name="postalCode" placeholder="" required>
+            </div>
+          </div>
+  
+          <!-- 第三组：联系信息 -->
+          <div class="form-section">
+            <h4>联系信息</h4>
+            <div class="form-group">
+              <label for="companyPhone">电话</label>
+              <input type="text" id="companyPhone" name="companyPhone" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="companyEmail">电子邮件</label>
+              <input type="email" id="companyEmail" name="companyEmail" value="" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-buttons">
+          <button type="button" class="close-btn">关闭</button>
+          <button type="submit" class="save-btn">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
   <nav class="sidebar">
     <ul>
         <li class="dropdown">
@@ -121,6 +186,8 @@
       </div>
     </div>
   </main>
+  <script src="common.js"></script>
   <script src="scategoria.js"></script>
+  
 </body>
 </html>
