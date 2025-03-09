@@ -11,6 +11,8 @@
 <body>
   <header class="top-bar">
     <h1>管理系统</h1>
+    <button class="auth-btn login-btn">登录</button>
+    <button class="auth-btn register-btn">注册</button>
     <button class="company-profile-btn">公司资料</button>
   </header>
   <div class="modal" id="companyProfileModal">
@@ -76,6 +78,50 @@
       </form>
     </div>
   </div>
+  <div class="modal" id="registerModal">
+    <div class="modal-content auth-modal">
+        <h3>注册账户</h3>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="registerEmail">电子邮箱</label>
+                <input type="email" id="registerEmail" name="email" placeholder="请输入邮箱" required>
+            </div>
+            <div class="form-group">
+                <label for="registerUsername">用户名</label>
+                <input type="text" id="registerUsername" name="username" placeholder="请输入用户名" required>
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">密码</label>
+                <input type="password" id="registerPassword" name="password" placeholder="请输入密码" required>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="close-btn">关闭</button>
+                <button type="submit" class="save-btn auth-submit">注册</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 新增：登录模态框 -->
+<div class="modal" id="loginModal">
+    <div class="modal-content auth-modal">
+        <h3>登录系统</h3>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="loginIdentifier">用户名或电子邮箱</label>
+                <input type="text" id="loginIdentifier" name="identifier" placeholder="请输入用户名或邮箱" required>
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">密码</label>
+                <input type="password" id="loginPassword" name="password" placeholder="请输入密码" required>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="close-btn">关闭</button>
+                <button type="submit" class="save-btn auth-submit">登录</button>
+            </div>
+        </form>
+    </div>
+</div>
   <nav class="sidebar">
     <ul>
         <li class="dropdown">
