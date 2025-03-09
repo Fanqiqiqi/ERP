@@ -290,3 +290,233 @@ body {
         max-height: 90vh;
     }
 }
+/* 在 .company-profile-btn 样式下方添加以下内容 */
+
+/* 通用认证按钮样式 */
+.auth-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ff8e53); /* 渐变色，红色到橙色 */
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px; /* 与公司资料按钮保持间距 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    font-weight: 500;
+    text-transform: uppercase; /* 大写字母增加时尚感 */
+    letter-spacing: 1px; /* 字符间距 */
+}
+
+/* 登录按钮特定样式 */
+.login-btn {
+    background: linear-gradient(45deg, #4facfe, #00f2fe); /* 蓝色渐变 */
+}
+
+/* 注册按钮特定样式 */
+.register-btn {
+    background: linear-gradient(45deg, #43e97b, #38f9d7); /* 绿色渐变 */
+}
+
+/* 悬停效果 */
+.auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 激活效果 */
+.auth-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* 调整顶部栏布局 */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 确保按钮靠右分布 */
+    padding: 0 20px;
+}
+
+.top-bar h1 {
+    flex-grow: 1; /* 标题占剩余空间 */
+    margin-right: 20px; /* 与按钮组保持间距 */
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .auth-btn {
+        padding: 6px 12px;
+        font-size: 14px;
+        margin-right: 5px;
+    }
+    .company-profile-btn {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+}
+/* common.css */
+/* ... 现有样式保持不变，直到响应式设计部分 ... */
+
+/* 认证模态框特定样式 */
+/* ... 现有样式保持不变，直到 .modal-content 样式 ... */
+
+/* 认证模态框特定样式 */
+.auth-modal {
+    max-width: 400px; /* 更紧凑的宽度，时尚感 */
+    padding: 30px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ffffff, #f9f9f9); /* 轻微渐变背景 */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* 更强的阴影 */
+}
+
+.auth-modal h3 {
+    font-size: 24px;
+    color: #2e3b3e;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* 表单输入框样式优化 */
+.auth-modal .form-group input {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-modal .form-group input:focus {
+    border-color: #00b4d8;
+    box-shadow: 0 0 8px rgba(0, 180, 216, 0.3);
+}
+
+/* 按钮样式优化 */
+.auth-modal .auth-submit {
+    background: linear-gradient(45deg, #00b4d8, #43e97b); /* 渐变色按钮 */
+    padding: 10px 25px;
+    font-size: 16px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.auth-modal .auth-submit:hover {
+    background: linear-gradient(45deg, #0093b3, #38f9d7);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 调整关闭按钮 */
+.auth-modal .close-btn {
+    background: linear-gradient(45deg, #e63946, #ff6b6b);
+    border-radius: 8px;
+    padding: 10px 25px;
+}
+
+.auth-modal .close-btn:hover {
+    background: linear-gradient(45deg, #b32d38, #ff8e53);
+    transform: translateY(-2px);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .auth-modal {
+        width: 90%;
+        padding: 20px;
+    }
+    .auth-modal h3 {
+        font-size: 20px;
+    }
+    .auth-modal .form-group input {
+        font-size: 14px;
+    }
+    .auth-modal .auth-submit,
+    .auth-modal .close-btn {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+    .sidebar {
+        width: 80px;
+    }
+    .sidebar > ul > li > a {
+        font-size: 14px;
+        padding: 10px;
+        text-align: center;
+    }
+    .dropdown-menu {
+        padding-left: 10px;
+    }
+    .dropdown-menu a {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+    .modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+    .auth-btn {
+        padding: 6px 12px;
+        font-size: 14px;
+        margin-right: 5px;
+    }
+    .company-profile-btn {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+}
+
+/* ... 现有样式保持不变，直到 .company-profile-btn 样式 ... */
+
+/* 通用认证按钮样式 */
+.auth-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ff8e53); /* 渐变色，红色到橙色 */
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px; /* 与公司资料按钮保持间距 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    font-weight: 500;
+    text-transform: uppercase; /* 大写字母增加时尚感 */
+    letter-spacing: 1px; /* 字符间距 */
+}
+
+/* 登录按钮特定样式 */
+.login-btn {
+    background: linear-gradient(45deg, #4facfe, #00f2fe); /* 蓝色渐变 */
+}
+
+/* 注册按钮特定样式 */
+.register-btn {
+    background: linear-gradient(45deg, #43e97b, #38f9d7); /* 绿色渐变 */
+}
+
+/* 悬停效果 */
+.auth-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 激活效果 */
+.auth-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* 调整顶部栏布局 */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 确保按钮靠右分布 */
+    padding: 0 20px;
+}
+
+.top-bar h1 {
+    flex-grow: 1; /* 标题占剩余空间 */
+    margin-right: 20px; /* 与按钮组保持间距 */
+}

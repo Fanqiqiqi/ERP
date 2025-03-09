@@ -1,4 +1,3 @@
-// common.js
 document.addEventListener('DOMContentLoaded', function() {
     // 初始化下拉菜单为隐藏状态
     document.querySelectorAll('.dropdown-menu').forEach(menu => {
@@ -58,12 +57,21 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = 'index.html';
     });
 
-    // 点击“公司资料”按钮显示模态框
+    // 模态框相关逻辑
     const companyProfileBtn = document.querySelector('.company-profile-btn');
     const companyProfileModal = document.getElementById('companyProfileModal');
     const closeBtn = document.querySelector('#companyProfileModal .close-btn');
     const companyProfileForm = document.getElementById('companyProfileForm');
+    const loginBtn = document.querySelector('.login-btn');
+    const registerBtn = document.querySelector('.register-btn');
+    const loginModal = document.getElementById('loginModal');
+    const registerModal = document.getElementById('registerModal');
+    const loginCloseBtn = document.querySelector('#loginModal .close-btn');
+    const registerCloseBtn = document.querySelector('#registerModal .close-btn');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
 
+    // 显示/隐藏模态框
     if (companyProfileBtn && companyProfileModal && closeBtn) {
         companyProfileBtn.addEventListener('click', function() {
             companyProfileModal.style.display = 'flex';
@@ -73,39 +81,154 @@ document.addEventListener('DOMContentLoaded', function() {
             companyProfileModal.style.display = 'none';
         });
 
-        // 点击模态框外部关闭
         companyProfileModal.addEventListener('click', function(e) {
             if (e.target === companyProfileModal) {
                 companyProfileModal.style.display = 'none';
             }
         });
+    }
 
-        // 新增：加载保存的公司资料
-        if (companyProfileForm) {
-            // 从 localStorage 恢复数据
-            const savedData = JSON.parse(localStorage.getItem('companyProfileData')) || {};
-            for (const [key, value] of Object.entries(savedData)) {
-                const input = companyProfileForm.querySelector(`[name="${key}"]`);
-                if (input) {
-                    input.value = value;
-                }
+    if (registerBtn && registerModal && registerCloseBtn) {
+        registerBtn.addEventListener('click', function() {
+            registerModal.style.display = 'flex';
+        });
+
+        registerCloseBtn.addEventListener('click', function() {
+            registerModal.style.display = 'none';
+        });
+
+        registerModal.addEventListener('click', function(e) {
+            if (e.target === registerModal) {
+                registerModal.style.display = 'none';
+            }
+        });
+    }
+
+    if (loginBtn && loginModal && loginCloseBtn) {
+        loginBtn.addEventListener('click', function() {
+            loginModal.style.display = 'flex';
+        });
+
+        loginCloseBtn.addEventListener('click', function() {
+            loginModal.style.display = 'none';
+        });
+
+        loginModal.addEventListener('click', function(e) {
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+        });
+    }
+
+    // Firebase 注册逻辑
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('registerEmail').value;
+            const username = document.getElementById('registerUsername').value;
+            const password = document.getElementById('registerPassword').value;
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // 保存用户名到 Firestore
+                    return db.collection('users').doc(userCredential.user.uid).set({
+                        username: username,
+                        email: email,
+                        createdAt: new Date()
+                    });
+                })
+                .then(() => {
+                    alert('注册成功！');
+                    registerModal.style.display = 'none';
+                    // 自动登录
+                    return auth.signInWithEmailAndPassword(email, password);
+                })
+                .then(() => {
+                    window.location.reload(); // 刷新页面以更新状态
+                })
+                .catch((error) => {
+                    alert('注册失败：' + error.message);
+                });
+        });
+    }
+
+    // Firebase 登录逻辑
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const identifier = document.getElementById('loginIdentifier').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // 假设 identifier 可以是邮箱或用户名，但目前只支持邮箱
+            auth.signInWithEmailAndPassword(identifier, password)
+                .then((userCredential) => {
+                    alert('登录成功！');
+                    loginModal.style.display = 'none';
+                    window.location.reload(); // 刷新页面以更新状态
+                })
+                .catch((error) => {
+                    alert('登录失败：' + error.message);
+                });
+        });
+    }
+
+    // Firebase 保存公司资料
+    if (companyProfileForm) {
+        companyProfileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = auth.currentUser;
+            if (!user) {
+                alert('请先登录！');
+                return;
             }
 
-            // 保存公司资料到 localStorage 并关闭模态框
-            companyProfileForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-                const companyData = {};
-                formData.forEach((value, key) => {
-                    companyData[key] = value;
+            const companyData = {
+                companyName: document.getElementById('companyName').value,
+                taxNumber: document.getElementById('taxNumber').value,
+                companyAddress: document.getElementById('companyAddress').value,
+                city: document.getElementById('city').value,
+                province: document.getElementById('province').value,
+                country: document.getElementById('country').value,
+                postalCode: document.getElementById('postalCode').value,
+                companyPhone: document.getElementById('companyPhone').value,
+                companyEmail: document.getElementById('companyEmail').value,
+                updatedAt: new Date()
+            };
+
+            db.collection('users').doc(user.uid).collection('companyProfile').doc('profile')
+                .set(companyData, { merge: true })
+                .then(() => {
+                    alert('公司资料保存成功！');
+                    companyProfileModal.style.display = 'none';
+                })
+                .catch((error) => {
+                    alert('保存失败：' + error.message);
                 });
-                // 保存到 localStorage
-                localStorage.setItem('companyProfileData', JSON.stringify(companyData));
-                console.log('保存的公司资料:', companyData); // 调试用，可移除
-                companyProfileModal.style.display = 'none'; // 关闭模态框
-            });
-        }
-    } else {
-        console.error('公司资料按钮或模态框未找到');
+        });
     }
+
+    // 监听用户登录状态
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            // 用户已登录，加载公司资料
+            db.collection('users').doc(user.uid).collection('companyProfile').doc('profile').get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.getElementById('companyName').value = data.companyName || '';
+                        document.getElementById('taxNumber').value = data.taxNumber || '';
+                        document.getElementById('companyAddress').value = data.companyAddress || '';
+                        document.getElementById('city').value = data.city || '';
+                        document.getElementById('province').value = data.province || '';
+                        document.getElementById('country').value = data.country || '';
+                        document.getElementById('postalCode').value = data.postalCode || '';
+                        document.getElementById('companyPhone').value = data.companyPhone || '';
+                        document.getElementById('companyEmail').value = data.companyEmail || '';
+                    }
+                })
+                .catch((error) => {
+                    console.error('加载公司资料失败：', error);
+                });
+        }
+    });
 });
