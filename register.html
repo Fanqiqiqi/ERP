@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册 - 客户管理价格系统</title>
+    <link rel="stylesheet" href="common.css">
+    <!-- 移除原有的 <script src="..."> 标签，因为模块方式已包含初始化 -->
+</head>
+<body>
+    <header class="top-bar">
+        <h1>管理系统 - 注册</h1>
+    </header>
+
+    <div class="modal" id="registerModal" style="display: flex;">
+        <div class="modal-content auth-modal">
+            <h3>注册账户</h3>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerEmail">电子邮箱</label>
+                    <input type="email" id="registerEmail" name="email" placeholder="请输入邮箱" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerUsername">用户名</label>
+                    <input type="text" id="registerUsername" name="username" placeholder="请输入用户名" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">密码</label>
+                    <input type="password" id="registerPassword" name="password" placeholder="请输入密码" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="save-btn auth-submit">注册</button>
+                </div>
+            </form>
+            <p style="text-align: center; margin-top: 20px;">
+                已有账户？<a href="login.html" style="color: #00b4d8; text-decoration: none;">点击登录</a>
+            </p>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJShPdQQ4BilabH3dqEn83Kcezo0JG-iI",
+            authDomain: "customermanagementnew.firebaseapp.com",
+            projectId: "customermanagementnew",
+            storageBucket: "customermanagementnew.firebasestorage.app",
+            messagingSenderId: "335466802047",
+            appId: "1:335466802047:web:55e7ee0523f45f34e6c84a"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // 调试日志
+        console.log('Firebase 初始化成功，版本: 11.4.0');
+        console.log('Auth:', typeof auth);
+        console.log('DB:', typeof db);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM 加载完成');
+
+            const registerForm = document.getElementById('registerForm');
+            if (!registerForm) {
+                console.error('未找到 registerForm 元素');
+                return;
+            }
+
+            console.log('注册表单事件绑定成功');
+
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('表单提交事件触发');
+
+                const email = document.getElementById('registerEmail').value.trim();
+                const username = document.getElementById('registerUsername').value.trim();
+                const password = document.getElementById('registerPassword').value;
+
+                console.log('输入内容:', { email, username, password });
+
+                // 输入验证
+                if (!email || !username || !password) {
+                    console.error('输入字段不完整');
+                    alert('请填写所有字段！');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    console.error('密码长度不足');
+                    alert('密码必须至少6位！');
+                    return;
+                }
+
+                console.log('尝试注册:', { email, username });
+
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        console.log('用户创建成功:', user.uid);
+
+                        // 同步用户名到 Authentication
+                        return Promise.all([
+                            updateProfile(user, { displayName: username }),
+                            setDoc(doc(db, 'users', user.uid), {
+                                username: username,
+                                email: email,
+                                createdAt: serverTimestamp()
+                            })
+                        ]);
+                    })
+                    .then(() => {
+                        console.log('用户信息保存成功');
+                        alert('注册成功！请登录以继续使用系统。');
+                        window.location.href = 'login.html';
+                    })
+                    .catch((error) => {
+                        console.error('注册过程出错:', error.code, error.message);
+                        let errorMessage = '注册失败：';
+                        switch (error.code) {
+                            case 'auth/email-already-in-use':
+                                errorMessage += '该邮箱已被注册！';
+                                break;
+                            case 'auth/invalid-email':
+                                errorMessage += '邮箱格式无效！';
+                                break;
+                            case 'auth/weak-password':
+                                errorMessage += '密码太弱，请使用更强的密码！';
+                                break;
+                            case 'auth/network-request-failed':
+                                errorMessage += '网络错误，请检查网络连接！';
+                                break;
+                            default:
+                                errorMessage += error.message;
+                        }
+                        alert(errorMessage);
+                    });
+            });
+
+            document.querySelector('.top-bar h1').addEventListener('click', function() {
+                console.log('顶部标题点击，跳转到 register.html');
+                window.location.href = 'register.html';
+            });
+        });
+    </script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91dc6cdc3c6fdd1c',t:'MTc0MTU0MjczNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91de395a6abaad62',t:'MTc4MTU2MTU5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>
