@@ -3,231 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>客户管理价格系统</title>
+    <title>登录 - 客户管理价格系统</title>
     <link rel="stylesheet" href="common.css">
-    <link rel="stylesheet" href="index.css">
-    <script src="https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js"></script>
-
 </head>
 <body>
-    <!-- 顶部灰色横条 -->
     <header class="top-bar">
-        <h1>管理系统</h1>
-        <button class="auth-btn login-btn">登录</button>
-        <button class="auth-btn register-btn">注册</button>
-        <button class="company-profile-btn">公司资料</button>
+        <h1>管理系统 - 登录</h1>
     </header>
-    <div class="modal" id="companyProfileModal">
-        <div class="modal-content">
-          <h3>公司资料</h3>
-          <form id="companyProfileForm">
-            <div class="form-container">
-              <!-- 第一组：基本信息 -->
-              <div class="form-section">
-                <h4>基本信息</h4>
-                <div class="form-group">
-                  <label for="companyName">公司名称</label>
-                  <input type="text" id="companyName" name="companyName" value="" required>
-                </div>
-                <div class="form-group">
-                  <label for="taxNumber">税号</label>
-                  <input type="text" id="taxNumber" name="taxNumber" placeholder="请输入税号" required>
-                </div>
-              </div>
-      
-              <!-- 第二组：地址信息 -->
-              <div class="form-section">
-                <h4>地址信息</h4>
-                <div class="form-group">
-                  <label for="companyAddress">地址</label>
-                  <input type="text" id="companyAddress" name="companyAddress" value="" required>
-                </div>
-                <div class="form-group">
-                  <label for="city">城市</label>
-                  <input type="text" id="city" name="city" value="" required>
-                </div>
-                <div class="form-group">
-                  <label for="province">省份</label>
-                  <input type="text" id="province" name="province" value="" required>
-                </div>
-                <div class="form-group">
-                  <label for="country">国家</label>
-                  <input type="text" id="country" name="country" value="" required>
-                </div>
-                <div class="form-group">
-                  <label for="postalCode">邮编</label>
-                  <input type="text" id="postalCode" name="postalCode" placeholder="" required>
-                </div>
-              </div>
-      
-              <!-- 第三组：联系信息 -->
-              <div class="form-section">
-                <h4>联系信息</h4>
-                <div class="form-group">
-                  <label for="companyPhone">电话</label>
-                  <input type="text" id="companyPhone" name="companyPhone" value="" required>
-                </div>
-                <div class="form-group">
-                  <label for="companyEmail">电子邮件</label>
-                  <input type="email" id="companyEmail" name="companyEmail" value="" required>
-                </div>
-              </div>
-            </div>
-            <div class="modal-buttons">
-              <button type="button" class="close-btn">关闭</button>
-              <button type="submit" class="save-btn">保存</button>
-            </div>
-          </form>
-        </div>
-      </div>
-      <div class="modal" id="registerModal">
-        <div class="modal-content auth-modal">
-            <h3>注册账户</h3>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="registerEmail">电子邮箱</label>
-                    <input type="email" id="registerEmail" name="email" placeholder="请输入邮箱" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerUsername">用户名</label>
-                    <input type="text" id="registerUsername" name="username" placeholder="请输入用户名" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerPassword">密码</label>
-                    <input type="password" id="registerPassword" name="password" placeholder="请输入密码" required>
-                </div>
-                <div class="modal-buttons">
-                    <button type="button" class="close-btn">关闭</button>
-                    <button type="submit" class="save-btn auth-submit">注册</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <!-- 新增：登录模态框 -->
-    <div class="modal" id="loginModal">
+    <div class="modal" id="loginModal" style="display: flex;">
         <div class="modal-content auth-modal">
             <h3>登录系统</h3>
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="loginIdentifier">用户名或电子邮箱</label>
-                    <input type="text" id="loginIdentifier" name="identifier" placeholder="请输入用户名或邮箱" required>
+                    <label for="loginIdentifier">电子邮箱</label>
+                    <input type="email" id="loginIdentifier" name="identifier" placeholder="请输入邮箱" required>
                 </div>
                 <div class="form-group">
                     <label for="loginPassword">密码</label>
                     <input type="password" id="loginPassword" name="password" placeholder="请输入密码" required>
                 </div>
                 <div class="modal-buttons">
-                    <button type="button" class="close-btn">关闭</button>
                     <button type="submit" class="save-btn auth-submit">登录</button>
                 </div>
             </form>
+            <p style="text-align: center; margin-top: 20px;">
+                没有账户？<a href="register.html" style="color: #00b4d8; text-decoration: none;">点击注册</a>
+            </p>
         </div>
     </div>
 
-    <!-- 左侧菜单栏 -->
-    <nav class="sidebar">
-      <ul>
-          <li class="dropdown">
-            <a href="#system" class="dropdown-toggle">系统管理</a>
-            <ul class="dropdown-menu">
-                <li><a href="#" data-page="codemanagement.html">代码管理</a></li>
-                <li><a href="#" data-page="authmanagement.html">授权管理</a></li>
-            </ul>
-          </li>
-          <li class="dropdown">
-              <a href="#customer" class="dropdown-toggle">客户管理</a>
-              <ul class="dropdown-menu">
-                  <li><a href="#" data-page="ccategoria.html">客户类别</a></li>
-                  <li><a href="#" data-page="customer.html">客户资料</a></li>
-              </ul>
-          </li>
-          <li class="dropdown">
-              <a href="#supplier" class="dropdown-toggle">供应商管理</a>
-              <ul class="dropdown-menu">
-                  <li><a href="#" data-page="scategoria.html">供应商类别</a></li>
-                  <li><a href="#" data-page="supplier.html">供应商资料</a></li>
-              </ul>
-          </li>
-          <li class="dropdown">
-              <a href="#product" class="dropdown-toggle">产品管理</a>
-              <ul class="dropdown-menu">
-                  <li><a href="#" data-page="pcategoria.html">产品类别</a></li>
-                  <li><a href="#" data-page="product.html">产品资料</a></li>
-              </ul>
-          </li>
-          <li class="dropdown">
-              <a href="#price" class="dropdown-toggle">价格管理</a>
-              <ul class="dropdown-menu">
-                  <li><a href="#" data-page="prcategoria.html">价格表分类</a></li>
-                  <li><a href="#" data-page="price.html">价格表资料</a></li>
-              </ul>
-          </li>
-          <li class="dropdown">
-              <a href="#purchase" class="dropdown-toggle">采购管理</a>
-              <ul class="dropdown-menu">
-                  <li><a href="#" data-page="purchaseprice.html">采购报价管理</a></li>
-                  <li><a href="#" data-page="purchaseorder.html">采购订单管理</a></li>
-                  <li><a href="#" data-page="purchaseorderinstocklist.html">采购入库</a></li>
-              </ul>
-          </li>
-          <li class="dropdown">
-              <a href="#sales" class="dropdown-toggle">销售管理</a>
-              <ul class="dropdown-menu">
-                  <li><a href="#" data-page="cotation.html">报价管理</a></li>
-                  <li><a href="#" data-page="order.html">订单管理</a></li>
-                  <li><a href="#" data-page="despatch.html">出货管理</a></li>
-              </ul>
-          </li>
-          <li><a href="#" data-page="stockmanagement.html">库存管理</a></li>
-          <li class="dropdown">
-              <a href="#invoice" class="dropdown-toggle">发票管理</a>
-              <ul class="dropdown-menu">
-                  <li><a href="#" data-page="salesinvoicelist.html">销售发票</a></li>
-                  <li><a href="#" data-page="purchaseinvoice.html">采购发票</a></li>
-              </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#finance" class="dropdown-toggle">财务管理</a>
-            <ul class="dropdown-menu">
-                <li><a href="#" data-page="receivables.html">应收管理</a></li>
-                <li><a href="#" data-page="payables.html">应付管理</a></li>
-                <li><a href="#" data-page="financialreport.html">财务报表</a></li>
-            </ul>
-          </li>
-      </ul>
-    </nav>
-      
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js';
 
-    <!-- 主内容区域 -->
-    <main class="content">
-        <h2>工作流</h2>
-        <p>请选择左侧菜单进行操作</p>
-    </main>
-    <script src="common.js"></script>
-    <script src="index.js"></script>
-    <script>
-      // Firebase 配置
-      const firebaseConfig = {
-          apiKey: "AIzaSyCErh2D2DIpoCh40Ktig8h-n6TIJQe76Y-",
-          authDomain: "companymanagementtest.firebaseapp.com",
-          projectId: "companymanagementtest",
-          storageBucket: "companymanagementtest.firebasestorage.app",
-          messagingSenderId: "959499614940",
-          appId: "1:959499614940:web:e4e9320deeC949ead79c1"
-      };
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJShPdQQ4BilabH3dqEn83Kcezo0JG-iI",
+            authDomain: "customermanagementnew.firebaseapp.com",
+            projectId: "customermanagementnew",
+            storageBucket: "customermanagementnew.firebasestorage.app",
+            messagingSenderId: "335466802047",
+            appId: "1:335466802047:web:55e7ee0523f45f34e6c84a"
+        };
 
-      // 初始化 Firebase
-      const app = firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const db = firebase.firestore();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-      // 确保 Authentication 和 Firestore 服务已启用
-      // 在 Firebase 控制台手动启用 Email/Password 和 Firestore (测试模式)
+        console.log('Firebase 初始化成功，版本: 11.4.0');
+        console.log('Auth:', typeof auth);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM 加载完成');
+            const loginForm = document.getElementById('loginForm');
+
+            if (!loginForm) {
+                console.error('未找到 loginForm 元素');
+                return;
+            }
+
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                console.log('开始提交表单');
+                const identifier = document.getElementById('loginIdentifier').value.trim();
+                const password = document.getElementById('loginPassword').value;
+
+                if (!identifier || !password) {
+                    console.error('邮箱或密码为空');
+                    alert('请输入邮箱和密码');
+                    return;
+                }
+
+                console.log('尝试登录:', { identifier, passwordLength: password.length });
+
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, identifier, password);
+                    const user = userCredential.user;
+                    console.log('登录成功:', user.uid, user.email);
+                    window.location.replace('dashboard.html'); // 修改为跳转到 dashboard.html
+                } catch (error) {
+                    console.error('登录失败:', error.code, error.message);
+                    let errorMessage = '登录失败：';
+                    switch (error.code) {
+                        case 'auth/user-not-found':
+                            errorMessage += '用户不存在！';
+                            break;
+                        case 'auth/wrong-password':
+                            errorMessage += '密码错误！';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage += '邮箱格式无效！';
+                            break;
+                        case 'auth/network-request-failed':
+                            errorMessage += '网络错误，请检查网络连接！';
+                            break;
+                        default:
+                            errorMessage += error.message;
+                    }
+                    alert(errorMessage);
+                }
+            });
+        });
     </script>
-
-
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91decafd092c7bb8',t:'MTc0MTU2NzU2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
