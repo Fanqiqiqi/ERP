@@ -6,31 +6,33 @@ const printBtn = document.querySelector('.print-btn');
 const customerCodeSelect = document.querySelector('#customerCode');
 const customerNameInput = document.querySelector('#customerName');
 const invoiceNumberInput = document.querySelector('#invoiceNumber');
+const invoiceSeriesInput = document.querySelector('#invoiceSeries');
 const invoiceDateInput = document.querySelector('#invoiceDate');
 const dueDateInput = document.querySelector('#dueDate');
 const tableContainer = document.querySelector('.table-container');
 const totalsContainer = document.querySelector('#totals-container');
 const totalsSection = document.querySelector('.totals-section');
 const generateInvoiceBtn = document.querySelector('#generateInvoiceBtn');
+const generateSeriesBtn = document.querySelector('#generateSeriesBtn');
 
-// 从客户数据中加载客户
+// Cargar clientes desde datos
 function getCustomers() {
     return JSON.parse(localStorage.getItem('customers') || '[]');
 }
 
-// 从产品数据中加载产品
+// Cargar productos desde datos
 function getProducts() {
     return JSON.parse(localStorage.getItem('products') || '[]');
 }
 
-// 获取产品币种
+// Obtener moneda del producto
 function getProductCurrency(productCode) {
     const products = getProducts();
     const product = products.find(p => p.code === productCode);
     return product ? product.currency || '' : '';
 }
 
-// 获取销售价格和税率
+// Obtener precio de venta y tasa de impuesto
 function getSalePriceAndTaxRate(productCode, customerCode) {
     const cotations = JSON.parse(localStorage.getItem('cotations') || '[]');
     const products = getProducts();
@@ -59,7 +61,7 @@ function getSalePriceAndTaxRate(productCode, customerCode) {
     return { price, taxRate };
 }
 
-// 动态调整表格容器高度
+// Ajustar altura del contenedor de tabla dinámicamente
 function adjustTableHeight() {
     const totalsSectionRect = totalsSection.getBoundingClientRect();
     const tableContainerRect = tableContainer.getBoundingClientRect();
@@ -69,10 +71,10 @@ function adjustTableHeight() {
     tableContainer.style.overflowY = tableHeight > availableHeight ? 'auto' : 'hidden';
 }
 
-// 加载客户下拉框
+// Cargar lista desplegable de clientes
 function loadCustomers() {
     const customers = getCustomers();
-    customerCodeSelect.innerHTML = '<option value="">请选择客户</option>';
+    customerCodeSelect.innerHTML = '<option value="">Selecciona cliente</option>';
     customers.forEach(customer => {
         const option = document.createElement('option');
         option.value = customer.code;
@@ -81,16 +83,16 @@ function loadCustomers() {
     });
 }
 
-// 设置默认日期
+// Establecer fechas por defecto
 function setDefaultDate() {
     const today = new Date().toISOString().split('T')[0];
     invoiceDateInput.value = today;
     const dueDate = new Date();
-    dueDate.setDate(dueDate.getDate() + 30); // 默认到期日为30天后
+    dueDate.setDate(dueDate.getDate() + 30);
     dueDateInput.value = dueDate.toISOString().split('T')[0];
 }
 
-// 更新总额显示
+// Actualizar visualización de totales
 function updateTotals() {
     const rows = Array.from(tbody.querySelectorAll('tr'));
     const taxGroups = {};
@@ -128,17 +130,17 @@ function updateTotals() {
         const totalsRow = document.createElement('div');
         totalsRow.className = 'totals-row';
         totalsRow.innerHTML = `
-            <div><label>税前总价:</label><span>${group.subtotal.toFixed(2)}</span></div>
-            <div><label>税率:</label><span>${taxRate}%</span></div>
-            <div><label>税值:</label><span>${group.taxValue.toFixed(2)}</span></div>
-            <div><label>税后总价:</label><span>${group.totalWithTax.toFixed(2)}</span></div>
+            <div><label>Total sin Impuesto:</label><span>${group.subtotal.toFixed(2)}</span></div>
+            <div><label>Tasa Impuesto:</label><span>${taxRate}%</span></div>
+            <div><label>Valor Impuesto:</label><span>${group.taxValue.toFixed(2)}</span></div>
+            <div><label>Total con Impuesto:</label><span>${group.totalWithTax.toFixed(2)}</span></div>
         `;
         totalsContainer.appendChild(totalsRow);
     });
     adjustTableHeight();
 }
 
-// 生成临时销售发票号（不占用计数器）
+// Generar número de factura临时 (no ocupa contador)
 function generateTemporaryInvoiceNumber() {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const invoiceRule = codeRules['salesinvoice'] || { prefix: 'INV', digits: 4, suffix: '', counter: 0 };
@@ -157,7 +159,22 @@ function generateTemporaryInvoiceNumber() {
     return newInvoiceNumber;
 }
 
-// 确认并占用发票号（保存时调用）
+// Generar系列号临时 (示例逻辑，可根据需求调整)
+function generateTemporarySeries() {
+    const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
+    const seriesRule = codeRules['invoiceSeries'] || { prefix: 'SER', digits: 3, counter: 0 };
+    
+    let counter = seriesRule.counter || 0;
+    counter++;
+    const number = String(counter).padStart(seriesRule.digits, '0');
+    const newSeries = `${seriesRule.prefix}${number}`;
+    seriesRule.counter = counter;
+    codeRules['invoiceSeries'] = seriesRule;
+    localStorage.setItem('codeRules', JSON.stringify(codeRules));
+    return newSeries;
+}
+
+// Confirmar y ocupar número de factura (al guardar)
 function confirmInvoiceNumber(invoiceNumber) {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const invoiceRule = codeRules['salesinvoice'] || { prefix: 'INV', digits: 4, suffix: '', counter: 0 };
@@ -173,17 +190,17 @@ function confirmInvoiceNumber(invoiceNumber) {
     }
 }
 
-// 添加新行
+// Añadir nueva fila
 addBtn.addEventListener('click', function() {
     const row = document.createElement('tr');
     row.innerHTML = `
-        <td><input type="text" class="product-code" placeholder="输入产品代码"></td>
-        <td><input type="text" class="product-name" placeholder="输入产品名称"></td>
-        <td><input type="text" class="lote" placeholder="输入批次号"></td>
-        <td><input type="number" class="quantity" placeholder="输入数量"></td>
-        <td><input type="number" class="sale-price" placeholder="销售价格" step="0.01" readonly> <span class="currency-span"></span></td>
-        <td><input type="text" class="tax-rate" placeholder="税率 (%)" step="0.01"></td>
-        <td><input type="number" class="total-price" placeholder="总价" step="0.01" readonly> <span class="currency-span"></span></td>
+        <td><input type="text" class="product-code" placeholder="Ingresa código producto"></td>
+        <td><input type="text" class="product-name" placeholder="Ingresa nombre producto"></td>
+        <td><input type="text" class="lote" placeholder="Ingresa lote"></td>
+        <td><input type="number" class="quantity" placeholder="Ingresa cantidad"></td>
+        <td><input type="number" class="sale-price" placeholder="Precio venta" step="0.01" readonly> <span class="currency-span"></span></td>
+        <td><input type="text" class="tax-rate" placeholder="Tasa (%)" step="0.01"></td>
+        <td><input type="number" class="total-price" placeholder="Total" step="0.01" readonly> <span class="currency-span"></span></td>
         <td><span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span></td>
     `;
     tbody.appendChild(row);
@@ -193,27 +210,29 @@ addBtn.addEventListener('click', function() {
     row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 
-// 返回销售发票列表页面
+// Volver a la lista de facturas de venta
 backBtn.addEventListener('click', function() {
     window.location.href = 'salesinvoicelist.html';
 });
 
-// 打印按钮事件
+// Evento botón imprimir
 printBtn.addEventListener('click', function() {
     window.print();
 });
 
-// 保存所有数据到发票列表
+// Guardar todos los datos en la lista de facturas
 saveAllBtn.addEventListener('click', function() {
     const rows = Array.from(tbody.querySelectorAll('tr'));
     const invoiceNumber = invoiceNumberInput.value.trim();
+    const invoiceSeries = invoiceSeriesInput.value.trim();
     const customerCode = customerCodeSelect.value;
     const customerName = customerNameInput.value.trim();
     const invoiceDate = invoiceDateInput.value;
     const dueDate = dueDateInput.value;
+    const verifactu = document.querySelector('input[name="verifactu"]:checked').value;
 
     if (!invoiceNumber || !customerCode || !invoiceDate || !dueDate) {
-        alert('请确保发票编号、客户代码、发票日期和到期日期填写完整！');
+        alert('¡Asegúrate de completar el número de factura, código cliente, fecha factura y fecha vencimiento!');
         return;
     }
 
@@ -244,7 +263,7 @@ saveAllBtn.addEventListener('click', function() {
     }).filter(item => item !== null);
 
     if (invoiceListData.length === 0) {
-        alert('请至少添加一条有效的发票明细！');
+        alert('¡Agrega al menos un detalle de factura válido!');
         return;
     }
 
@@ -252,14 +271,16 @@ saveAllBtn.addEventListener('click', function() {
     const totalAmount = invoiceListData.reduce((sum, item) => sum + parseFloat(item.totalPrice), 0).toFixed(2);
     const invoice = {
         invoiceNumber,
+        invoiceSeries,
         invoiceDate,
         dueDate,
         customerName,
         invoiceAmount: totalAmount,
-        currency: invoiceListData[0].currency || '€' // 确保保存欧元
+        currency: invoiceListData[0].currency || '€',
+        verifactu
     };
 
-    console.log('Saving invoice:', invoice); // 调试
+    console.log('Guardando factura:', invoice);
 
     const existingIndex = invoiceData.findIndex(i => i.invoiceNumber === invoiceNumber);
     if (existingIndex >= 0) {
@@ -275,7 +296,8 @@ saveAllBtn.addEventListener('click', function() {
 
     window.location.href = 'salesinvoicelist.html';
 });
-// 绑定输入框事件
+
+// Vincular eventos de inputs
 function bindInputEvents(row) {
     const codeInput = row.querySelector('.product-code');
     const nameInput = row.querySelector('.product-name');
@@ -362,7 +384,7 @@ function bindInputEvents(row) {
     });
 }
 
-// 绑定操作图标事件
+// Vincular eventos de íconos
 function bindIconEvents() {
     document.querySelectorAll('.delete-icon').forEach(icon => {
         icon.removeEventListener('click', deleteHandler);
@@ -373,13 +395,13 @@ function bindIconEvents() {
 const deleteHandler = function() {
     const row = this.closest('tr');
     const productCode = row.querySelector('.product-code').value;
-    if (confirm(`确定删除产品：${productCode} 的发票明细吗？`)) {
+    if (confirm(`¿Seguro de eliminar el detalle de factura del producto: ${productCode}?`)) {
         row.remove();
         updateTotals();
     }
 };
 
-// 客户代码和名称联动
+// Vincular código y nombre de cliente
 customerCodeSelect.addEventListener('change', function() {
     const customers = getCustomers();
     const selectedCustomer = customers.find(c => c.code === this.value);
@@ -387,7 +409,7 @@ customerCodeSelect.addEventListener('change', function() {
     updateTotals();
 });
 
-// 加载现有发票数据（编辑模式）或从出货单传递的数据
+// Cargar datos existentes de factura (modo edición) o datos desde despacho
 function loadInvoiceData() {
     const urlParams = new URLSearchParams(window.location.search);
     const invoiceNumber = decodeURIComponent(urlParams.get('invoiceNumber') || '');
@@ -399,6 +421,7 @@ function loadInvoiceData() {
         const invoice = invoiceData.find(i => i.invoiceNumber === invoiceNumber);
         if (invoice) {
             invoiceNumberInput.value = invoice.invoiceNumber;
+            invoiceSeriesInput.value = invoice.invoiceSeries || '';
             const customers = getCustomers();
             const customer = customers.find(c => c.name === invoice.customerName);
             if (customer) {
@@ -407,23 +430,24 @@ function loadInvoiceData() {
             }
             invoiceDateInput.value = invoice.invoiceDate;
             dueDateInput.value = invoice.dueDate;
+            document.querySelector(`input[name="verifactu"][value="${invoice.verifactu || 'yes'}"]`).checked = true;
 
             const invoiceList = JSON.parse(localStorage.getItem('invoiceList') || '[]');
             const items = invoiceList.filter(item => item.invoiceNumber === invoiceNumber);
             tbody.innerHTML = '';
             if (items.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8">暂无发票明细数据</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8">Sin datos de detalles de factura</td></tr>';
             } else {
                 items.forEach(item => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td><input type="text" class="product-code" value="${item.productCode}" placeholder="输入产品代码"></td>
-                        <td><input type="text" class="product-name" value="${item.productName}" placeholder="输入产品名称"></td>
-                        <td><input type="text" class="lote" value="${item.lote}" placeholder="输入批次号"></td>
-                        <td><input type="number" class="quantity" value="${item.quantity}" placeholder="输入数量"></td>
-                        <td><input type="number" class="sale-price" value="${item.salePrice}" placeholder="销售价格" step="0.01" readonly> <span class="currency-span">${item.currency || getProductCurrency(item.productCode)}</span></td>
-                        <td><input type="text" class="tax-rate" value="${item.taxRate}%" placeholder="税率 (%)" step="0.01"></td>
-                        <td><input type="number" class="total-price" value="${item.totalPrice}" placeholder="总价" step="0.01" readonly> <span class="currency-span">${item.currency || getProductCurrency(item.productCode)}</span></td>
+                        <td><input type="text" class="product-code" value="${item.productCode}" placeholder="Ingresa código producto"></td>
+                        <td><input type="text" class="product-name" value="${item.productName}" placeholder="Ingresa nombre producto"></td>
+                        <td><input type="text" class="lote" value="${item.lote}" placeholder="Ingresa lote"></td>
+                        <td><input type="number" class="quantity" value="${item.quantity}" placeholder="Ingresa cantidad"></td>
+                        <td><input type="number" class="sale-price" value="${item.salePrice}" placeholder="Precio venta" step="0.01" readonly> <span class="currency-span">${item.currency || getProductCurrency(item.productCode)}</span></td>
+                        <td><input type="text" class="tax-rate" value="${item.taxRate}%" placeholder="Tasa (%)" step="0.01"></td>
+                        <td><input type="number" class="total-price" value="${item.totalPrice}" placeholder="Total" step="0.01" readonly> <span class="currency-span">${item.currency || getProductCurrency(item.productCode)}</span></td>
                         <td><span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span></td>
                     `;
                     tbody.appendChild(row);
@@ -433,30 +457,32 @@ function loadInvoiceData() {
                 updateTotals();
             }
         } else {
-            tbody.innerHTML = '<tr><td colspan="8">未找到该发票数据</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8">No se encontraron datos de esta factura</td></tr>';
         }
     } else if (fromDespatch) {
         const tempInvoiceData = JSON.parse(localStorage.getItem('tempInvoiceData') || '{}');
         if (tempInvoiceData && tempInvoiceData.items) {
-            invoiceNumberInput.value = generateTemporaryInvoiceNumber(); // 确保每次生成唯一发票号
+            invoiceNumberInput.value = generateTemporaryInvoiceNumber();
+            invoiceSeriesInput.value = '';
             customerCodeSelect.value = tempInvoiceData.customerCode;
             customerNameInput.value = tempInvoiceData.customerName;
             invoiceDateInput.value = tempInvoiceData.despatchDate;
             const despatchDate = new Date(tempInvoiceData.despatchDate);
             despatchDate.setDate(despatchDate.getDate() + 30);
             dueDateInput.value = despatchDate.toISOString().split('T')[0];
+            document.querySelector('input[name="verifactu"][value="yes"]').checked = true;
 
             tbody.innerHTML = '';
             tempInvoiceData.items.forEach(item => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><input type="text" class="product-code" value="${item.productCode}" placeholder="输入产品代码"></td>
-                    <td><input type="text" class="product-name" value="${item.productName}" placeholder="输入产品名称"></td>
-                    <td><input type="text" class="lote" value="${item.lote}" placeholder="输入批次号"></td>
-                    <td><input type="number" class="quantity" value="${item.quantity}" placeholder="输入数量"></td>
-                    <td><input type="number" class="sale-price" value="${item.salePrice}" placeholder="销售价格" step="0.01" readonly> <span class="currency-span">${item.currency}</span></td>
-                    <td><input type="text" class="tax-rate" value="${item.taxRate}%" placeholder="税率 (%)" step="0.01"></td>
-                    <td><input type="number" class="total-price" value="${item.totalPrice}" placeholder="总价" step="0.01" readonly> <span class="currency-span">${item.currency}</span></td>
+                    <td><input type="text" class="product-code" value="${item.productCode}" placeholder="Ingresa código producto"></td>
+                    <td><input type="text" class="product-name" value="${item.productName}" placeholder="Ingresa nombre producto"></td>
+                    <td><input type="text" class="lote" value="${item.lote}" placeholder="Ingresa lote"></td>
+                    <td><input type="number" class="quantity" value="${item.quantity}" placeholder="Ingresa cantidad"></td>
+                    <td><input type="number" class="sale-price" value="${item.salePrice}" placeholder="Precio venta" step="0.01" readonly> <span class="currency-span">${item.currency}</span></td>
+                    <td><input type="text" class="tax-rate" value="${item.taxRate}%" placeholder="Tasa (%)" step="0.01"></td>
+                    <td><input type="number" class="total-price" value="${item.totalPrice}" placeholder="Total" step="0.01" readonly> <span class="currency-span">${item.currency}</span></td>
                     <td><span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span></td>
                 `;
                 tbody.appendChild(row);
@@ -468,20 +494,24 @@ function loadInvoiceData() {
     }
 }
 
-// 在编辑模式下禁用生成按钮和发票号输入框
+// Deshabilitar按钮生成 en modo edición
 function disableGenerateButtonInEditMode() {
     const urlParams = new URLSearchParams(window.location.search);
     const isEdit = urlParams.get('edit') === 'true';
     if (isEdit) {
         generateInvoiceBtn.style.display = 'none';
+        generateSeriesBtn.style.display = 'none';
         invoiceNumberInput.setAttribute('readonly', 'readonly');
+        invoiceSeriesInput.setAttribute('readonly', 'readonly');
     } else {
         generateInvoiceBtn.style.display = 'block';
+        generateSeriesBtn.style.display = 'block';
         invoiceNumberInput.removeAttribute('readonly');
+        invoiceSeriesInput.removeAttribute('readonly');
     }
 }
 
-// 生成发票号按钮事件
+// Evento botón生成发票号
 generateInvoiceBtn.addEventListener('click', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const isEdit = urlParams.get('edit') === 'true';
@@ -492,7 +522,18 @@ generateInvoiceBtn.addEventListener('click', function() {
     }
 });
 
-// 初始化
+// Evento botón生成系列号
+generateSeriesBtn.addEventListener('click', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isEdit = urlParams.get('edit') === 'true';
+    
+    if (!isEdit) {
+        const newSeries = generateTemporarySeries();
+        invoiceSeriesInput.value = newSeries;
+    }
+});
+
+// Inicialización
 document.addEventListener('DOMContentLoaded', function() {
     loadCustomers();
     setDefaultDate();
@@ -501,9 +542,10 @@ document.addEventListener('DOMContentLoaded', function() {
     disableGenerateButtonInEditMode();
     window.addEventListener('resize', adjustTableHeight);
 
-    // 如果是从出货单跳转过来，隐藏生成按钮
+    // Ocultar按钮生成 si viene de despacho
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('fromDespatch') === 'true') {
         generateInvoiceBtn.style.display = 'none';
+        generateSeriesBtn.style.display = 'none';
     }
 });

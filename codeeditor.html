@@ -1,50 +1,52 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>代码编辑</title>
+    <title>Editar Código</title>
     <link rel="stylesheet" href="codeeditor.css">
 </head>
 <body>
     <div class="container">
-        <h2 id="title">创建代码规则</h2>
+        <h2 id="title">Crear Regla Código</h2>
         <form id="codeForm">
             <div class="form-group">
-                <label for="category">项目:</label>
+                <label for="category">Proyecto:</label>
                 <select id="category" name="category" required>
-                    <option value="">请选择项目</option>
-                    <option value="customer">客户</option>
-                    <option value="supplier">供应商</option>
-                    <option value="product">产品</option>
-                    <option value="price">价格表</option>
-                    <option value="purchasequote">采购报价单</option>
-                    <option value="purchaseorder">采购订单</option>
-                    <option value="instock">入库单</option>
-                    <option value="salesquote">销售报价单</option>
-                    <option value="salesorder">销售订单</option>
-                    <option value="salesdespatch">销售出货单</option>
-                    <option value="salesinvoice">销售发票</option>
+                    <option value="">Sel. Proyecto</option>
+                    <option value="customer">Cliente</option>
+                    <option value="supplier">Proveedor</option>
+                    <option value="product">Producto</option>
+                    <option value="price">Precios</option>
+                    <option value="purchasequote">Cotiz. Compra</option>
+                    <option value="purchaseorder">Orden Compra</option>
+                    <option value="instock">Entrada</option>
+                    <option value="salesquote">Cotiz. Venta</option>
+                    <option value="salesorder">Orden Venta</option>
+                    <option value="salesdespatch">Despacho Venta</option>
+                    <option value="salesinvoice">Factura Venta</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="prefix">前缀:</label>
-                <input type="text" id="prefix" name="prefix" placeholder="请输入前缀" required>
+                <label for="prefix">Prefijo:</label>
+                <input type="text" id="prefix" name="prefix" placeholder="Ingresa prefijo" required>
             </div>
             <div class="form-group">
-                <label for="digits">数字位数:</label>
-                <input type="number" id="digits" name="digits" min="1" placeholder="请输入数字位数" required>
+                <label for="digits">Núm. Dígitos:</label>
+                <input type="number" id="digits" name="digits" min="1" placeholder="Ingresa dígitos" required>
             </div>
             <div class="form-group">
-                <label for="suffix">后缀:</label>
-                <input type="text" id="suffix" name="suffix" placeholder="请输入后缀（可选）">
+                <label for="suffix">Sufijo:</label>
+                <input type="text" id="suffix" name="suffix" placeholder="Ingresa sufijo (opcional)">
             </div>
             <div class="form-buttons">
-                <button type="button" class="cancel-btn">取消</button>
-                <button type="submit" class="save-btn">保存</button>
+                <button type="button" class="cancel-btn">Cancelar</button>
+                <button type="submit" class="save-btn">Guardar</button>
             </div>
         </form>
     </div>
     <script src="codeeditor.js"></script>
+    <!-- El script adicional (iframe) se mantiene intacto -->
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9255c4672f131d78',t:'MTc0MjgxNTEwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>

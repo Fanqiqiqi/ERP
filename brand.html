@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión marcas</title>
+  <link rel="stylesheet" href="common.css">
+  <link rel="stylesheet" href="pcategoria.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <header class="top-bar">
+    <h1>Sistema de gestión</h1>
+    <button class="company-profile-btn">Datos empresa</button>
+  </header>
+  <div class="modal" id="companyProfileModal">
+    <div class="modal-content">
+      <h3>Datos empresa</h3>
+      <form id="companyProfileForm">
+        <div class="form-container">
+          <div class="form-section">
+            <h4>Info básica</h4>
+            <div class="form-group">
+              <label for="companyName">Nombre empresa</label>
+              <input type="text" id="companyName" name="companyName" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="taxNumber">Nº fiscal</label>
+              <input type="text" id="taxNumber" name="taxNumber" placeholder="Ingresa nº fiscal" required>
+            </div>
+          </div>
+          <div class="form-section">
+            <h4>Dirección</h4>
+            <div class="form-group">
+              <label for="companyAddress">Dirección</label>
+              <input type="text" id="companyAddress" name="companyAddress" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="city">Ciudad</label>
+              <input type="text" id="city" name="city" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="province">Provincia</label>
+              <input type="text" id="province" name="province" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="country">País</label>
+              <input type="text" id="country" name="country" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="postalCode">Código postal</label>
+              <input type="text" id="postalCode" name="postalCode" placeholder="" required>
+            </div>
+          </div>
+          <div class="form-section">
+            <h4>Contacto</h4>
+            <div class="form-group">
+              <label for="companyPhone">Teléfono</label>
+              <input type="text" id="companyPhone" name="companyPhone" value="" required>
+            </div>
+            <div class="form-group">
+              <label for="companyEmail">Correo</label>
+              <input type="email" id="companyEmail" name="companyEmail" value="" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-buttons">
+          <button type="button" class="close-btn">Cerrar</button>
+          <button type="submit" class="save-btn">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <nav class="sidebar">
+    <ul>
+        <li class="dropdown">
+          <a href="#system" class="dropdown-toggle">Gestión sistema</a>
+          <ul class="dropdown-menu">
+              <li><a href="#" data-page="codemanagement.html">Gestión códigos</a></li>
+              <li><a href="#" data-page="authmanagement.html">Gestión permisos</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#customer" class="dropdown-toggle">Gestión clientes</a>
+            <ul class="dropdown-menu">
+                <li><a href="#" data-page="ccategoria.html">Categorías clientes</a></li>
+                <li><a href="#" data-page="customer.html">Datos clientes</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#supplier" class="dropdown-toggle">Gestión proveedores</a>
+            <ul class="dropdown-menu">
+                <li><a href="#" data-page="scategoria.html">Categorías proveedores</a></li>
+                <li><a href="#" data-page="supplier.html">Datos proveedores</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#product" class="dropdown-toggle">Gestión productos</a>
+            <ul class="dropdown-menu">
+                <li><a href="#" data-page="pcategoria.html">Categorías productos</a></li>
+                <li><a href="#" data-page="brand.html">Gestión marcas</a></li>
+                <li><a href="#" data-page="product.html">Datos productos</a></li>               
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#price" class="dropdown-toggle">Gestión precios</a>
+            <ul class="dropdown-menu">
+                <li><a href="#" data-page="prcategoria.html">Clasificación precios</a></li>
+                <li><a href="#" data-page="price.html">Datos precios</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#purchase" class="dropdown-toggle">Gestión compras</a>
+            <ul class="dropdown-menu">
+                <li><a href="#" data-page="purchaseprice.html">Gestión cotizaciones compras</a></li>
+                <li><a href="#" data-page="purchaseforecast.html">Previsión compras</a></li>
+                <li><a href="#" data-page="purchaseorder.html">Gestión pedidos compras</a></li>
+                <li><a href="#" data-page="purchaseorderinstocklist.html">Entrada compras</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#sales" class="dropdown-toggle">Gestión ventas</a>
+            <ul class="dropdown-menu">
+                <li><a href="#" data-page="cotation.html">Gestión cotizaciones</a></li>
+                <li><a href="#" data-page="order.html">Gestión pedidos</a></li>
+                <li><a href="#" data-page="despatch.html">Gestión envíos</a></li>
+            </ul>
+        </li>
+        <li><a href="#" data-page="stockmanagement.html">Gestión inventario</a></li>
+        <li class="dropdown">
+            <a href="#invoice" class="dropdown-toggle">Gestión facturas</a>
+            <ul class="dropdown-menu">
+                <li><a href="#" data-page="salesinvoicelist.html">Facturas ventas</a></li>
+                <li><a href="#" data-page="purchaseinvoice.html">Facturas compras</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#finance" class="dropdown-toggle">Gestión finanzas</a>
+          <ul class="dropdown-menu">
+              <li><a href="#" data-page="receivables.html">Gestión cobros</a></li>
+              <li><a href="#" data-page="payables.html">Gestión pagos</a></li>
+              <li><a href="#" data-page="financialreport.html">Informes financieros</a></li>
+          </ul>
+        </li>
+    </ul>
+  </nav>
+  <main class="content">
+    <div class="content-wrapper">
+      <div class="table-header">
+        <h2>Lista marcas</h2>
+        <button class="add-btn">Agregar marca</button>
+      </div>
+      <div class="table-container">
+        <table class="category-table">
+          <thead>
+            <tr>
+              <th>Código marca</th>
+              <th>Nombre marca</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Datos marcas cargados dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <button class="page-btn prev-btn" disabled>Pág. anterior</button>
+        <span>Pág. 1 / Total 1</span>
+        <button class="page-btn next-btn" disabled>Pág. siguiente</button>
+      </div>
+    </div>
+
+    <!-- Modal agregar marca -->
+    <div class="modal" id="addCategoryModal">
+      <div class="modal-content">
+        <h3>Agregar nueva marca</h3>
+        <form id="categoryForm">
+          <div class="form-group">
+            <label for="categoryCode">Código marca</label>
+            <input type="text" id="categoryCode" name="categoryCode" placeholder="Ingresa código marca" required>
+          </div>
+          <div class="form-group">
+            <label for="categoryName">Nombre marca</label>
+            <input type="text" id="categoryName" name="categoryName" placeholder="Ingresa nombre marca" required>
+          </div>
+          <div class="modal-buttons">
+            <button type="button" class="cancel-btn">Cancelar</button>
+            <button type="submit" class="save-btn">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+  <script src="common.js"></script>
+  <script src="brand.js"></script>
+</body>
+</html>

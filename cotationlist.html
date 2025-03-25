@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>报价明细</title>
+    <title>Detalles de Cotización</title>
     <link rel="stylesheet" href="cotationlist.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <header class="top-bar">
-        <h1>报价明细</h1>
+        <h1>Detalles de Cotización</h1>
     </header>
     <main class="content">
         <div class="table-header">
-            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
-            <h2>报价明细列表</h2>
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
+            <h2>Lista de Detalles de Cotización</h2>
             <div class="button-group">
                 <button class="add-btn add-product-btn"><i class="fas fa-plus"></i></button>
                 <button class="save-all-btn save-btn"><i class="fas fa-save"></i></button>
@@ -23,30 +23,30 @@
         </div>
         <div class="cotation-info">
             <div class="form-group">
-                <label for="cotationCode">销售报价单代码:</label>
+                <label for="cotationCode">Código Cotización Ventas:</label>
                 <div style="position: relative;">
-                    <input type="text" id="cotationCode" name="cotationCode" placeholder="请点击生成按钮" readonly>
-                    <button type="button" id="generateCodeBtn" class="generate-btn">生成</button>
+                    <input type="text" id="cotationCode" name="cotationCode" placeholder="Haz clic en generar" readonly>
+                    <button type="button" id="generateCodeBtn" class="generate-btn">Generar</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="customerCode">客户代码:</label>
+                <label for="customerCode">Código Cliente:</label>
                 <select id="customerCode" name="customerCode" required>
-                    <option value="">请选择客户代码</option>
+                    <option value="">Selecciona código cliente</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="customerName">客户名称:</label>
+                <label for="customerName">Nombre Cliente:</label>
                 <input type="text" id="customerName" name="customerName" readonly>
             </div>
             <div class="form-group">
-                <label for="cotationDate">日期:</label>
+                <label for="cotationDate">Fecha:</label>
                 <input type="date" id="cotationDate" name="cotationDate" required>
             </div>
             <div class="form-group">
-                <label for="priceCategory">价格表类别:</label>
+                <label for="priceCategory">Categoría Precio:</label>
                 <select id="priceCategory" name="priceCategory" required>
-                    <option value="">请选择价格表类别</option>
+                    <option value="">Selecciona categoría precio</option>
                 </select>
             </div>
         </div>
@@ -54,22 +54,22 @@
             <table class="cotationlist-table">
                 <thead>
                     <tr>
-                        <th>产品代码</th>
-                        <th>产品名称</th>
-                        <th>产品规格</th>
-                        <th>单位</th>
-                        <th>价格</th>
-                        <th>税率</th>
-                        <th>总价</th>
-                        <th>操作</th>
+                        <th>Código Producto</th>
+                        <th>Nombre Producto</th>
+                        <th>Especificaciones</th>
+                        <th>Unidad</th>
+                        <th>Precio</th>
+                        <th>IVA</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- 动态加载产品数据 -->
+                    <!-- Datos de productos cargados dinámicamente -->
                 </tbody>
             </table>
         </div>
     </main>
     <script src="cotationlist.js"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9255db96aec4675d',t:'MTc0MjgxNjA0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

@@ -1,38 +1,43 @@
+// customer_es.js
 
-// 模态框相关元素
+// Elementos del modal
 const modal = document.getElementById('addCustomerModal');
 const modalTitle = modal.querySelector('.modal-content h3');
 const addBtn = document.querySelector('.add-btn');
 const cancelBtn = document.querySelector('.cancel-btn');
 const customerForm = document.getElementById('customerForm');
-const customerCodeInput = document.getElementById('customerCode');
-const customerNameInput = document.getElementById('customerName');
-const taxNumberInput = document.getElementById('taxNumber');
-const customerAddressInput = document.getElementById('customerAddress');
-const postalCodeInput = document.getElementById('postalCode');
-const cityInput = document.getElementById('city');
-const provinceInput = document.getElementById('province');
-const countryInput = document.getElementById('country');
-const emailInput = document.getElementById('email');
-const customerPhoneInput = document.getElementById('customerPhone');
-const customerCategorySelect = document.getElementById('customerCategory');
-const priceCategorySelect = document.getElementById('priceCategory');
-const statusSelect = document.getElementById('status');
-const contactPersonInput = document.getElementById('contactPerson');
-const contactPhoneInput = document.getElementById('contactPhone');
-const paymentTermsInput = document.getElementById('paymentTerms');
-const remarksInput = document.getElementById('remarks');
-const tbody = document.querySelector('.customer-table tbody');
-const generateCodeBtn = document.getElementById('generateCodeBtn');
 
-// 分页相关变量
-const itemsPerPage = 9; // 每页显示9条
-let currentPage = 1; // 当前页码
+// Campos del formulario
+const customerCodeInput = customerForm.querySelector('#customerCode');
+const customerNameInput = customerForm.querySelector('#customerName');
+const taxNumberInput = customerForm.querySelector('#taxNumber');
+const customerAddressInput = customerForm.querySelector('#customerAddress');
+const postalCodeInput = customerForm.querySelector('#postalCode');
+const cityInput = customerForm.querySelector('#city');
+const provinceInput = customerForm.querySelector('#province');
+const countryInput = customerForm.querySelector('#country');
+const emailInput = customerForm.querySelector('#email');
+const customerPhoneInput = customerForm.querySelector('#customerPhone');
+const customerCategorySelect = customerForm.querySelector('#customerCategory');
+const priceCategorySelect = customerForm.querySelector('#priceCategory');
+const statusSelect = customerForm.querySelector('#status');
+const contactPersonInput = customerForm.querySelector('#contactPerson');
+const contactPhoneInput = customerForm.querySelector('#contactPhone');
+const paymentTermsInput = customerForm.querySelector('#paymentTerms');
+const remarksInput = customerForm.querySelector('#remarks');
+
+// Botón generar código y tabla
+const generateCodeBtn = customerForm.querySelector('#generateCodeBtn');
+const tbody = document.querySelector('.customer-table tbody');
+
+// Variables paginación
+const itemsPerPage = 9;
+let currentPage = 1;
 
 let isEditing = false;
 let editingRow = null;
 
-// 生成客户代码（仅生成候选代码，不更新计数器）
+// Generar código cliente
 function generateCustomerCode() {
   const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
   const customerRule = codeRules['customer'] || { prefix: 'CUS', digits: 3, suffix: '', counter: 0 };
@@ -48,11 +53,10 @@ function generateCustomerCode() {
     newCode = `${customerRule.prefix}${number}${customerRule.suffix}`;
   } while (existingCodes.includes(newCode));
   
-  // 不立即保存 counter，只返回候选代码
   return newCode;
 }
 
-// 更新计数器（在保存时调用）
+// Actualizar contador código
 function updateCustomerCodeCounter(code) {
   const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
   const customerRule = codeRules['customer'] || { prefix: 'CUS', digits: 3, suffix: '', counter: 0 };
@@ -65,10 +69,10 @@ function updateCustomerCodeCounter(code) {
   }
 }
 
-// 加载客户类别到下拉框
+// Cargar categorías clientes
 function loadCategoriesIntoSelect() {
   const categories = JSON.parse(localStorage.getItem('categories') || '[]');
-  customerCategorySelect.innerHTML = '<option value="">请选择类别</option>';
+  customerCategorySelect.innerHTML = '<option value="">Selecciona Categoría</option>';
   categories.forEach(category => {
     const option = document.createElement('option');
     option.value = category.name;
@@ -77,19 +81,19 @@ function loadCategoriesIntoSelect() {
   });
 }
 
-// 加载价格表类别到下拉框
+// Cargar categorías precios
 function loadPriceCategoriesIntoSelect() {
-  const prices = JSON.parse(localStorage.getItem('prices') || '[]');
-  priceCategorySelect.innerHTML = '<option value="">请选择价格表类别</option>';
-  prices.forEach(price => {
+  const categories = JSON.parse(localStorage.getItem('prcategories') || '[]');
+  priceCategorySelect.innerHTML = '<option value="">Selecciona Categoría Precios</option>';
+  categories.forEach(category => {
     const option = document.createElement('option');
-    option.value = price.category;
-    option.textContent = price.category;
+    option.value = category.code;
+    option.textContent = category.name;
     priceCategorySelect.appendChild(option);
   });
 }
 
-// 设置表单字段只读状态
+// Configurar solo lectura
 function setFormReadOnly(isReadOnly) {
   const inputs = document.querySelectorAll('#customerForm input, #customerForm select');
   inputs.forEach(input => {
@@ -103,7 +107,7 @@ function setFormReadOnly(isReadOnly) {
   });
 }
 
-// 更新表格行
+// Actualizar fila tabla
 function updateTableRow(row, data) {
   row.cells[0].textContent = data.code;
   row.cells[1].textContent = data.name;
@@ -112,7 +116,7 @@ function updateTableRow(row, data) {
   row.cells[4].textContent = data.phone;
 }
 
-// 创建表格行
+// Crear fila tabla
 function createTableRow(data, index) {
   const row = document.createElement('tr');
   row.innerHTML = `
@@ -130,36 +134,30 @@ function createTableRow(data, index) {
   return row;
 }
 
-// 加载客户数据（带分页）
+// Cargar datos clientes
 function loadCustomers() {
   const customers = JSON.parse(localStorage.getItem('customers') || '[]');
   tbody.innerHTML = '';
 
-  // 计算总页数
   const totalPages = Math.ceil(customers.length / itemsPerPage);
-
-  // 确保当前页码有效
   if (currentPage < 1) currentPage = 1;
   if (currentPage > totalPages) currentPage = totalPages;
 
-  // 计算当前页的数据范围
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, customers.length);
   const currentData = customers.slice(startIndex, endIndex);
 
   currentData.forEach((customer, pageIndex) => {
-    const globalIndex = startIndex + pageIndex; // 计算全局索引
+    const globalIndex = startIndex + pageIndex;
     const row = createTableRow(customer, globalIndex);
     tbody.appendChild(row);
   });
 
-  // 更新分页控件
   updatePagination(totalPages);
-
   bindIconEvents();
 }
 
-// 更新分页控件
+// Actualizar paginación
 function updatePagination(totalPages) {
   let pagination = document.querySelector('.pagination');
   if (!pagination) {
@@ -169,9 +167,9 @@ function updatePagination(totalPages) {
   }
 
   pagination.innerHTML = `
-    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-    <span>第 ${currentPage} 页 / 共 ${totalPages} 页</span>
-    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Anterior</button>
+    <span>Pág ${currentPage} / Total ${totalPages}</span>
+    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Siguiente</button>
   `;
 
   pagination.querySelector('.prev-btn').addEventListener('click', () => {
@@ -189,7 +187,7 @@ function updatePagination(totalPages) {
   });
 }
 
-// 保存客户数据到 localStorage
+// Guardar datos cliente
 function saveCustomerData(customerData) {
   const customers = JSON.parse(localStorage.getItem('customers') || '[]');
   const customerIndex = customers.findIndex(c => c.code === customerData.code);
@@ -201,10 +199,10 @@ function saveCustomerData(customerData) {
   localStorage.setItem('customers', JSON.stringify(customers));
 }
 
-// 添加客户
+// Botón agregar cliente
 addBtn.addEventListener('click', function() {
   isEditing = false;
-  modalTitle.textContent = '添加新客户';
+  modalTitle.textContent = 'Agregar Nuevo Cliente';
   customerForm.reset();
   customerCodeInput.removeAttribute('readonly');
   loadCategoriesIntoSelect();
@@ -214,7 +212,7 @@ addBtn.addEventListener('click', function() {
   modal.style.display = 'flex';
 });
 
-// 取消按钮
+// Botón cancelar
 cancelBtn.addEventListener('click', function() {
   modal.style.display = 'none';
   customerForm.reset();
@@ -222,7 +220,7 @@ cancelBtn.addEventListener('click', function() {
   editingRow = null;
 });
 
-// 保存或更新客户
+// Guardar o actualizar cliente
 customerForm.addEventListener('submit', function(e) {
   e.preventDefault();
 
@@ -246,7 +244,7 @@ customerForm.addEventListener('submit', function(e) {
     remarks: remarksInput.value.trim()
   };
 
-  const requiredFields = ['code', 'name', 'taxNumber', 'address', 'postalCode', 'city', 'province', 'country', 'email', 'phone', 'category', 'status'];
+  const requiredFields = ['code', 'name', 'taxNumber'];
   if (requiredFields.every(field => customerData[field])) {
     const customers = JSON.parse(localStorage.getItem('customers') || '[]');
     const suppliers = JSON.parse(localStorage.getItem('suppliers') || '[]');
@@ -254,16 +252,15 @@ customerForm.addEventListener('submit', function(e) {
     const existingSupplier = suppliers.find(s => s.taxNumber === customerData.taxNumber);
 
     if (existingCustomer || existingSupplier) {
-      alert('此税号已存在，请使用唯一的税号！');
+      alert('¡Este Nº Tributario ya existe, usa uno único!');
       return;
     }
 
     if (!isEditing && customers.map(c => c.code).includes(customerData.code)) {
-      alert('客户代码已存在，请使用唯一的代码！');
+      alert('¡Código cliente ya existe, usa uno único!');
       return;
     }
 
-    // 如果是新增客户，保存时更新计数器
     if (!isEditing) {
       updateCustomerCodeCounter(customerData.code);
     }
@@ -272,7 +269,7 @@ customerForm.addEventListener('submit', function(e) {
       updateTableRow(editingRow, customerData);
       saveCustomerData(customerData);
     } else {
-      const newRow = createTableRow(customerData, customers.length); // 全局索引在 loadCustomers 中重新分配
+      const newRow = createTableRow(customerData, customers.length);
       tbody.appendChild(newRow);
       saveCustomerData(customerData);
     }
@@ -282,13 +279,12 @@ customerForm.addEventListener('submit', function(e) {
     isEditing = false;
     editingRow = null;
     loadCustomers();
-    // window.location.href = 'customer.html'; // 移除刷新页面，直接通过 loadCustomers 更新
   } else {
-    alert('请填写所有必填字段！');
+    alert('¡Completa todos los campos obligatorios (Código, Nombre, Nº Tributario)!');
   }
 });
 
-// 操作图标事件绑定
+// Vincular eventos íconos
 function bindIconEvents() {
   document.querySelectorAll('.view-icon').forEach(icon => {
     icon.removeEventListener('click', viewHandler);
@@ -304,13 +300,13 @@ function bindIconEvents() {
   });
 }
 
-// 查看事件
+// Ver cliente
 const viewHandler = function() {
   const index = this.dataset.index;
   const customers = JSON.parse(localStorage.getItem('customers') || '[]');
   const customer = customers[index] || {};
 
-  modalTitle.textContent = '查看客户';
+  modalTitle.textContent = 'Ver Cliente';
   customerCodeInput.value = customer.code || '';
   customerNameInput.value = customer.name || '';
   taxNumberInput.value = customer.taxNumber || '';
@@ -335,15 +331,15 @@ const viewHandler = function() {
   modal.style.display = 'flex';
 };
 
-// 编辑事件
+// Editar cliente
 const editHandler = function() {
   const index = this.dataset.index;
   const customers = JSON.parse(localStorage.getItem('customers') || '[]');
   const customer = customers[index] || {};
 
   isEditing = true;
-  editingRow = tbody.children[index - (currentPage - 1) * itemsPerPage]; // 调整为当前页的相对索引
-  modalTitle.textContent = '编辑客户';
+  editingRow = tbody.children[index - (currentPage - 1) * itemsPerPage];
+  modalTitle.textContent = 'Editar Cliente';
   customerCodeInput.value = customer.code || '';
   customerNameInput.value = customer.name || '';
   taxNumberInput.value = customer.taxNumber || '';
@@ -369,19 +365,19 @@ const editHandler = function() {
   modal.style.display = 'flex';
 };
 
-// 删除事件
+// Eliminar cliente
 const deleteHandler = function() {
   const index = this.dataset.index;
   const customers = JSON.parse(localStorage.getItem('customers') || '[]');
   const code = customers[index].code;
-  if (confirm(`确定删除客户：${code} 吗？`)) {
+  if (confirm(`¿Seguro de eliminar cliente: ${code}?`)) {
     customers.splice(index, 1);
     localStorage.setItem('customers', JSON.stringify(customers));
     loadCustomers();
   }
 };
 
-// 生成代码按钮事件
+// Botón generar código
 generateCodeBtn.addEventListener('click', function() {
   if (!isEditing) {
     const newCode = generateCustomerCode();
@@ -389,12 +385,12 @@ generateCodeBtn.addEventListener('click', function() {
   }
 });
 
-// 监听 storage 事件
+// Escuchar eventos storage
 window.addEventListener('storage', function() {
   loadPriceCategoriesIntoSelect();
 });
 
-// 页面加载时初始化
+// Inicializar al cargar página
 document.addEventListener('DOMContentLoaded', function() {
   loadCategoriesIntoSelect();
   loadCustomers();

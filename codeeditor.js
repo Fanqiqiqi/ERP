@@ -8,27 +8,36 @@ const suffixInput = document.getElementById('suffix');
 const title = document.getElementById('title');
 const cancelBtn = document.querySelector('.cancel-btn');
 
-// 获取 URL 参数
+// Obtener parámetros URL
 const urlParams = new URLSearchParams(window.location.search);
 const item = urlParams.get('item');
 const isEditMode = urlParams.get('edit') === 'true';
 
-// 初始化表单
+// Inicializar formulario
 function initForm() {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const categories = {
-        'customer': '客户',
-        'supplier': '供应商',
-        'product': '产品',
-        'price': '价格表',
-        'purchasequote': '采购报价单',
-        'purchaseorder': '采购订单',
-        'instock': '入库单',
-        'salesquote': '销售报价单',
-        'salesorder': '销售订单',
-        'salesdespatch': '销售出货单',
-        'salesinvoice': '销售发票'
+        'customer': 'Cliente',
+        'supplier': 'Proveedor',
+        'product': 'Producto',
+        'price': 'Precios',
+        'purchasequote': 'Cotiz. Compra',
+        'purchaseorder': 'Pedido de Compra',
+        'instock': 'Albarán de compra',
+        'salesquote': 'Cotiz. Venta',
+        'salesorder': 'Pedido de Venta',
+        'salesdespatch': 'Albarán de Venta',
+        'salesinvoice': 'Factura Venta',
+        'invoiceseries': 'Serie de Factura' // 新增 Serie de Factura
     };
+
+    // 动态填充 categorySelect 下拉菜单
+    Object.entries(categories).forEach(([key, value]) => {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = value;
+        categorySelect.appendChild(option);
+    });
 
     if (item) {
         const categoryKey = Object.keys(categories).find(key => categories[key] === item);
@@ -38,8 +47,8 @@ function initForm() {
             prefixInput.value = rule.prefix || '';
             digitsInput.value = rule.digits || '';
             suffixInput.value = rule.suffix || '';
-            categorySelect.disabled = true; // 编辑或查看时禁用类别选择
-            title.textContent = isEditMode ? '编辑代码规则' : '查看代码规则';
+            categorySelect.disabled = true; // Deshabilitar selección en edición o vista
+            title.textContent = isEditMode ? 'Editar Regla Código' : 'Ver Regla Código';
             if (!isEditMode) {
                 prefixInput.readOnly = true;
                 digitsInput.readOnly = true;
@@ -50,7 +59,7 @@ function initForm() {
     }
 }
 
-// 保存规则
+// Guardar regla
 form.addEventListener('submit', function(e) {
     e.preventDefault();
     const category = categorySelect.value;
@@ -59,7 +68,7 @@ form.addEventListener('submit', function(e) {
     const suffix = suffixInput.value.trim();
 
     if (!category || !prefix || !digits) {
-        alert('请填写所有必填字段！');
+        alert('¡Llena todos los campos requeridos!');
         return;
     }
 
@@ -68,7 +77,7 @@ form.addEventListener('submit', function(e) {
         prefix: prefix,
         digits: digits,
         suffix: suffix,
-        counter: codeRules[category]?.counter || 0 // 保留现有计数器
+        counter: codeRules[category]?.counter || 0 // Mantener contador existente
     };
     localStorage.setItem('codeRules', JSON.stringify(codeRules));
 
@@ -76,7 +85,7 @@ form.addEventListener('submit', function(e) {
     window.close();
 });
 
-// 取消按钮
+// Botón cancelar
 cancelBtn.addEventListener('click', function() {
     window.close();
 });

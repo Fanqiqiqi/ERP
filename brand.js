@@ -1,4 +1,4 @@
-// Elementos modal
+// Variables modal
 const modal = document.getElementById('addCategoryModal');
 const modalTitle = modal.querySelector('.modal-content h3');
 const addBtn = document.querySelector('.add-btn');
@@ -15,43 +15,39 @@ let currentPage = 1;
 let isEditing = false;
 let editingRow = null;
 
-// Cargar categorías con paginación
-function loadCategories() {
-  const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+// Actualizar tabla con datos marcas
+function updateTable() {
+  const brands = JSON.parse(localStorage.getItem('brands') || '[]');
   tbody.innerHTML = '';
 
-  const totalPages = Math.ceil(categories.length / itemsPerPage);
+  const totalPages = Math.ceil(brands.length / itemsPerPage);
 
   if (currentPage < 1) currentPage = 1;
   if (currentPage > totalPages) currentPage = totalPages;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, categories.length);
-  const currentData = categories.slice(startIndex, endIndex);
+  const endIndex = Math.min(startIndex + itemsPerPage, brands.length);
+  const currentData = brands.slice(startIndex, endIndex);
 
-  if (Array.isArray(categories)) {
-    currentData.forEach((category, pageIndex) => {
-      const globalIndex = startIndex + pageIndex;
-      if (category.code && category.name) {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${category.code}</td>
-          <td>${category.name}</td>
-          <td>
-            <span class="action-icon view-icon" data-index="${globalIndex}"><i class="fas fa-eye"></i></span>
-            <span class="action-icon delete-icon" data-index="${globalIndex}"><i class="fas fa-trash-alt"></i></span>
-          </td>
-        `;
-        tbody.appendChild(row);
-      }
-    });
-  }
+  currentData.forEach((brand, pageIndex) => {
+    const globalIndex = startIndex + pageIndex;
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${brand.code}</td>
+      <td>${brand.name}</td>
+      <td>
+        <span class="action-icon view-icon" data-index="${globalIndex}"><i class="fas fa-eye"></i></span>
+        <span class="action-icon delete-icon" data-index="${globalIndex}"><i class="fas fa-trash-alt"></i></span>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
 
   updatePagination(totalPages);
   bindIconEvents();
 }
 
-// Actualizar paginación
+// Actualizar controles paginación
 function updatePagination(totalPages) {
   let pagination = document.querySelector('.pagination');
   if (!pagination) {
@@ -69,38 +65,38 @@ function updatePagination(totalPages) {
   pagination.querySelector('.prev-btn').addEventListener('click', () => {
     if (currentPage > 1) {
       currentPage--;
-      loadCategories();
+      updateTable();
     }
   });
 
   pagination.querySelector('.next-btn').addEventListener('click', () => {
     if (currentPage < totalPages) {
       currentPage++;
-      loadCategories();
+      updateTable();
     }
   });
 }
 
-// Guardar categorías en localStorage
-function saveCategories() {
+// Guardar marcas en almacenamiento local
+function saveBrands() {
   const rows = Array.from(tbody.querySelectorAll('tr'));
-  const categories = rows.map(row => ({
+  const brands = rows.map(row => ({
     code: row.cells[0].textContent,
     name: row.cells[1].textContent
   }));
-  localStorage.setItem('categories', JSON.stringify(categories));
+  localStorage.setItem('brands', JSON.stringify(brands));
 }
 
-// Mostrar modal para agregar categoría
+// Mostrar modal agregar marca
 addBtn.addEventListener('click', function() {
   isEditing = false;
-  modalTitle.textContent = 'Agregar nueva categoría';
+  modalTitle.textContent = 'Agregar nueva marca';
   categoryForm.reset();
   categoryCodeInput.removeAttribute('readonly');
   modal.style.display = 'flex';
 });
 
-// Cerrar modal con cancelar
+// Cerrar modal con botón cancelar
 cancelBtn.addEventListener('click', function() {
   modal.style.display = 'none';
   categoryForm.reset();
@@ -108,19 +104,18 @@ cancelBtn.addEventListener('click', function() {
   editingRow = null;
 });
 
-// Guardar o actualizar categoría
+// Guardar o actualizar marca
 categoryForm.addEventListener('submit', function(e) {
   e.preventDefault();
   const code = categoryCodeInput.value.trim();
   const name = categoryNameInput.value.trim();
-
   if (code && name) {
     if (isEditing && editingRow) {
       editingRow.cells[1].textContent = name;
     } else {
       const existingCodes = Array.from(tbody.querySelectorAll('td:first-child')).map(td => td.textContent);
       if (existingCodes.includes(code)) {
-        alert('¡El código categoría ya existe, usa uno único!');
+        alert('¡El código marca ya existe, usa uno único!');
         return;
       }
       const newRow = document.createElement('tr');
@@ -134,53 +129,46 @@ categoryForm.addEventListener('submit', function(e) {
       `;
       tbody.appendChild(newRow);
     }
-    saveCategories();
+    saveBrands();
     modal.style.display = 'none';
     categoryForm.reset();
     isEditing = false;
     editingRow = null;
-    loadCategories();
+    updateTable();
   }
 });
 
 // Vincular eventos íconos acción
 function bindIconEvents() {
   document.querySelectorAll('.view-icon').forEach(icon => {
-    icon.removeEventListener('click', viewHandler);
-    icon.addEventListener('click', viewHandler);
+    icon.addEventListener('click', function() {
+      const index = this.getAttribute('data-index');
+      const brands = JSON.parse(localStorage.getItem('brands') || '[]');
+      isEditing = true;
+      editingRow = tbody.children[index - (currentPage - 1) * itemsPerPage];
+      modalTitle.textContent = 'Editar marca';
+      categoryCodeInput.value = brands[index].code;
+      categoryNameInput.value = brands[index].name;
+      categoryCodeInput.setAttribute('readonly', 'readonly');
+      modal.style.display = 'flex';
+    });
   });
+
   document.querySelectorAll('.delete-icon').forEach(icon => {
-    icon.removeEventListener('click', deleteHandler);
-    icon.addEventListener('click', deleteHandler);
+    icon.addEventListener('click', function() {
+      const index = this.getAttribute('data-index');
+      const brands = JSON.parse(localStorage.getItem('brands') || '[]');
+      const code = brands[index].code;
+      if (confirm(`¿Seguro de eliminar marca: ${code}?`)) {
+        brands.splice(index, 1);
+        localStorage.setItem('brands', JSON.stringify(brands));
+        updateTable();
+      }
+    });
   });
 }
 
-// Evento editar
-const viewHandler = function() {
-  const index = this.getAttribute('data-index');
-  const categories = JSON.parse(localStorage.getItem('categories') || '[]');
-  isEditing = true;
-  editingRow = tbody.children[index - (currentPage - 1) * itemsPerPage];
-  modalTitle.textContent = 'Editar categoría';
-  categoryCodeInput.value = categories[index].code;
-  categoryNameInput.value = categories[index].name;
-  categoryCodeInput.setAttribute('readonly', 'readonly');
-  modal.style.display = 'flex';
-};
-
-// Evento eliminar
-const deleteHandler = function() {
-  const index = this.getAttribute('data-index');
-  const categories = JSON.parse(localStorage.getItem('categories') || '[]');
-  const code = categories[index].code;
-  if (confirm(`¿Seguro de eliminar categoría: ${code}?`)) {
-    categories.splice(index, 1);
-    localStorage.setItem('categories', JSON.stringify(categories));
-    loadCategories();
-  }
-};
-
-// Inicializar al cargar página
+// Inicializar tabla al cargar página
 document.addEventListener('DOMContentLoaded', function() {
-  loadCategories();
+  updateTable();
 });

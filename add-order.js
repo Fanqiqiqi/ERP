@@ -381,7 +381,15 @@ saveAllBtn.addEventListener('click', function() {
         updateOrderCounter(orderCode);
     }
     localStorage.setItem('orders', JSON.stringify(orders));
-    localStorage.setItem('orderList', JSON.stringify(orderListData));
+
+    // 获取现有的 orderList 数据
+    let existingOrderList = JSON.parse(localStorage.getItem('orderList') || '[]');
+    // 过滤掉当前订单的旧明细（如果是编辑模式）
+    existingOrderList = existingOrderList.filter(item => item.orderCode !== orderCode);
+    // 将当前订单的新明细追加到现有数据中
+    const updatedOrderList = [...existingOrderList, ...orderListData];
+    // 保存更新后的 orderList
+    localStorage.setItem('orderList', JSON.stringify(updatedOrderList));
 
     let stockData = getStockData();
     orderListData.forEach(orderItem => {

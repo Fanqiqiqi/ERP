@@ -1,45 +1,44 @@
-
-
 const addBtn = document.querySelector('.add-btn');
 const tbody = document.querySelector('.code-table tbody');
 
-// 分页相关变量
-const itemsPerPage = 9; // 每页显示9条
-let currentPage = 1; // 当前页码
+// Variables relacionadas con la paginación
+const itemsPerPage = 9; // Mostrar 9 ítems por página
+let currentPage = 1; // Página actual
 
 function generateCodeFormat(category) {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const rule = codeRules[category] || { prefix: '', digits: 0, suffix: '' };
     const number = '0'.repeat(rule.digits || 0);
-    return `${rule.prefix}${number}${rule.suffix}` || '无格式';
+    return `${rule.prefix}${number}${rule.suffix}` || 'Sin formato';
 }
 
 function loadCodes() {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const categories = {
-        'customer': '客户',
-        'supplier': '供应商',
-        'product': '产品',
-        'price': '价格表',
-        'purchasequote': '采购报价单',
-        'purchaseorder': '采购订单',
-        'instock': '入库单',
-        'salesquote': '销售报价单',
-        'salesorder': '销售订单',
-        'salesdespatch': '销售出货单',
-        'salesinvoice': '销售发票'
+        'customer': 'Cliente',
+        'supplier': 'Proveedor',
+        'product': 'Producto',
+        'price': 'Listado de Precios',
+        'purchasequote': 'Cotización de Compra',
+        'purchaseorder': 'Pedido de Compra',
+        'instock': 'Albarán de compra',
+        'salesquote': 'Cotización de Venta',
+        'salesorder': 'Noº Pedido de Venta',
+        'salesdespatch': 'Albarán de Venta',
+        'salesinvoice': 'Noº Factura',
+        'invoiceseries': 'Serie de Factura' // 新增 Serie de Factura
     };
 
-    // 获取所有类别键并转换为数组
+    // Obtener las claves de categorías que tienen reglas y convertirlas en un arreglo
     const categoryKeys = Object.keys(categories).filter(category => codeRules[category]);
     const totalItems = categoryKeys.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-    // 确保当前页码有效
+    // Asegurar que la página actual sea válida
     if (currentPage < 1) currentPage = 1;
     if (currentPage > totalPages) currentPage = totalPages;
 
-    // 计算当前页的数据范围
+    // Calcular el rango de datos para la página actual
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
     const currentCategories = categoryKeys.slice(startIndex, endIndex);
@@ -60,7 +59,7 @@ function loadCodes() {
         tbody.appendChild(row);
     });
 
-    // 更新分页控件
+    // Actualizar controles de paginación
     updatePagination(totalPages);
 
     bindIconEvents();
@@ -71,9 +70,9 @@ function updatePagination(totalPages) {
     if (!pagination) return;
 
     pagination.innerHTML = `
-        <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-        <span>第 ${currentPage} 页 / 共 ${totalPages} 页</span>
-        <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+        <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Anterior</button>
+        <span>Página ${currentPage} de ${totalPages}</span>
+        <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Siguiente</button>
     `;
 
     pagination.querySelector('.prev-btn').addEventListener('click', () => {
@@ -117,17 +116,18 @@ function bindIconEvents() {
 const viewHandler = function() {
     const category = this.getAttribute('data-category');
     const categories = {
-        'customer': '客户',
-        'supplier': '供应商',
-        'product': '产品',
-        'price': '价格表',
-        'purchasequote': '采购报价单',
-        'purchaseorder': '采购订单',
-        'instock': '入库单',
-        'salesquote': '销售报价单',
-        'salesorder': '销售订单',
-        'salesdespatch': '销售出货单',
-        'salesinvoice': '销售发票'
+        'customer': 'Cliente',
+        'supplier': 'Proveedor',
+        'product': 'Producto',
+        'price': 'Listado de Precios',
+        'purchasequote': 'Cotización de Compra',
+        'purchaseorder': 'Pedido de Compra',
+        'instock': 'Albarán de compra',
+        'salesquote': 'Cotización de Venta',
+        'salesorder': 'Noº Pedido de Venta',
+        'salesdespatch': 'Albarán de Venta',
+        'salesinvoice': 'Noº Factura',
+        'invoiceseries': 'Serie de Factura' // 新增 Serie de Factura
     };
     const item = categories[category];
     const codeWindow = window.open(`codeeditor.html?item=${item}`, '_blank', 'fullscreen=yes');
@@ -140,17 +140,18 @@ const viewHandler = function() {
 const editHandler = function() {
     const category = this.getAttribute('data-category');
     const categories = {
-        'customer': '客户',
-        'supplier': '供应商',
-        'product': '产品',
-        'price': '价格表',
-        'purchasequote': '采购报价单',
-        'purchaseorder': '采购订单',
-        'instock': '入库单',
-        'salesquote': '销售报价单',
-        'salesorder': '销售订单',
-        'salesdespatch': '销售出货单',
-        'salesinvoice': '销售发票'
+        'customer': 'Cliente',
+        'supplier': 'Proveedor',
+        'product': 'Producto',
+        'price': 'Listado de Precios',
+        'purchasequote': 'Cotización de Compra',
+        'purchaseorder': 'Pedido de Compra',
+        'instock': 'Albarán de compra',
+        'salesquote': 'Cotización de Venta',
+        'salesorder': 'Noº Pedido de Venta',
+        'salesdespatch': 'Albarán de Venta',
+        'salesinvoice': 'Noº Factura',
+        'invoiceseries': 'Serie de Factura' // 新增 Serie de Factura
     };
     const item = categories[category];
     const codeWindow = window.open(`codeeditor.html?item=${item}&edit=true`, '_blank', 'fullscreen=yes');
@@ -163,20 +164,21 @@ const editHandler = function() {
 const deleteHandler = function() {
     const category = this.getAttribute('data-category');
     const categories = {
-        'customer': '客户',
-        'supplier': '供应商',
-        'product': '产品',
-        'price': '价格表',
-        'purchasequote': '采购报价单',
-        'purchaseorder': '采购订单',
-        'instock': '入库单',
-        'salesquote': '销售报价单',
-        'salesorder': '销售订单',
-        'salesdespatch': '销售出货单',
-        'salesinvoice': '销售发票'
+        'customer': 'Cliente',
+        'supplier': 'Proveedor',
+        'product': 'Producto',
+        'price': 'Listado de Precios',
+        'purchasequote': 'Cotización de Compra',
+        'purchaseorder': 'Pedido de Compra',
+        'instock': 'Albarán de compra',
+        'salesquote': 'Cotización de Venta',
+        'salesorder': 'Noº Pedido de Venta',
+        'salesdespatch': 'Albarán de Venta',
+        'salesinvoice': 'Noº Factura',
+        'invoiceseries': 'Serie de Factura' // 新增 Serie de Factura
     };
     const item = categories[category];
-    if (confirm(`确定删除代码：${item} 吗？`)) {
+    if (confirm(`¿Está seguro de eliminar el código: ${item}?`)) {
         const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
         delete codeRules[category];
         localStorage.setItem('codeRules', JSON.stringify(codeRules));

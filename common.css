@@ -1,4 +1,3 @@
-/* common.css */
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +11,7 @@ body {
     line-height: 1.6;
 }
 
-/* 顶部横条 */
+/* Barra superior */
 .top-bar {
     background-color: #d3d3d3;
     height: 60px;
@@ -34,7 +33,7 @@ body {
     cursor: pointer;
 }
 
-/* 公司资料按钮样式 */
+/* Estilo botón datos empresa */
 .company-profile-btn {
     margin-left: auto;
     background: linear-gradient(45deg, #6a11cb, #2575fc);
@@ -52,7 +51,7 @@ body {
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-/* 资料按钮样式（仅在需要时加载，保留兼容性） */
+/* Estilo botón perfil (carga solo si necesario) */
 .profile-btn {
     background-color: #00b4d8;
     color: #fff;
@@ -68,7 +67,7 @@ body {
     background-color: #0093b3;
 }
 
-/* 左侧菜单栏 */
+/* Menú lateral */
 .sidebar {
     background-color: #1c2526;
     width: 220px;
@@ -103,7 +102,7 @@ body {
     border-left: 4px solid #00b4d8;
 }
 
-/* 下拉菜单 */
+/* Menú desplegable */
 .dropdown-menu {
     display: none;
     background-color: #2e3b3e;
@@ -130,7 +129,7 @@ body {
     border-left: 4px solid #00b4d8;
 }
 
-/* 模态框样式 */
+/* Estilo modal (修改部分) */
 .modal {
     display: none;
     position: fixed;
@@ -138,306 +137,303 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 2000;
-    justify-content: center;
-    align-items: center;
-    overflow: auto;
+    backdrop-filter: blur(5px);
 }
 
 .modal-content {
-    background-color: #fff;
-    width: 90%;
-    max-width: 600px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    animation: slideIn 0.3s ease-out;
+    background: linear-gradient(135deg, #ffffff, #eef2f7);
+    margin: 5% auto;
+    padding: 3rem;
+    width: 50%;
+    max-width: 900px;
+    min-height: 600px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    animation: slideIn 0.4s ease-out;
+    overflow: visible;
 }
 
-.modal-content h3 {
-    font-size: 22px;
-    color: #2e3b3e;
-    margin-bottom: 20px;
-    text-align: center;
+.wide-modal {
+    width: 50%;
+    max-width: 900px;
+    padding: 3rem;
+    min-height: 600px;
 }
 
-.company-profile-content {
-    font-size: 16px;
-    color: #333;
-    line-height: 1.8;
+/* Modal Page Container */
+.modal-page-container {
+    position: relative;
+    width: 100%;
+    min-height: 500px;
+    overflow: hidden;
 }
 
-.company-profile-content p {
-    margin-bottom: 10px;
+/* Modal Page Styling */
+.modal-page {
+    position: absolute;
+    width: 100%;
+    min-height: 100%;
+    top: 0;
+    left: 0;
+    padding: 1rem;
+    transition: transform 0.5s ease;
 }
 
-.modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
+.modal-page.active {
+    transform: translateX(0);
+}
+
+.modal-page.slide-out {
+    transform: translateX(-100%);
+}
+
+.modal-page.slide-in {
+    transform: translateX(100%);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .close-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 30px;
+    color: #777;
     cursor: pointer;
-    background-color: #e63946;
-    color: #fff;
-    transition: background 0.3s ease, transform 0.2s ease;
+    transition: color 0.3s ease;
 }
 
 .close-btn:hover {
-    background-color: #b32d38;
-    transform: translateY(-2px);
+    color: #e74c3c;
 }
 
-/* 新增：表单样式 */
+.upload-manual-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 300px;
+    gap: 2rem;
+}
+
+.upload-section, .manual-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 200px;
+    height: 200px;
+}
+
+.upload-section:hover, .manual-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.plus-icon {
+    font-size: 60px;
+    color: #3498db;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.upload-section:hover .plus-icon {
+    transform: scale(1.1);
+}
+
+.upload-section p {
+    font-size: 1.1rem;
+    color: #666;
+    text-align: center;
+}
+
+.manual-btn {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.manual-btn:hover {
+    background: linear-gradient(135deg, #27ae60, #219653);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Container */
 .form-container {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.form-section {
-    flex: 1;
-    min-width: 250px;
-}
-
-.form-section h4 {
-    font-size: 18px;
-    color: #2e3b3e;
-    margin-bottom: 15px;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+    padding-bottom: 4rem;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .form-group label {
-    display: block;
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 5px;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
+    font-size: 1.2rem;
     color: #333;
+    font-weight: 500;
 }
 
-.form-group input:focus {
-    border-color: #00b4d8;
+/* Custom Dropdown */
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.dropdown-input:hover,
+.dropdown-input:focus {
+    border-color: #3498db;
     outline: none;
 }
 
-/* 新增：保存按钮样式 */
-.save-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.dropdown-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    color: #333;
     cursor: pointer;
-    background-color: #00b4d8;
-    color: #fff;
-    transition: background 0.3s ease, transform 0.2s ease;
+    transition: background 0.2s ease;
+    width: 100%;
+}
+
+.dropdown-option:hover {
+    background: #f0f0f0;
+}
+
+/* Next Button */
+.next-btn {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.next-btn:hover {
+    background: linear-gradient(135deg, #2980b9, #1f6692);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Prev Button */
+.prev-btn {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.prev-btn:hover {
+    background: linear-gradient(135deg, #2980b9, #1f6692);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Save Button */
+.save-btn {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .save-btn:hover {
-    background-color: #0093b3;
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #27ae60, #219653);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* 滑入动画 */
-@keyframes slideIn {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 80px;
-    }
-    .sidebar > ul > li > a {
-        font-size: 14px;
-        padding: 10px;
-        text-align: center;
-    }
-    .dropdown-menu {
-        padding-left: 10px;
-    }
-    .dropdown-menu a {
-        font-size: 12px;
-        padding: 8px 10px;
-    }
-    .modal-content {
-        width: 95%;
-        max-height: 90vh;
-    }
-}
-/* 在 .company-profile-btn 样式下方添加以下内容 */
-
-/* 通用认证按钮样式 */
-.auth-btn {
-    background: linear-gradient(45deg, #ff6b6b, #ff8e53); /* 渐变色，红色到橙色 */
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-right: 10px; /* 与公司资料按钮保持间距 */
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-    font-weight: 500;
-    text-transform: uppercase; /* 大写字母增加时尚感 */
-    letter-spacing: 1px; /* 字符间距 */
-}
-
-/* 登录按钮特定样式 */
-.login-btn {
-    background: linear-gradient(45deg, #4facfe, #00f2fe); /* 蓝色渐变 */
-}
-
-/* 注册按钮特定样式 */
-.register-btn {
-    background: linear-gradient(45deg, #43e97b, #38f9d7); /* 绿色渐变 */
-}
-
-/* 悬停效果 */
-.auth-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* 激活效果 */
-.auth-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-/* 调整顶部栏布局 */
-.top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* 确保按钮靠右分布 */
-    padding: 0 20px;
-}
-
-.top-bar h1 {
-    flex-grow: 1; /* 标题占剩余空间 */
-    margin-right: 20px; /* 与按钮组保持间距 */
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-    .auth-btn {
-        padding: 6px 12px;
-        font-size: 14px;
-        margin-right: 5px;
-    }
-    .company-profile-btn {
-        padding: 6px 12px;
-        font-size: 14px;
-    }
-}
-/* common.css */
-/* ... 现有样式保持不变，直到响应式设计部分 ... */
-
-/* 认证模态框特定样式 */
-/* ... 现有样式保持不变，直到 .modal-content 样式 ... */
-
-/* 认证模态框特定样式 */
-.auth-modal {
-    max-width: 400px; /* 更紧凑的宽度，时尚感 */
-    padding: 30px;
-    border-radius: 15px;
-    background: linear-gradient(135deg, #ffffff, #f9f9f9); /* 轻微渐变背景 */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* 更强的阴影 */
-}
-
-.auth-modal h3 {
-    font-size: 24px;
-    color: #2e3b3e;
-    margin-bottom: 25px;
+/* Modal Title */
+.modal-page h3 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
     text-align: center;
-    font-weight: 600;
-    letter-spacing: 1px;
 }
 
-/* 表单输入框样式优化 */
-.auth-modal .form-group input {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 16px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.auth-modal .form-group input:focus {
-    border-color: #00b4d8;
-    box-shadow: 0 0 8px rgba(0, 180, 216, 0.3);
-}
-
-/* 按钮样式优化 */
-.auth-modal .auth-submit {
-    background: linear-gradient(45deg, #00b4d8, #43e97b); /* 渐变色按钮 */
-    padding: 10px 25px;
-    font-size: 16px;
-    border-radius: 8px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.auth-modal .auth-submit:hover {
-    background: linear-gradient(45deg, #0093b3, #38f9d7);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* 调整关闭按钮 */
-.auth-modal .close-btn {
-    background: linear-gradient(45deg, #e63946, #ff6b6b);
-    border-radius: 8px;
-    padding: 10px 25px;
-}
-
-.auth-modal .close-btn:hover {
-    background: linear-gradient(45deg, #b32d38, #ff8e53);
-    transform: translateY(-2px);
-}
-
-/* 响应式设计 */
+/* Diseño responsivo */
 @media (max-width: 768px) {
-    .auth-modal {
-        width: 90%;
-        padding: 20px;
-    }
-    .auth-modal h3 {
-        font-size: 20px;
-    }
-    .auth-modal .form-group input {
-        font-size: 14px;
-    }
-    .auth-modal .auth-submit,
-    .auth-modal .close-btn {
-        padding: 8px 20px;
-        font-size: 14px;
-    }
     .sidebar {
         width: 80px;
     }
@@ -457,66 +453,4 @@ body {
         width: 95%;
         max-height: 90vh;
     }
-    .auth-btn {
-        padding: 6px 12px;
-        font-size: 14px;
-        margin-right: 5px;
-    }
-    .company-profile-btn {
-        padding: 6px 12px;
-        font-size: 14px;
-    }
-}
-
-/* ... 现有样式保持不变，直到 .company-profile-btn 样式 ... */
-
-/* 通用认证按钮样式 */
-.auth-btn {
-    background: linear-gradient(45deg, #ff6b6b, #ff8e53); /* 渐变色，红色到橙色 */
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-right: 10px; /* 与公司资料按钮保持间距 */
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-    font-weight: 500;
-    text-transform: uppercase; /* 大写字母增加时尚感 */
-    letter-spacing: 1px; /* 字符间距 */
-}
-
-/* 登录按钮特定样式 */
-.login-btn {
-    background: linear-gradient(45deg, #4facfe, #00f2fe); /* 蓝色渐变 */
-}
-
-/* 注册按钮特定样式 */
-.register-btn {
-    background: linear-gradient(45deg, #43e97b, #38f9d7); /* 绿色渐变 */
-}
-
-/* 悬停效果 */
-.auth-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* 激活效果 */
-.auth-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-/* 调整顶部栏布局 */
-.top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* 确保按钮靠右分布 */
-    padding: 0 20px;
-}
-
-.top-bar h1 {
-    flex-grow: 1; /* 标题占剩余空间 */
-    margin-right: 20px; /* 与按钮组保持间距 */
 }

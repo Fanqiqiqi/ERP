@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>创建销售发票</title>
+    <title>Crear Factura de Venta</title>
     <link rel="stylesheet" href="createinvoice.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <main class="content">
         <div class="table-header">
-            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
-            <h2>发票明细列表</h2>
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
+            <h2>Lista de Detalles de Factura</h2>
             <div class="button-group">
                 <button class="add-btn"><i class="fas fa-plus"></i></button>
                 <button class="print-btn"><i class="fas fa-print"></i></button>
@@ -19,58 +19,69 @@
             </div>
         </div>
         <div class="invoice-info">
-            <div class="form-group">
-                <label for="invoiceNumber">发票编号:</label>
-                <div style="position: relative;">
-                    <input type="text" id="invoiceNumber" name="invoiceNumber" placeholder="请输入发票编号" required>
-                    <button type="button" id="generateInvoiceBtn" class="generate-btn">生成</button>
-                </div>
+            <div class="form-group invoice-series-group">
+                <label for="invoiceSeries">Serie Factura:</label>
+                <input type="text" id="invoiceSeries" name="invoiceSeries" placeholder="Ingresa serie factura">
+                <button type="button" id="generateSeriesBtn" class="generate-btn">Generar</button>
+            </div>
+            <div class="form-group invoice-number-group">
+                <label for="invoiceNumber">Nº Factura:</label>
+                <input type="text" id="invoiceNumber" name="invoiceNumber" placeholder="Ingresa nº factura" required>
+                <button type="button" id="generateInvoiceBtn" class="generate-btn">Generar</button>
             </div>
             <div class="form-group">
-                <label for="customerCode">客户代码:</label>
+                <label for="customerCode">Código Cliente:</label>
                 <select id="customerCode" name="customerCode" required>
-                    <option value="">请选择客户</option>
+                    <option value="">Selecciona cliente</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="customerName">客户名称:</label>
-                <input type="text" id="customerName" name="customerName" placeholder="请输入客户名称" readonly>
+                <label for="customerName">Nombre Cliente:</label>
+                <input type="text" id="customerName" name="customerName" placeholder="Ingresa nombre cliente" readonly>
             </div>
             <div class="form-group">
-                <label for="invoiceDate">发票日期:</label>
+                <label for="invoiceDate">Fecha Factura:</label>
                 <input type="date" id="invoiceDate" name="invoiceDate" required>
             </div>
             <div class="form-group">
-                <label for="dueDate">到期日期:</label>
+                <label for="dueDate">Fecha Vencimiento:</label>
                 <input type="date" id="dueDate" name="dueDate" required>
+            </div>
+            <div class="form-group verifactu-form-group">
+                <label>Verifactu:</label>
+                <div class="verifactu-group">
+                    <label><input type="radio" name="verifactu" value="yes" checked> Sí</label>
+                    <label><input type="radio" name="verifactu" value="no"> No</label>
+                </div>
             </div>
         </div>
         <div class="table-container">
             <table class="invoice-table">
                 <thead>
                     <tr>
-                        <th>产品代码</th>
-                        <th>产品名称</th>
+                        <th>Código Producto</th>
+                        <th>Nombre Producto</th>
                         <th>LOTE</th>
-                        <th>数量</th>
-                        <th>销售价格</th>
-                        <th>税率</th>
-                        <th>总价</th>
-                        <th>操作</th>
+                        <th>Cantidad</th>
+                        <th>Precio Venta</th>
+                        <th>Tasa Impuesto</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- 动态加载发票明细 -->
+                    <!-- Detalles de factura cargados dinámicamente -->
                 </tbody>
             </table>
         </div>
         <div class="totals-section">
-            <h3>发票总额: <span class="grand-total">0.00</span></h3>
+            <h3>Total Factura: <span class="grand-total">0.00</span></h3>
             <div id="totals-container">
-                <!-- 动态生成税率分组总额 -->
+                <!-- Totales agrupados por tasa generados dinámicamente -->
             </div>
         </div>
     </main>
     <script src="createinvoice.js"></script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'925eca1d4f43457c',t:'MTc0MjkwOTcwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>

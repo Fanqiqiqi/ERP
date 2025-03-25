@@ -12,7 +12,7 @@ body {
     line-height: 1.6;
 }
 
-/* 顶部横条 */
+/* Barra superior */
 .top-bar {
     background-color: #d3d3d3;
     height: 60px;
@@ -36,7 +36,7 @@ body {
 .content {
     margin-top: 60px;
     padding: 40px;
-    position: relative; /* 为悬浮框提供定位上下文 */
+    position: relative;
 }
 
 .table-header {
@@ -114,7 +114,7 @@ body {
     background-color: #5a6268;
 }
 
-/* 报价信息区域 */
+/* Área de información de cotización */
 .cotation-info {
     display: flex;
     flex-wrap: wrap;
@@ -160,7 +160,7 @@ body {
     background-color: #f8f8f8;
 }
 
-/* 生成按钮样式 */
+/* Estilo botón generar */
 .generate-btn {
     position: absolute;
     right: 5px;
@@ -178,15 +178,15 @@ body {
     background-color: #0093b3;
 }
 
-/* 表格容器 */
+/* Contenedor de tabla */
 .table-container {
     position: relative;
     overflow-y: auto;
     margin-bottom: 20px;
-    max-height: calc(100vh - 300px); /* 固定高度，留出顶部和表单空间 */
+    max-height: calc(100vh - 300px);
 }
 
-/* 表格 */
+/* Tabla */
 .cotationlist-table {
     width: 100%;
     border-collapse: collapse;
@@ -203,12 +203,12 @@ body {
 
 .cotationlist-table th,
 .cotationlist-table td {
-    width: 12.5%; /* 8 列平均分配 */
+    width: 12.5%;
 }
 
 .cotationlist-table.view-mode th,
 .cotationlist-table.view-mode td {
-    width: 14.29%; /* 7 列平均分配 */
+    width: 14.29%;
 }
 
 .cotationlist-table th {
@@ -224,10 +224,10 @@ body {
     background-color: #f9f9f9;
 }
 
-/* 表格中的输入框样式 */
+/* Estilo de inputs en tabla */
 .cotationlist-table input,
 .cotationlist-table select {
-    width: 80px; /* 默认宽度，适用于非主键输入框 */
+    width: 80px;
     padding: 8px;
     font-size: 14px;
     border: 1px solid #ddd;
@@ -239,29 +239,26 @@ body {
     vertical-align: middle;
 }
 
-/* 产品代码和产品名称输入框特定样式 */
 .cotationlist-table input.product-code,
 .cotationlist-table input.product-name {
-    width: 200px; /* 增大宽度 */
+    width: 200px;
 }
 
-/* 输入框焦点样式 */
 .cotationlist-table input:focus,
 .cotationlist-table select:focus {
     border-color: #00b4d8;
     box-shadow: 0 0 5px rgba(0,180,216,0.3);
 }
 
-/* 货币单位样式 */
 .cotationlist-table .currency-span {
     display: inline-block;
-    margin-left: 5px; /* 与输入框的间距 */
+    margin-left: 5px;
     color: #666;
     font-size: 14px;
     vertical-align: middle;
 }
 
-/* 自动补全提示 */
+/* Sugerencias autocompletar */
 .autocomplete-suggestions {
     position: absolute;
     background-color: #fff;
@@ -282,7 +279,7 @@ body {
     background-color: #f0f0f0;
 }
 
-/* 操作图标 */
+/* Iconos de acción */
 .action-icon {
     margin: 0 8px;
     cursor: pointer;
@@ -299,7 +296,7 @@ body {
     transform: scale(1.2);
 }
 
-/* 响应式 */
+/* Responsivo */
 @media (max-width: 768px) {
     .content {
         padding: 20px;
@@ -318,15 +315,15 @@ body {
     .cotationlist-table select {
         font-size: 12px;
         padding: 6px;
-        width: 60px; /* 小屏幕下缩小 */
+        width: 60px;
     }
     .cotationlist-table input.product-code,
     .cotationlist-table input.product-name {
-        width: 120px; /* 小屏幕下仍较大 */
+        width: 120px;
     }
     .cotationlist-table .currency-span {
         font-size: 12px;
-        margin-left: 3px; /* 小屏幕下减小间距 */
+        margin-left: 3px;
     }
     .table-header h2 {
         font-size: 20px;

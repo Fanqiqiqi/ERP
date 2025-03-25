@@ -15,7 +15,7 @@ html, body {
 }
 
 .content {
-    padding: 5px 40px 40px 40px; /* 顶部为 5px，与 despatchout.css 一致 */
+    padding: 5px 40px 40px 40px;
     position: relative;
 }
 
@@ -94,34 +94,33 @@ html, body {
     background-color: #e08700;
 }
 
-/* 发票信息区域 */
+/* Área de información de factura */
 .invoice-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
     background-color: #fff;
-    padding: 15px;
+    padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .form-group {
-    flex: 1 1 200px;
     display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .form-group label {
     font-size: 14px;
     color: #333;
-    white-space: nowrap;
+    font-weight: 600;
 }
 
 .form-group input,
 .form-group select {
-    flex-grow: 1;
+    width: 100%;
     padding: 8px;
     font-size: 14px;
     border: 1px solid #ddd;
@@ -136,11 +135,17 @@ html, body {
     box-shadow: 0 0 5px rgba(0,180,216,0.3);
 }
 
-/* 生成按钮样式 */
-.generate-btn {
+/* 特定于 invoiceSeries 和 invoiceNumber 的样式，包含生成按钮 */
+.form-group.invoice-series-group,
+.form-group.invoice-number-group {
+    position: relative;
+}
+
+.form-group.invoice-series-group .generate-btn,
+.form-group.invoice-number-group .generate-btn {
     position: absolute;
     right: 5px;
-    top: 50%;
+    top: 70%;
     transform: translateY(-50%);
     padding: 5px 10px;
     background: #00b4d8;
@@ -150,11 +155,38 @@ html, body {
     cursor: pointer;
 }
 
-.generate-btn:hover {
+.form-group.invoice-series-group .generate-btn:hover,
+.form-group.invoice-number-group .generate-btn:hover {
     background-color: #0093b3;
 }
 
-/* 表格容器 */
+/* Verifactu 组样式 */
+.verifactu-form-group {
+    padding-left: 10px; /* 调整左边框距离为 10px */
+}
+
+.verifactu-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.verifactu-group label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.verifactu-group input[type="radio"] {
+    margin-right: 5px;
+    accent-color: #00b4d8;
+    cursor: pointer;
+}
+
+/* Contenedor de tabla */
 .table-container {
     position: relative;
     overflow-y: auto;
@@ -162,7 +194,7 @@ html, body {
     max-height: calc(100vh - 340px);
 }
 
-/* 表格 */
+/* Tabla */
 .invoice-table {
     width: 100%;
     border-collapse: collapse;
@@ -175,7 +207,7 @@ html, body {
     padding: 12px 15px;
     text-align: center;
     border-bottom: 1px solid #ddd;
-    width: 12.5%; /* 8列平均分配 */
+    width: 12.5%;
 }
 
 .invoice-table th {
@@ -191,7 +223,7 @@ html, body {
     background-color: #f9f9f9;
 }
 
-/* 输入框样式 */
+/* Estilo de inputs */
 .invoice-table input {
     width: 70px;
     padding: 8px;
@@ -203,7 +235,6 @@ html, body {
     text-align: center;
 }
 
-/* 产品代码、产品名称和LOTE输入框特定样式 */
 .invoice-table input.product-code,
 .invoice-table input.product-name,
 .invoice-table input.lote {
@@ -215,7 +246,6 @@ html, body {
     box-shadow: 0 0 5px rgba(0,180,216,0.3);
 }
 
-/* 货币单位样式 */
 .invoice-table .currency-span {
     display: inline-block;
     margin-left: 5px;
@@ -224,7 +254,7 @@ html, body {
     vertical-align: middle;
 }
 
-/* 自动补全提示 */
+/* Sugerencias autocompletar */
 .autocomplete-suggestions {
     position: absolute;
     background-color: #fff;
@@ -245,7 +275,7 @@ html, body {
     background-color: #f0f0f0;
 }
 
-/* 操作图标 */
+/* Iconos de acción */
 .action-icon {
     margin: 0 8px;
     cursor: pointer;
@@ -262,7 +292,7 @@ html, body {
     transform: scale(1.2);
 }
 
-/* 总额区域 */
+/* Área de totales */
 .totals-section {
     position: fixed;
     bottom: 20px;
@@ -319,7 +349,7 @@ html, body {
     min-width: 80px;
 }
 
-/* 响应式 */
+/* Responsivo */
 @media (max-width: 768px) {
     .content {
         padding: 5px 20px 20px 20px;
@@ -356,11 +386,8 @@ html, body {
         font-size: 14px;
     }
     .invoice-info {
-        gap: 10px;
-        padding: 10px;
-    }
-    .form-group {
-        flex: 1 1 100%;
+        grid-template-columns: 1fr;
+        padding: 15px;
     }
     .totals-section {
         width: 100%;
