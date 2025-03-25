@@ -1,5 +1,4 @@
-
-/* 主内容 */
+/* Contenido principal */
 .content {
     margin-left: 220px;
     margin-top: 60px;
@@ -8,12 +7,12 @@
 
 .content-wrapper {
     position: relative;
-    min-height: calc(100vh - 60px); /* 减去顶部横条高度 */
-    padding-bottom: 60px; /* 为分页控件留出空间 */
+    min-height: calc(100vh - 60px); /* Resta la altura de la barra superior */
+    padding-bottom: 60px; /* Espacio para controles de paginación */
 }
 
 .table-container {
-    min-height: 360px; /* 假设每行高度约40px，9行约为360px */
+    min-height: 360px; /* Suponiendo una altura de fila de ~40px, 9 filas ≈ 360px */
 }
 
 .table-header {
@@ -25,8 +24,8 @@
 
 .button-group {
     display: flex;
-    gap: 5px; /* 按钮之间的间距设置为 5px */
-    margin-left: auto; /* 将按钮组推到右侧 */
+    gap: 5px; /* Espacio entre botones establecido en 5px */
+    margin-left: auto; /* Empuja el grupo de botones a la derecha */
 }
 
 .table-header h2 {
@@ -49,7 +48,7 @@
     background-color: #0093b3;
 }
 
-/* 表格 */
+/* Tabla */
 .purchaseorderinstock-table {
     width: 100%;
     border-collapse: collapse;
@@ -57,65 +56,65 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* 重置表格列宽分配 */
+/* Restablecer distribución de ancho de columnas */
 .purchaseorderinstock-table th,
 .purchaseorderinstock-table td {
     padding: 12px 15px;
     text-align: center;
     border-bottom: 1px solid #ddd;
-    vertical-align: middle; /* 垂直居中 */
+    vertical-align: middle; /* Centrado vertical */
 }
 
-/* 明确指定每一列的宽度 */
+/* Especificar ancho de cada columna */
 .purchaseorderinstock-table th:nth-child(1),
 .purchaseorderinstock-table td:nth-child(1) {
-    width: 20%; /* 入库单号 */
+    width: 20%; /* Número de entrada */
 }
 
 .purchaseorderinstock-table th:nth-child(2),
 .purchaseorderinstock-table td:nth-child(2) {
-    width: 20%; /* 入库日期 */
+    width: 20%; /* Fecha de entrada */
 }
 
 .purchaseorderinstock-table th:nth-child(3),
 .purchaseorderinstock-table td:nth-child(3) {
-    width: 25%; /* 供应商名称 */
+    width: 25%; /* Nombre del proveedor */
 }
 
 .purchaseorderinstock-table th:nth-child(4),
 .purchaseorderinstock-table td:nth-child(4) {
-    width: 20%; /* 入库金额 */
+    width: 20%; /* Monto de entrada */
 }
 
 .purchaseorderinstock-table th:nth-child(5),
 .purchaseorderinstock-table td:nth-child(5) {
-    width: 15%; /* 操作列，缩小比例但保证最小宽度 */
-    min-width: 120px; /* 确保操作列有足够空间容纳图标 */
-    display: flex; /* 对表头和内容都应用 Flexbox */
-    justify-content: center; /* 水平居中 */
-    align-items: center; /* 垂直居中 */
-    flex-wrap: nowrap; /* 禁止换行 */
+    width: 15%; /* Columna de acciones, reducir proporción pero garantizar ancho mínimo */
+    min-width: 120px; /* Asegurar suficiente espacio para iconos */
+    display: flex; /* Aplicar Flexbox a encabezado y contenido */
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    flex-wrap: nowrap; /* Prohibir salto de línea */
 }
 
-/* 表头样式 */
+/* Estilo del encabezado */
 .purchaseorderinstock-table th {
     background-color: #f8f8f8;
     font-weight: 600;
     color: #2e3b3e;
-    text-align: center; /* 表头文字水平居中 */
+    text-align: center; /* Texto del encabezado centrado horizontalmente */
 }
 
 .purchaseorderinstock-table tr:hover {
     background-color: #f9f9f9;
 }
 
-/* 操作图标 */
+/* Iconos de acción */
 .action-icon {
-    margin: 0 6px; /* 减小间距但保持可点击性 */
+    margin: 0 6px; /* Reducir espacio pero mantener clicabilidad */
     cursor: pointer;
     font-size: 16px;
     transition: color 0.3s ease, transform 0.2s ease;
-    display: inline-block; /* 确保图标行为一致 */
+    display: inline-block; /* Asegurar comportamiento consistente de los iconos */
 }
 
 .view-icon {
@@ -145,11 +144,11 @@
     transform: scale(1.2);
 }
 
-/* 分页控件样式 */
+/* Estilo de controles de paginación */
 .pagination {
     position: fixed;
     bottom: 0;
-    left: 220px; /* 与 sidebar 宽度一致 */
+    left: 220px; /* Coincide con el ancho del sidebar */
     right: 0;
     background-color: #fff;
     padding: 10px 0;
@@ -187,7 +186,7 @@
     color: #2e3b3e;
 }
 
-/* Search Button */
+/* Botón de búsqueda */
 .search-btn {
     background-color: #00b4d8;
     color: #fff;
@@ -204,11 +203,11 @@
     transform: scale(1.05);
 }
 
-/* Filter Panel */
+/* Panel de filtros */
 .filter-panel {
     position: fixed;
-    top: 60px; /* 与顶部横条对齐 */
-    right: -400px; /* 默认隐藏在右侧 */
+    top: 60px; /* Alineado con la barra superior */
+    right: -400px; /* Oculto por defecto a la derecha */
     width: 400px;
     height: calc(100vh - 60px);
     background-color: #fff;
@@ -222,7 +221,7 @@
 }
 
 .filter-panel.active {
-    right: 0; /* 激活时滑入 */
+    right: 0; /* Deslizar hacia dentro cuando está activo */
 }
 
 .filter-header {
@@ -250,8 +249,8 @@
 }
 
 .filter-content {
-    flex: 1; /* 占据剩余空间 */
-    overflow-y: auto; /* 内容超出时滚动 */
+    flex: 1; /* Ocupa el espacio restante */
+    overflow-y: auto; /* Desplazamiento cuando el contenido excede */
 }
 
 .form-group {
@@ -290,8 +289,8 @@
 }
 
 .filter-footer {
-    padding-top: 120px; /* 与上方内容保持间距 */
-    padding-bottom: 0px; /* 底部留出合理间距 */
+    padding-top: 120px; /* Mantener distancia con el contenido superior */
+    padding-bottom: 0px; /* Espacio razonable en la parte inferior */
 }
 
 .filter-buttons {
@@ -334,7 +333,7 @@
     transform: scale(1.05);
 }
 
-/* 响应式 */
+/* Diseño responsivo */
 @media (max-width: 768px) {
     .sidebar {
         width: 80px;
@@ -362,7 +361,7 @@
         margin: 0 5px;
     }
     .pagination {
-        left: 80px; /* 与响应式 sidebar 宽度一致 */
+        left: 80px; /* Coincide con el ancho del sidebar responsivo */
     }
     .table-header {
         flex-direction: column;
@@ -370,12 +369,12 @@
     }
     .button-group {
         margin-top: 10px;
-        margin-left: 0; /* 重置 margin-left */
-        align-self: flex-end; /* 按钮组靠右 */
+        margin-left: 0; /* Restablecer margin-left */
+        align-self: flex-end; /* Grupo de botones a la derecha */
     }
     .filter-panel {
-        width: 300px; /* 在小屏幕上缩小宽度 */
-        right: -300px; /* 调整隐藏位置 */
+        width: 300px; /* Reducir ancho en pantallas pequeñas */
+        right: -300px; /* Ajustar posición oculta */
     }
     .filter-panel.active {
         right: 0;
@@ -389,58 +388,58 @@
         width: 100%;
     }
 }
-/* 针对公司资料模态框的特定样式 */
+/* Estilos específicos para el modal de datos de la empresa */
 #companyProfileModal .modal-content {
     width: 90%;
-    max-width: 1200px; /* 与 supplier.css 一致 */
+    max-width: 1200px;
     max-height: 80vh;
-    overflow-x: auto; /* 支持水平滚动 */
-  }
+    overflow-x: auto;
+}
   
-  #companyProfileModal .form-container {
+#companyProfileModal .form-container {
     display: flex;
-    flex-wrap: nowrap; /* 不换行，与 supplier.css 一致 */
+    flex-wrap: nowrap;
     gap: 20px;
     justify-content: space-between;
-  }
+}
   
-  #companyProfileModal .form-section {
+#companyProfileModal .form-section {
     flex: 1;
-    min-width: 250px; /* 与 supplier.css 一致 */
-  }
+    min-width: 250px;
+}
   
-  #companyProfileModal .form-section h4 {
-    font-size: 16px; /* 与 supplier.css 一致 */
+#companyProfileModal .form-section h4 {
+    font-size: 16px;
     color: #2e3b3e;
     margin-bottom: 15px;
-    border-bottom: 1px solid #ddd; /* 添加分隔线，与 supplier.css 一致 */
+    border-bottom: 1px solid #ddd;
     padding-bottom: 5px;
-  }
+}
   
-  #companyProfileModal .form-group input {
+#companyProfileModal .form-group input {
     width: 100%;
-    padding: 8px; /* 与 supplier.css 一致 */
-    font-size: 14px; /* 与 supplier.css 一致 */
+    padding: 8px;
+    font-size: 14px;
     border: 1px solid #ddd;
     border-radius: 5px;
     outline: none;
     transition: border-color 0.3s ease;
-  }
+}
   
-  #companyProfileModal .form-group input:focus {
+#companyProfileModal .form-group input:focus {
     border-color: #00b4d8;
     box-shadow: 0 0 5px rgba(0, 180, 216, 0.3);
-  }
+}
   
-  /* 调整模态框按钮样式 */
-  #companyProfileModal .modal-buttons {
+/* Estilos de botones del modal */
+#companyProfileModal .modal-buttons {
     display: flex;
-    justify-content: flex-end; /* 与 supplier.css 一致 */
+    justify-content: flex-end;
     gap: 10px;
-    margin-top: 20px; /* 与 supplier.css 一致 */
-  }
+    margin-top: 20px;
+}
   
-  #companyProfileModal .close-btn {
+#companyProfileModal .close-btn {
     background-color: #e63946;
     color: #fff;
     padding: 10px 20px;
@@ -449,14 +448,14 @@
     font-size: 16px;
     cursor: pointer;
     transition: background 0.3s ease, transform 0.2s ease;
-  }
+}
   
-  #companyProfileModal .close-btn:hover {
+#companyProfileModal .close-btn:hover {
     background-color: #b32d38;
     transform: translateY(-2px);
-  }
+}
   
-  #companyProfileModal .save-btn {
+#companyProfileModal .save-btn {
     background-color: #00b4d8;
     color: #fff;
     padding: 10px 20px;
@@ -465,23 +464,23 @@
     font-size: 16px;
     cursor: pointer;
     transition: background 0.3s ease, transform 0.2s ease;
-  }
+}
   
-  #companyProfileModal .save-btn:hover {
+#companyProfileModal .save-btn:hover {
     background-color: #0093b3;
     transform: translateY(-2px);
-  }
+}
   
-  /* 响应式设计 */
-  @media (max-width: 768px) {
+/* Diseño responsivo */
+@media (max-width: 768px) {
     #companyProfileModal .modal-content {
       width: 95%;
       max-height: 90vh;
     }
     #companyProfileModal .form-container {
-      flex-wrap: wrap; /* 在小屏幕下允许换行，与 supplier.css 一致 */
+      flex-wrap: wrap;
     }
     #companyProfileModal .form-section {
       min-width: 100%;
     }
-  }
+}

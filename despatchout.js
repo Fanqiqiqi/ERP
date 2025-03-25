@@ -13,35 +13,30 @@ const tableContainer = document.querySelector('.table-container');
 const totalsContainer = document.querySelector('#totals-container');
 const totalsSection = document.querySelector('.totals-section');
 const generateCodeBtn = document.querySelector('#generateCodeBtn');
+const orderCodeInput = document.querySelector('#orderCode');
 
-// 从客户数据中加载客户
 function getCustomers() {
     return JSON.parse(localStorage.getItem('customers') || '[]');
 }
 
-// 从产品数据中加载产品
 function getProducts() {
     return JSON.parse(localStorage.getItem('products') || '[]');
 }
 
-// 从库存数据中获取数据
 function getStockData() {
     return JSON.parse(localStorage.getItem('stockData') || '[]');
 }
 
-// 保存库存数据到 localStorage
 function saveStockData(stockData) {
     localStorage.setItem('stockData', JSON.stringify(stockData));
 }
 
-// 获取产品币种
 function getProductCurrency(productCode) {
     const products = getProducts();
     const product = products.find(p => p.code === productCode);
-    return product ? product.currency || '未知' : '未知';
+    return product ? product.currency || 'Desconocido' : 'Desconocido';
 }
 
-// 获取销售价格、税率、批次号和库存
 function getSalePriceAndStock(productCode, customerCode) {
     const cotations = JSON.parse(localStorage.getItem('cotations') || '[]');
     const products = getProducts();
@@ -98,7 +93,6 @@ function getSalePriceAndStock(productCode, customerCode) {
     return { price, taxRate, lote, stock };
 }
 
-// 动态调整表格容器高度
 function adjustTableHeight() {
     const totalsSectionRect = totalsSection.getBoundingClientRect();
     const tableContainerRect = tableContainer.getBoundingClientRect();
@@ -108,10 +102,9 @@ function adjustTableHeight() {
     tableContainer.style.overflowY = tableHeight > availableHeight ? 'auto' : 'hidden';
 }
 
-// 加载客户下拉框
 function loadCustomers() {
     const customers = getCustomers();
-    customerCodeSelect.innerHTML = '<option value="">请选择客户</option>';
+    customerCodeSelect.innerHTML = '<option value="">Sel. Cliente</option>';
     customers.forEach(customer => {
         const option = document.createElement('option');
         option.value = customer.code;
@@ -120,13 +113,11 @@ function loadCustomers() {
     });
 }
 
-// 设置默认日期为今天
 function setDefaultDate() {
     const today = new Date().toISOString().split('T')[0];
     despatchDateInput.value = today;
 }
 
-// 更新总额显示
 function updateTotals() {
     const rows = Array.from(tbody.querySelectorAll('tr'));
     const taxGroups = {};
@@ -164,18 +155,23 @@ function updateTotals() {
         const totalsRow = document.createElement('div');
         totalsRow.className = 'totals-row';
         totalsRow.innerHTML = `
-            <div><label>税前总价:</label><span>${group.subtotal.toFixed(2)}</span></div>
-            <div><label>税率:</label><span>${taxRate}%</span></div>
-            <div><label>税值:</label><span>${group.taxValue.toFixed(2)}</span></div>
-            <div><label>税后总价:</label><span>${group.totalWithTax.toFixed(2)}</span></div>
+            <div><label>Subtotal:</label><span>${group.subtotal.toFixed(2)}</span></div>
+            <div><label>Tasa Imp.:</label><span>${taxRate}%</span></div>
+            <div><label>Imp.:</label><span>${group.taxValue.toFixed(2)}</span></div>
+            <div><label>Total:</label><span>${group.totalWithTax.toFixed(2)}</span></div>
         `;
         totalsContainer.appendChild(totalsRow);
     });
     adjustTableHeight();
 }
 
-// 检查库存是否足够
 function checkStockAvailability(despatchCode = null) {
+    const orderCode = orderCodeInput.value.trim();
+
+    if (orderCode) {
+        return { isValid: true };
+    }
+
     const rows = Array.from(tbody.querySelectorAll('tr'));
     const stockData = getStockData();
     const despatchList = JSON.parse(localStorage.getItem('despatchList') || '[]');
@@ -203,15 +199,14 @@ function checkStockAvailability(despatchCode = null) {
             }
 
             if (quantity > availableStock) {
-                const loteDisplay = lote || '无批次';
-                return { isValid: false, message: `批次号 ${loteDisplay} 的库存数量不够！当前库存: ${availableStock}` };
+                const loteDisplay = lote || 'Sin Lote';
+                return { isValid: false, message: `¡Stock insuficiente para lote ${loteDisplay}! Stock actual: ${availableStock}` };
             }
         }
     }
     return { isValid: true };
 }
 
-// 生成临时出货单编号
 function generateTemporaryDespatchCode() {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const despatchRule = codeRules['salesdespatch'] || { prefix: 'DES', digits: 4, suffix: '', counter: 0 };
@@ -230,7 +225,6 @@ function generateTemporaryDespatchCode() {
     return newCode;
 }
 
-// 确认并占用出货单编号
 function confirmDespatchCode(code) {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const despatchRule = codeRules['salesdespatch'] || { prefix: 'DES', digits: 4, suffix: '', counter: 0 };
@@ -246,7 +240,6 @@ function confirmDespatchCode(code) {
     }
 }
 
-// 生成临时发票编号
 function generateTemporaryInvoiceCode() {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const invoiceRule = codeRules['salesinvoice'] || { prefix: 'INV', digits: 4, suffix: '', counter: 0 };
@@ -265,7 +258,6 @@ function generateTemporaryInvoiceCode() {
     return newCode;
 }
 
-// 确认并占用发票编号
 function confirmInvoiceCode(code) {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const invoiceRule = codeRules['salesinvoice'] || { prefix: 'INV', digits: 4, suffix: '', counter: 0 };
@@ -281,7 +273,16 @@ function confirmInvoiceCode(code) {
     }
 }
 
-// 添加新行
+function updateOrderStatus(orderCode, despatchDate) {
+    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    const orderIndex = orders.findIndex(o => o.code === orderCode);
+    if (orderIndex >= 0) {
+        orders[orderIndex].deliveryDate = despatchDate;
+        orders[orderIndex].status = 'Enviado';
+        localStorage.setItem('orders', JSON.stringify(orders));
+    }
+}
+
 addBtn.addEventListener('click', function() {
     const stockCheck = checkStockAvailability();
     if (!stockCheck.isValid) {
@@ -291,14 +292,14 @@ addBtn.addEventListener('click', function() {
 
     const row = document.createElement('tr');
     row.innerHTML = `
-        <td><input type="text" class="product-code" placeholder="输入产品代码"></td>
-        <td><input type="text" class="product-name" placeholder="输入产品名称"></td>
-        <td><input type="text" class="lote" placeholder="输入批次号"></td>
-        <td><input type="number" class="stock" placeholder="库存" readonly></td>
-        <td><input type="number" class="quantity" placeholder="输入数量"></td>
-        <td><input type="number" class="sale-price" placeholder="销售价格" step="0.01" readonly> <span class="currency-span"></span></td>
-        <td><input type="text" class="tax-rate" placeholder="税率 (%)" step="0.01"></td>
-        <td><input type="number" class="total-price" placeholder="总价" step="0.01" readonly> <span class="currency-span"></span></td>
+        <td><input type="text" class="product-code" placeholder="Cód. Producto"></td>
+        <td><input type="text" class="product-name" placeholder="Nombre Prod."></td>
+        <td><input type="text" class="lote" placeholder="Lote"></td>
+        <td><input type="number" class="stock" placeholder="Stock" readonly></td>
+        <td><input type="number" class="quantity" placeholder="Cant."></td>
+        <td><input type="number" class="sale-price" placeholder="Precio Venta" step="0.01" readonly> <span class="currency-span"></span></td>
+        <td><input type="text" class="tax-rate" placeholder="Tasa Imp. (%)" step="0.01"></td>
+        <td><input type="number" class="total-price" placeholder="Total" step="0.01" readonly> <span class="currency-span"></span></td>
         <td><span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span></td>
     `;
     tbody.appendChild(row);
@@ -308,22 +309,18 @@ addBtn.addEventListener('click', function() {
     row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 
-// 返回出货单列表页面
 backBtn.addEventListener('click', function() {
     window.location.href = 'despatch.html';
 });
 
-// 打印按钮事件
 printBtn.addEventListener('click', function() {
     window.print();
 });
 
-// 转发票按钮事件
-// 转发票按钮事件
 invoiceBtn.addEventListener('click', function() {
     const despatchCode = despatchCodeInput.value.trim();
     if (!despatchCode) {
-        alert('请先填写出货单编号再转发票！');
+        alert('¡Ingresa el Nº de envío antes de enviar la factura!');
         return;
     }
 
@@ -331,9 +328,11 @@ invoiceBtn.addEventListener('click', function() {
     const customerCode = customerCodeSelect.value;
     const customerName = customerNameInput.value.trim();
     const despatchDate = despatchDateInput.value;
+    const orderCode = orderCodeInput.value.trim();
+    const verifactu = document.querySelector('input[name="verifactu"]:checked').value;
 
     if (!customerCode || !despatchDate || rows.length === 0) {
-        alert('请确保客户代码、出货日期和出货明细填写完整再转发票！');
+        alert('¡Asegúrate de completar Cód. Cliente, Fecha Envío y detalles!');
         return;
     }
 
@@ -383,7 +382,8 @@ invoiceBtn.addEventListener('click', function() {
         totalAmount,
         date: despatchDate,
         customerCode,
-        status: '已开票'
+        status: '已开票',
+        verifactu
     };
 
     const existingIndex = despatches.findIndex(d => d.code === despatchCode);
@@ -397,37 +397,39 @@ invoiceBtn.addEventListener('click', function() {
     localStorage.setItem('despatches', JSON.stringify(despatches));
     localStorage.setItem('despatchList', JSON.stringify(updatedDespatchList));
 
-    let stockData = getStockData();
-    despatchListData.forEach(despatchItem => {
-        const productCode = despatchItem.productCode;
-        const lote = despatchItem.lote;
-        const quantitySold = parseFloat(despatchItem.quantity);
+    if (!orderCode) {
+        let stockData = getStockData();
+        despatchListData.forEach(despatchItem => {
+            const productCode = despatchItem.productCode;
+            const lote = despatchItem.lote;
+            const quantitySold = parseFloat(despatchItem.quantity);
 
-        const stockIndex = stockData.findIndex(item => 
-            item.productCode === productCode && (!lote || item.lote === lote)
-        );
+            const stockIndex = stockData.findIndex(item => 
+                item.productCode === productCode && (!lote || item.lote === lote)
+            );
 
-        if (stockIndex !== -1) {
-            const currentStock = parseFloat(stockData[stockIndex].quantity);
-            stockData[stockIndex].quantity = Math.max(0, currentStock - quantitySold);
-            stockData[stockIndex].lastUpdated = new Date().toISOString().split('T')[0];
-            if (stockData[stockIndex].quantity === 0) {
-                stockData.splice(stockIndex, 1);
+            if (stockIndex !== -1) {
+                const currentStock = parseFloat(stockData[stockIndex].quantity);
+                stockData[stockIndex].quantity = Math.max(0, currentStock - quantitySold);
+                stockData[stockIndex].lastUpdated = new Date().toISOString().split('T')[0];
+                if (stockData[stockIndex].quantity === 0) {
+                    stockData.splice(stockIndex, 1);
+                }
             }
-        }
-    });
-    saveStockData(stockData);
+        });
+        saveStockData(stockData);
+    }
 
     const invoiceData = JSON.parse(localStorage.getItem('invoiceData') || '[]');
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     if (!codeRules['salesinvoice']) {
-        alert('请先在代码管理中注册销售发票编号生成规则！');
+        alert('¡Registra primero la regla de generación de Nº de factura en gestión de códigos!');
         return;
     }
     const invoiceNumber = generateTemporaryInvoiceCode();
     const dueDate = new Date(despatchDate);
     dueDate.setMonth(dueDate.getMonth() + 1);
-    const currency = despatchListData[0].currency || '未知';
+    const currency = despatchListData[0].currency || 'Desconocido';
     const newInvoice = {
         invoiceNumber,
         invoiceDate: despatchDate,
@@ -435,7 +437,8 @@ invoiceBtn.addEventListener('click', function() {
         customerName,
         invoiceAmount: totalAmount,
         currency,
-        items: despatchListData
+        items: despatchListData,
+        verifactu
     };
 
     const existingInvoiceIndex = invoiceData.findIndex(inv => inv.invoiceNumber === invoiceNumber);
@@ -447,15 +450,14 @@ invoiceBtn.addEventListener('click', function() {
     }
     localStorage.setItem('invoiceData', JSON.stringify(invoiceData));
 
-    // 同步到 receivablesData
     const receivablesData = JSON.parse(localStorage.getItem('receivablesData') || '[]');
     const receivable = {
-        receivableNo: `REC-${invoiceNumber}`, // 使用发票号生成应收编号
+        receivableNo: `REC-${invoiceNumber}`,
         invoiceDate: despatchDate,
         dueDate: dueDate.toISOString().split('T')[0],
         customerName,
         amount: totalAmount,
-        status: '未付款'
+        status: 'Sin Pagar'
     };
     const receivableIndex = receivablesData.findIndex(r => r.receivableNo === receivable.receivableNo);
     if (receivableIndex >= 0) {
@@ -465,7 +467,6 @@ invoiceBtn.addEventListener('click', function() {
     }
     localStorage.setItem('receivablesData', JSON.stringify(receivablesData));
 
-    // 同步到 receivablesList
     const receivablesList = JSON.parse(localStorage.getItem('receivablesList') || '[]');
     const receivableDetail = {
         invoiceNo: invoiceNumber,
@@ -477,7 +478,7 @@ invoiceBtn.addEventListener('click', function() {
         customerName,
         invoiceDate: despatchDate,
         dueDate: dueDate.toISOString().split('T')[0],
-        status: '未付款'
+        status: 'Sin Pagar'
     };
     const receivableDetailIndex = receivablesList.findIndex(r => r.receivableNo === receivable.receivableNo && r.invoiceNo === invoiceNumber);
     if (receivableDetailIndex >= 0) {
@@ -487,21 +488,24 @@ invoiceBtn.addEventListener('click', function() {
     }
     localStorage.setItem('receivablesList', JSON.stringify(receivablesList));
 
-    // 跳转到 salesinvoicelist.html
+    if (orderCode) {
+        updateOrderStatus(orderCode, despatchDate);
+    }
+
     window.location.href = 'salesinvoicelist.html';
 });
 
-// 保存所有数据并更新库存和出货单列表
 saveAllBtn.addEventListener('click', function() {
     const rows = Array.from(tbody.querySelectorAll('tr'));
     const despatchCode = despatchCodeInput.value.trim();
     const customerCode = customerCodeSelect.value;
     const customerName = customerNameInput.value.trim();
     const despatchDate = despatchDateInput.value;
-    const status = statusSelect.value;
+    const orderCode = orderCodeInput.value.trim();
+    const verifactu = document.querySelector('input[name="verifactu"]:checked').value;
 
-    if (!despatchCode || !customerCode || !despatchDate || !status) {
-        alert('请确保出货单编号、客户代码、出货日期和状态填写完整！');
+    if (!despatchCode || !customerCode || !despatchDate) {
+        alert('¡Completa Nº Envío, Cód. Cliente y Fecha!');
         return;
     }
 
@@ -534,7 +538,7 @@ saveAllBtn.addEventListener('click', function() {
     }).filter(item => item !== null);
 
     if (despatchListData.length === 0) {
-        alert('请至少添加一条有效的出货明细！');
+        alert('¡Agrega al menos un detalle de envío válido!');
         return;
     }
 
@@ -556,7 +560,8 @@ saveAllBtn.addEventListener('click', function() {
         totalAmount,
         date: despatchDate,
         customerCode,
-        status
+        status: '未开票',
+        verifactu
     };
 
     const existingIndex = despatches.findIndex(d => d.code === despatchCode);
@@ -570,31 +575,36 @@ saveAllBtn.addEventListener('click', function() {
     localStorage.setItem('despatches', JSON.stringify(despatches));
     localStorage.setItem('despatchList', JSON.stringify(updatedDespatchList));
 
-    let stockData = getStockData();
-    despatchListData.forEach(despatchItem => {
-        const productCode = despatchItem.productCode;
-        const lote = despatchItem.lote;
-        const quantitySold = parseFloat(despatchItem.quantity);
+    if (!orderCode) {
+        let stockData = getStockData();
+        despatchListData.forEach(despatchItem => {
+            const productCode = despatchItem.productCode;
+            const lote = despatchItem.lote;
+            const quantitySold = parseFloat(despatchItem.quantity);
 
-        const stockIndex = stockData.findIndex(item => 
-            item.productCode === productCode && (!lote || item.lote === lote)
-        );
+            const stockIndex = stockData.findIndex(item => 
+                item.productCode === productCode && (!lote || item.lote === lote)
+            );
 
-        if (stockIndex !== -1) {
-            const currentStock = parseFloat(stockData[stockIndex].quantity);
-            stockData[stockIndex].quantity = Math.max(0, currentStock - quantitySold);
-            stockData[stockIndex].lastUpdated = new Date().toISOString().split('T')[0];
-            if (stockData[stockIndex].quantity === 0) {
-                stockData.splice(stockIndex, 1);
+            if (stockIndex !== -1) {
+                const currentStock = parseFloat(stockData[stockIndex].quantity);
+                stockData[stockIndex].quantity = Math.max(0, currentStock - quantitySold);
+                stockData[stockIndex].lastUpdated = new Date().toISOString().split('T')[0];
+                if (stockData[stockIndex].quantity === 0) {
+                    stockData.splice(stockIndex, 1);
+                }
             }
-        }
-    });
-    saveStockData(stockData);
+        });
+        saveStockData(stockData);
+    }
+
+    if (orderCode) {
+        updateOrderStatus(orderCode, despatchDate);
+    }
 
     window.location.href = 'despatch.html';
 });
 
-// 绑定输入框事件
 function bindInputEvents(row) {
     const codeInput = row.querySelector('.product-code');
     const nameInput = row.querySelector('.product-name');
@@ -606,6 +616,15 @@ function bindInputEvents(row) {
     const totalPriceInput = row.querySelector('.total-price');
     const priceCurrencySpan = salePriceInput.nextElementSibling;
     const totalPriceCurrencySpan = totalPriceInput.nextElementSibling;
+
+    function calculateTotalPrice() {
+        const salePrice = parseFloat(salePriceInput.value) || 0;
+        const quantity = parseFloat(quantityInput.value) || 0;
+        const taxRate = parseFloat(taxRateInput.value.replace('%', '')) || 0;
+        const subtotal = salePrice * quantity;
+        const taxValue = subtotal * (taxRate / 100);
+        totalPriceInput.value = (subtotal + taxValue).toFixed(2);
+    }
 
     [codeInput, nameInput].forEach(input => {
         input.addEventListener('input', function() {
@@ -632,13 +651,16 @@ function bindInputEvents(row) {
                         const saleData = getSalePriceAndStock(product.code, customerCode);
                         salePriceInput.value = saleData.price;
                         taxRateInput.value = `${saleData.taxRate}%`;
-                        stockInput.value = saleData.stock;
-                        loteInput.value = saleData.lote;
+                        if (!orderCodeInput.value) {
+                            stockInput.value = saleData.stock;
+                            loteInput.value = saleData.lote;
+                        }
                         quantityInput.value = '';
                         totalPriceInput.value = '';
                         const currency = getProductCurrency(product.code);
                         priceCurrencySpan.textContent = currency;
                         totalPriceCurrencySpan.textContent = currency;
+                        calculateTotalPrice();
                         updateTotals();
                         suggestionsDiv.remove();
                     });
@@ -663,9 +685,11 @@ function bindInputEvents(row) {
     loteInput.addEventListener('click', function() {
         const productCode = codeInput.value.trim();
         if (!productCode) {
-            alert('请先选择产品代码！');
+            alert('¡Selecciona primero el Cód. Producto!');
             return;
         }
+
+        if (orderCodeInput.value) return;
 
         const stockData = getStockData();
         const productStocks = stockData.filter(s => s.productCode === productCode);
@@ -678,12 +702,13 @@ function bindInputEvents(row) {
             suggestionsDiv.className = 'autocomplete-suggestions lote-suggestions';
             productStocks.forEach(stock => {
                 const suggestion = document.createElement('div');
-                suggestion.textContent = `${stock.lote || '无批次'} - 库存: ${stock.quantity}`;
+                suggestion.textContent = `${stock.lote || 'Sin Lote'} - Stock: ${stock.quantity}`;
                 suggestion.addEventListener('click', function() {
                     loteInput.value = stock.lote || '';
                     stockInput.value = stock.quantity;
                     quantityInput.value = '';
                     totalPriceInput.value = '';
+                    calculateTotalPrice();
                     updateTotals();
                     suggestionsDiv.remove();
                 });
@@ -706,30 +731,22 @@ function bindInputEvents(row) {
     });
 
     quantityInput.addEventListener('input', function() {
-        const salePrice = parseFloat(salePriceInput.value) || 0;
-        const quantity = parseFloat(quantityInput.value) || 0;
-        const taxRate = parseFloat(taxRateInput.value.replace('%', '')) || 0;
-        const subtotal = salePrice * quantity;
-        const taxValue = subtotal * (taxRate / 100);
-        totalPriceInput.value = (subtotal + taxValue).toFixed(2);
+        calculateTotalPrice();
         updateTotals();
     });
 
     taxRateInput.addEventListener('input', function() {
-        const salePrice = parseFloat(salePriceInput.value) || 0;
-        const quantity = parseFloat(quantityInput.value) || 0;
         let taxRate = this.value.replace('%', '').trim();
         if (taxRate === '' || isNaN(taxRate)) taxRate = '0';
         taxRate = parseFloat(taxRate);
-        const subtotal = salePrice * quantity;
-        const taxValue = subtotal * (taxRate / 100);
-        totalPriceInput.value = (subtotal + taxValue).toFixed(2);
+        calculateTotalPrice();
         this.value = `${taxRate}%`;
         updateTotals();
     });
+
+    calculateTotalPrice();
 }
 
-// 绑定操作图标事件
 function bindIconEvents() {
     document.querySelectorAll('.delete-icon').forEach(icon => {
         icon.removeEventListener('click', deleteHandler);
@@ -740,13 +757,12 @@ function bindIconEvents() {
 const deleteHandler = function() {
     const row = this.closest('tr');
     const productCode = row.querySelector('.product-code').value;
-    if (confirm(`确定删除产品：${productCode} 的出货明细吗？`)) {
+    if (confirm(`¿Eliminar detalle de envío del producto: ${productCode}?`)) {
         row.remove();
         updateTotals();
     }
 };
 
-// 客户代码和名称联动
 customerCodeSelect.addEventListener('change', function() {
     const customers = getCustomers();
     const selectedCustomer = customers.find(c => c.code === this.value);
@@ -754,7 +770,6 @@ customerCodeSelect.addEventListener('change', function() {
     updateTotals();
 });
 
-// 加载现有出货单数据
 function loadDespatchData() {
     const urlParams = new URLSearchParams(window.location.search);
     const code = decodeURIComponent(urlParams.get('code') || '');
@@ -773,27 +788,28 @@ function loadDespatchData() {
                 customerNameInput.value = customer.name;
             }
             despatchDateInput.value = despatch.date;
-            statusSelect.value = despatch.status || '未开票';
+            statusSelect.value = despatch.status === '未开票' ? 'Sin Factura' : 'Con Factura';
+            document.querySelector(`input[name="verifactu"][value="${despatch.verifactu || 'yes'}"]`).checked = true;
             generateCodeBtn.style.display = 'none';
 
             const despatchList = JSON.parse(localStorage.getItem('despatchList') || '[]');
             const items = despatchList.filter(item => item.despatchCode === code);
             tbody.innerHTML = '';
             if (items.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="9">暂无出货明细数据</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9">Sin datos de detalles</td></tr>';
             } else {
                 items.forEach(item => {
-                    const row = document.createElement('tr');
                     const currency = item.currency || getProductCurrency(item.productCode);
+                    const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td><input type="text" class="product-code" value="${item.productCode}" placeholder="输入产品代码"></td>
-                        <td><input type="text" class="product-name" value="${item.productName}" placeholder="输入产品名称"></td>
-                        <td><input type="text" class="lote" value="${item.lote}" placeholder="输入批次号"></td>
-                        <td><input type="number" class="stock" value="${item.stock}" placeholder="库存" readonly></td>
-                        <td><input type="number" class="quantity" value="${item.quantity}" placeholder="输入数量"></td>
-                        <td><input type="number" class="sale-price" value="${item.salePrice}" placeholder="销售价格" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
-                        <td><input type="text" class="tax-rate" value="${item.taxRate}%" placeholder="税率 (%)" step="0.01"></td>
-                        <td><input type="number" class="total-price" value="${item.totalPrice}" placeholder="总价" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
+                        <td><input type="text" class="product-code" value="${item.productCode}" placeholder="Cód. Producto"></td>
+                        <td><input type="text" class="product-name" value="${item.productName}" placeholder="Nombre Prod."></td>
+                        <td><input type="text" class="lote" value="${item.lote}" placeholder="Lote"></td>
+                        <td><input type="number" class="stock" value="${item.stock}" placeholder="Stock" readonly></td>
+                        <td><input type="number" class="quantity" value="${item.quantity}" placeholder="Cant."></td>
+                        <td><input type="number" class="sale-price" value="${item.salePrice}" placeholder="Precio Venta" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
+                        <td><input type="text" class="tax-rate" value="${item.taxRate}%" placeholder="Tasa Imp. (%)" step="0.01"></td>
+                        <td><input type="number" class="total-price" value="${item.totalPrice || ''}" placeholder="Total" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
                         <td><span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span></td>
                     `;
                     tbody.appendChild(row);
@@ -822,15 +838,14 @@ function loadDespatchData() {
                 });
             }
         } else {
-            tbody.innerHTML = '<tr><td colspan="9">未找到该出货单数据</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="9">No se encontró el envío</td></tr>';
         }
     } else {
         generateCodeBtn.style.display = 'block';
-        statusSelect.value = '未开票';
+        statusSelect.value = 'Sin Factura';
     }
 }
 
-// 初始化
 document.addEventListener('DOMContentLoaded', function() {
     loadCustomers();
     setDefaultDate();
@@ -841,10 +856,86 @@ document.addEventListener('DOMContentLoaded', function() {
     generateCodeBtn.addEventListener('click', function() {
         const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
         if (!codeRules['salesdespatch']) {
-            alert('请先在代码管理中注册出货单编号生成规则！');
+            alert('¡Registra primero la regla de generación de Nº de envío en gestión de códigos!');
             return;
         }
         const newCode = generateTemporaryDespatchCode();
         despatchCodeInput.value = newCode;
+    });
+
+    orderCodeInput.addEventListener('click', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isEdit = urlParams.get('edit') === 'true';
+        const isView = urlParams.get('view') === 'true';
+        if (isEdit || isView) return;
+
+        const width = screen.width;
+        const height = screen.height;
+        const orderWindow = window.open(
+            'selectSalesOrder.html',
+            'SelectSalesOrder',
+            `width=${width},height=${height},top=0,left=0,fullscreen=yes`
+        );
+
+        window.addEventListener('message', function handler(event) {
+            console.log('Mensaje recibido en despatchout:', event.data);
+            if (event.data && event.data.orderCode) {
+                const { orderCode, items, customerCode, customerName } = event.data;
+                orderCodeInput.value = orderCode;
+
+                customerCodeSelect.value = customerCode || '';
+                if (!customerCode && customerName) {
+                    const customers = getCustomers();
+                    const customer = customers.find(c => c.name === customerName);
+                    customerCodeSelect.value = customer ? customer.code : '';
+                }
+                customerNameInput.value = customerName || '';
+                if (!customerName && customerCode) {
+                    const customers = getCustomers();
+                    const customer = customers.find(c => c.code === customerCode);
+                    customerNameInput.value = customer ? customer.name : '';
+                }
+
+                if (!items || items.length === 0) {
+                    alert('¡La orden de venta seleccionada no tiene detalles!');
+                    return;
+                }
+
+                const orderList = JSON.parse(localStorage.getItem('orderList') || '[]');
+                tbody.innerHTML = '';
+                const products = getProducts();
+                items.forEach(item => {
+                    const product = products.find(p => p.code === item.productCode);
+                    const currency = product ? product.currency || 'Desconocido' : 'Desconocido';
+                    const orderItem = orderList.find(o => o.orderCode === orderCode && o.productCode === item.productCode);
+                    
+                    const saleData = getSalePriceAndStock(item.productCode, customerCodeSelect.value);
+                    const salePrice = orderItem && orderItem.salePrice ? orderItem.salePrice : saleData.price;
+                    const lote = orderItem && orderItem.lote !== undefined ? orderItem.lote : saleData.lote;
+                    const stock = orderItem && orderItem.stock !== undefined ? orderItem.stock : saleData.stock;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><input type="text" class="product-code" value="${item.productCode || ''}" placeholder="Cód. Producto"></td>
+                        <td><input type="text" class="product-name" value="${item.productName || ''}" placeholder="Nombre Prod."></td>
+                        <td><input type="text" class="lote" value="${lote || ''}" placeholder="Lote"></td>
+                        <td><input type="number" class="stock" value="${stock || ''}" placeholder="Stock" readonly></td>
+                        <td><input type="number" class="quantity" value="${item.quantity || ''}" placeholder="Cant."></td>
+                        <td><input type="number" class="sale-price" value="${salePrice || ''}" placeholder="Precio Venta" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
+                        <td><input type="text" class="tax-rate" value="${saleData.taxRate || '0'}%" placeholder="Tasa Imp. (%)" step="0.01"></td>
+                        <td><input type="number" class="total-price" value="" placeholder="Total" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
+                        <td><span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span></td>
+                    `;
+                    tbody.appendChild(row);
+                    bindInputEvents(row);
+                });
+
+                bindIconEvents();
+                updateTotals();
+            } else {
+                console.warn('Mensaje inválido recibido:', event.data);
+            }
+            window.removeEventListener('message', handler);
+        }, { once: true });
     });
 });

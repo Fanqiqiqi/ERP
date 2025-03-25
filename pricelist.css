@@ -11,7 +11,7 @@ body {
   line-height: 1.6;
 }
 
-/* 顶部横条 */
+/* Barra superior */
 .top-bar {
   background-color: #d3d3d3;
   height: 60px;
@@ -32,7 +32,7 @@ body {
   font-weight: 500;
 }
 
-/* 主内容区域 */
+/* Área de contenido */
 .content {
   margin-top: 60px;
   padding: 40px;
@@ -95,7 +95,7 @@ body {
   background-color: #5a6268;
 }
 
-/* 价格表类别选择框 */
+/* Selector de categoría */
 .category-select {
   display: flex;
   align-items: center;
@@ -122,7 +122,7 @@ body {
   box-shadow: 0 0 5px rgba(0,180,216,0.3);
 }
 
-/* 表格 */
+/* Tabla */
 .pricelist-table {
   width: 100%;
   border-collapse: collapse;
@@ -135,19 +135,19 @@ body {
   padding: 12px 15px;
   text-align: center;
   border-bottom: 1px solid #ddd;
-  position: relative; /* 为货币单位定位 */
+  position: relative; /* Para posicionar unidades monetarias */
 }
 
-/* 默认 6 列布局 */
+/* Diseño por defecto: 6 columnas */
 .pricelist-table th,
 .pricelist-table td {
-  width: 16.67%; /* 6 列平均分配，每列占 16.67% */
+  width: 16.67%; /* 6 columnas, 16.67% cada una */
 }
 
-/* 查看模式 5 列布局 */
+/* Modo vista: 5 columnas */
 .pricelist-table.view-mode th,
 .pricelist-table.view-mode td {
-  width: 20%; /* 5 列平均分配，每列占 20% */
+  width: 20%; /* 5 columnas, 20% cada una */
 }
 
 .pricelist-table th {
@@ -160,26 +160,26 @@ body {
   background-color: #f9f9f9;
 }
 
-/* 输入框通用样式 */
+/* Estilo general de inputs */
 .pricelist-table input {
-  width: 120px; /* 默认宽度，适用于价格输入框 */
+  width: 120px; /* Ancho por defecto para precios */
   padding: 8px;
-  margin-right: 10px; /* 与货币单位保持间距 */
+  margin-right: 10px; /* Espacio con unidad monetaria */
   font-size: 14px;
   border: 1px solid #ddd;
   border-radius: 5px;
   outline: none;
   transition: border-color 0.3s ease;
-  text-align: center; /* 输入框内容居中 */
+  text-align: center; /* Centrado */
 }
 
-/* 产品代码和产品名称输入框特定样式 */
+/* Estilo específico para código y nombre */
 .pricelist-table input.product-code,
 .pricelist-table input.product-name {
-  width: 180px; /* 增大宽度，比价格输入框宽 */
+  width: 180px; /* Más ancho que precios */
 }
 
-/* 输入框焦点样式 */
+/* Estilo en foco */
 .pricelist-table input:focus {
   border-color: #00b4d8;
   box-shadow: 0 0 5px rgba(0,180,216,0.3);
@@ -187,14 +187,14 @@ body {
 
 .pricelist-table input + span {
   position: absolute;
-  right: 15px; /* 与 margin-right 配合，确保间距 */
+  right: 15px; /* Ajuste con margin-right */
   top: 50%;
   transform: translateY(-50%);
   color: #666;
   font-size: 14px;
 }
 
-/* 自动补全提示 */
+/* Sugerencias de autocompletado */
 .autocomplete-suggestions {
   position: absolute;
   background-color: #fff;
@@ -215,7 +215,7 @@ body {
   background-color: #f0f0f0;
 }
 
-/* 操作图标 */
+/* Iconos de acción */
 .action-icon {
   margin: 0 8px;
   cursor: pointer;
@@ -241,7 +241,7 @@ body {
   transform: scale(1.2);
 }
 
-/* 响应式 */
+/* Responsive */
 @media (max-width: 768px) {
   .content {
     padding: 20px;
@@ -256,13 +256,13 @@ body {
   .pricelist-table input {
     font-size: 12px;
     padding: 6px;
-    width: 60px; /* 默认宽度在小屏幕下 */
+    width: 60px; /* Ancho en pantallas pequeñas */
     margin-right: 8px;
-    text-align: center; /* 小屏幕下保持居中 */
+    text-align: center; /* Centrado */
   }
   .pricelist-table input.product-code,
   .pricelist-table input.product-name {
-    width: 90px; /* 响应式下增大产品代码和名称的宽度 */
+    width: 90px; /* Ajuste responsive */
   }
   .pricelist-table input + span {
     font-size: 12px;

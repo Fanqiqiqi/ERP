@@ -20,7 +20,7 @@ const orderCode = urlParams.get('orderCode');
 const isEditMode = urlParams.get('edit') === 'true';
 const isViewMode = !isEditMode && orderCode;
 
-let tempGeneratedCode = null; // 临时存储生成的代码和计数器
+let tempGeneratedCode = null; // Almacenar temporalmente el código generado y el contador
 
 function getProducts() {
     return JSON.parse(localStorage.getItem('products') || '[]');
@@ -73,7 +73,7 @@ function adjustTableHeight() {
 
 function loadSuppliers() {
     const suppliers = getSuppliers();
-    supplierCodeSelect.innerHTML = '<option value="">请选择供应商</option>';
+    supplierCodeSelect.innerHTML = '<option value="">Selecciona proveedor</option>';
     suppliers.forEach(supplier => {
         const option = document.createElement('option');
         option.value = supplier.code;
@@ -119,7 +119,7 @@ function updateTotals() {
 
     if (rows.length === 0) {
         const h3 = totalsContainer.parentElement.querySelector('h3');
-        h3.innerHTML = `订单总额: <span class="grand-total">0.00</span>`;
+        h3.innerHTML = `Total Orden: <span class="grand-total">0.00</span>`;
         totalsContainer.innerHTML = '';
         adjustTableHeight();
         return;
@@ -145,9 +145,9 @@ function updateTotals() {
         if (currency) currencies.add(currency);
     });
 
-    const currencyStr = currencies.size === 1 ? Array.from(currencies)[0] : '多种货币';
+    const currencyStr = currencies.size === 1 ? Array.from(currencies)[0] : 'Varias monedas';
     const h3 = totalsContainer.parentElement.querySelector('h3');
-    h3.innerHTML = `订单总额: <span class="grand-total">${grandTotalWithTax.toFixed(2)} ${currencyStr}</span>`;
+    h3.innerHTML = `Total Orden: <span class="grand-total">${grandTotalWithTax.toFixed(2)} ${currencyStr}</span>`;
 
     totalsContainer.innerHTML = '';
     Object.keys(taxGroups).forEach(taxRate => {
@@ -155,10 +155,10 @@ function updateTotals() {
         const totalsRow = document.createElement('div');
         totalsRow.className = 'totals-row';
         totalsRow.innerHTML = `
-            <div><label>税前总价:</label><span>${group.subtotal.toFixed(2)} ${group.currency}</span></div>
-            <div><label>税率:</label><span>${taxRate}%</span></div>
-            <div><label>税值:</label><span>${group.taxValue.toFixed(2)} ${group.currency}</span></div>
-            <div><label>税后总价:</label><span>${group.totalWithTax.toFixed(2)} ${group.currency}</span></div>
+            <div><label>Total sin imp:</label><span>${group.subtotal.toFixed(2)} ${group.currency}</span></div>
+            <div><label>Tasa imp:</label><span>${taxRate}%</span></div>
+            <div><label>Valor imp:</label><span>${group.taxValue.toFixed(2)} ${group.currency}</span></div>
+            <div><label>Total con imp:</label><span>${group.totalWithTax.toFixed(2)} ${group.currency}</span></div>
         `;
         totalsContainer.appendChild(totalsRow);
     });
@@ -173,39 +173,39 @@ function loadOrderList() {
     if (isViewMode) {
         table.classList.add('view-mode');
         theadRow.innerHTML = `
-            <th>产品代码</th>
-            <th>产品名称</th>
-            <th>采购价格</th>
-            <th>数量</th>
-            <th>税率</th>
-            <th>总价</th>
+            <th>Código Producto</th>
+            <th>Nombre Producto</th>
+            <th>Precio Compra</th>
+            <th>Cantidad</th>
+            <th>Tasa Impuesto</th>
+            <th>Total</th>
         `;
         generateOrderCodeBtn.style.display = 'none';
     } else if (isEditMode) {
         table.classList.remove('view-mode');
         theadRow.innerHTML = `
-            <th>产品代码</th>
-            <th>产品名称</th>
-            <th>采购价格</th>
-            <th>数量</th>
-            <th>税率</th>
-            <th>总价</th>
-            <th>操作</th>
+            <th>Código Producto</th>
+            <th>Nombre Producto</th>
+            <th>Precio Compra</th>
+            <th>Cantidad</th>
+            <th>Tasa Impuesto</th>
+            <th>Total</th>
+            <th>Acción</th>
         `;
         generateOrderCodeBtn.style.display = 'none';
     } else {
         table.classList.remove('view-mode');
         theadRow.innerHTML = `
-            <th>产品代码</th>
-            <th>产品名称</th>
-            <th>采购价格</th>
-            <th>数量</th>
-            <th>税率</th>
-            <th>总价</th>
-            <th>操作</th>
+            <th>Código Producto</th>
+            <th>Nombre Producto</th>
+            <th>Precio Compra</th>
+            <th>Cantidad</th>
+            <th>Tasa Impuesto</th>
+            <th>Total</th>
+            <th>Acción</th>
         `;
         generateOrderCodeBtn.style.display = 'block';
-        tempGeneratedCode = null; // 重置临时代码
+        tempGeneratedCode = null; // Reiniciar código temporal
     }
 
     if (orderCode) {
@@ -218,11 +218,11 @@ function loadOrderList() {
                 const row = document.createElement('tr');
                 if (isEditMode) {
                     row.innerHTML = `
-                        <td><input type="text" class="product-code" value="${item.productCode || ''}" placeholder="输入产品代码"></td>
-                        <td><input type="text" class="product-name" value="${item.productName || ''}" placeholder="输入产品名称"></td>
+                        <td><input type="text" class="product-code" value="${item.productCode || ''}" placeholder="Ingresa código producto"></td>
+                        <td><input type="text" class="product-name" value="${item.productName || ''}" placeholder="Ingresa nombre producto"></td>
                         <td><input type="number" class="purchase-price" value="${item.purchasePrice || ''}" step="0.01" readonly> <span>${currency}</span></td>
-                        <td><input type="number" class="quantity" value="${item.quantity || ''}" placeholder="输入数量"></td>
-                        <td><input type="text" class="tax-rate" value="${item.taxRate || '0'}%" step="0.01" placeholder="输入税率 (%)"></td>
+                        <td><input type="number" class="quantity" value="${item.quantity || ''}" placeholder="Ingresa cantidad"></td>
+                        <td><input type="text" class="tax-rate" value="${item.taxRate || '0'}%" step="0.01" placeholder="Ingresa tasa (%)"></td>
                         <td><input type="number" class="total-price" value="${item.totalPrice || ''}" step="0.01" readonly> <span>${currency}</span></td>
                         <td>
                             <span class="action-icon delete-icon" data-index="${index}"><i class="fas fa-trash-alt"></i></span>
@@ -269,7 +269,7 @@ function saveOrderListToPurchaseOrders() {
     const expectedArrivalDate = expectedArrivalDateInput.value.trim();
 
     if (!orderCode || !selectedSupplierCode || !orderDate) {
-        alert('请确保采购订单号、供应商代码和订单日期填写完整！');
+        alert('¡Asegúrate de completar el nº de orden, código proveedor y fecha de orden!');
         return false;
     }
 
@@ -327,7 +327,7 @@ function saveOrderListToPurchaseOrders() {
     });
 
     if (!allValid) {
-        alert('请确保所有产品信息填写完整！');
+        alert('¡Asegúrate de completar toda la info de productos!');
         return false;
     }
 
@@ -358,7 +358,7 @@ function saveOrderListToPurchaseOrders() {
             orderDate: orderDate,
             expectedArrivalDate: expectedArrivalDate
         });
-        // 如果使用了临时生成的代码，则保存计数器
+        // Si se usó un código temporal, guardar el contador
         if (tempGeneratedCode && tempGeneratedCode.code === orderCode) {
             saveOrderCodeCounter(tempGeneratedCode.counter);
         }
@@ -374,11 +374,11 @@ function saveOrderListToPurchaseOrders() {
     localStorage.setItem('purchaseOrderList', JSON.stringify(updatedOrderList));
 
     window.dispatchEvent(new Event('storage'));
-    tempGeneratedCode = null; // 保存后清空临时代码
+    tempGeneratedCode = null; // Limpiar código temporal tras guardar
     return true;
 }
 
-// 保存计数器到 localStorage
+// Guardar contador en localStorage
 function saveOrderCodeCounter(counter) {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const orderRule = codeRules['purchaseorder'];
@@ -394,7 +394,7 @@ function generateOrderCode() {
     const orderRule = codeRules['purchaseorder'];
 
     if (!orderRule || !orderRule.prefix || !orderRule.digits) {
-        alert('请先在代码管理中为“采购订单”设置编号规则！');
+        alert('¡Configura primero las reglas de numeración para "orden de compra" en gestión de códigos!');
         return null;
     }
 
@@ -409,7 +409,7 @@ function generateOrderCode() {
         newCode = `${orderRule.prefix}${number}${orderRule.suffix || ''}`;
     } while (existingCodes.includes(newCode));
     
-    // 临时存储代码和计数器，不更新 localStorage
+    // Almacenar temporalmente código y contador, sin actualizar localStorage
     tempGeneratedCode = { code: newCode, counter: counter };
     return newCode;
 }
@@ -417,12 +417,12 @@ function generateOrderCode() {
 addBtn.addEventListener('click', function() {
     const row = document.createElement('tr');
     row.innerHTML = `
-        <td><input type="text" class="product-code" placeholder="输入产品代码"></td>
-        <td><input type="text" class="product-name" placeholder="输入产品名称"></td>
-        <td><input type="number" class="purchase-price" placeholder="采购价格" step="0.01" readonly> <span></span></td>
-        <td><input type="number" class="quantity" placeholder="输入数量"></td>
-        <td><input type="text" class="tax-rate" placeholder="税率 (%)" step="0.01"></td>
-        <td><input type="number" class="total-price" placeholder="总价" step="0.01" readonly> <span></span></td>
+        <td><input type="text" class="product-code" placeholder="Ingresa código producto"></td>
+        <td><input type="text" class="product-name" placeholder="Ingresa nombre producto"></td>
+        <td><input type="number" class="purchase-price" placeholder="Precio compra" step="0.01" readonly> <span></span></td>
+        <td><input type="number" class="quantity" placeholder="Ingresa cantidad"></td>
+        <td><input type="text" class="tax-rate" placeholder="Tasa imp (%)" step="0.01"></td>
+        <td><input type="number" class="total-price" placeholder="Total" step="0.01" readonly> <span></span></td>
         <td>
             <span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span>
         </td>
@@ -435,7 +435,7 @@ addBtn.addEventListener('click', function() {
 });
 
 backBtn.addEventListener('click', function() {
-    tempGeneratedCode = null; // 返回时清空临时代码
+    tempGeneratedCode = null; // Limpiar código temporal al volver
     window.location.href = 'purchaseorder.html';
     window.close();
 });
@@ -507,7 +507,7 @@ function bindInputEvents(row) {
                 document.body.appendChild(suggestionsDiv);
                 const inputRect = input.getBoundingClientRect();
                 suggestionsDiv.style.left = `${inputRect.left + window.scrollX}px`;
-                suggestionsDiv.style.top = `${inputRect.bottom + window.scrollY}px`;
+                suggestionsDiv.style.top = `${inputRect.bottom + bottleneckY}px`;
                 suggestionsDiv.style.width = `${inputRect.width}px`;
             }
         });
@@ -555,7 +555,7 @@ function bindIconEvents() {
 const deleteHandler = function() {
     const row = this.closest('tr');
     const productCode = row.cells[0].textContent;
-    if (confirm(`确定删除产品：${productCode} 的采购订单明细吗？`)) {
+    if (confirm(`¿Seguro de eliminar el detalle de orden de compra del producto: ${productCode}?`)) {
         row.remove();
         saveOrderListToPurchaseOrders();
         updateTotals();

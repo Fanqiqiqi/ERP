@@ -1,5 +1,6 @@
+// order.js
 
-// 模态框相关元素
+// Elementos del modal
 const modal = document.getElementById('addOrderModal');
 const modalTitle = modal.querySelector('.modal-content h3');
 const addBtn = document.querySelector('.add-btn');
@@ -9,396 +10,417 @@ const orderCodeInput = document.getElementById('orderCode');
 const customerNameSelect = document.getElementById('customerName');
 const totalAmountInput = document.getElementById('totalAmount');
 const orderDateInput = document.getElementById('orderDate');
+const deliveryDateInput = document.getElementById('deliveryDate');
+const statusSelect = document.getElementById('status');
 const tbody = document.querySelector('.order-table tbody');
 
 let isEditing = false;
 let editingRow = null;
 
-// 分页相关变量
-const itemsPerPage = 9; // 每页显示9条
-let currentPage = 1; // 当前页码
+// Variables de paginación
+const itemsPerPage = 9;
+let currentPage = 1;
 
-// 加载客户到下拉框
+// Cargar clientes en el selector
 function loadCustomersIntoSelect() {
-  const customers = JSON.parse(localStorage.getItem('customers')) || [];
-  customerNameSelect.innerHTML = '<option value="">请选择客户</option>';
-  customers.forEach(customer => {
-    const option = document.createElement('option');
-    option.value = customer.name;
-    option.textContent = customer.name;
-    customerNameSelect.appendChild(option);
-  });
+    const customers = JSON.parse(localStorage.getItem('customers')) || [];
+    customerNameSelect.innerHTML = '<option value="">Selecciona Cliente</option>';
+    customers.forEach(customer => {
+        const option = document.createElement('option');
+        option.value = customer.name;
+        option.textContent = customer.name;
+        customerNameSelect.appendChild(option);
+    });
 }
 
-// 更新表格函数（带分页）
+// Actualizar tabla con paginación
 function loadOrders() {
-  const orders = JSON.parse(localStorage.getItem('orders')) || [];
-  const products = JSON.parse(localStorage.getItem('products')) || [];
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    const products = JSON.parse(localStorage.getItem('products')) || [];
 
-  // 计算总页数
-  const totalPages = Math.ceil(orders.length / itemsPerPage);
+    const totalPages = Math.ceil(orders.length / itemsPerPage);
 
-  // 确保当前页码有效
-  if (currentPage < 1) currentPage = 1;
-  if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage > totalPages) currentPage = totalPages;
 
-  // 计算当前页的数据范围
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, orders.length);
-  
-  // Sort orders by date in descending order (latest first)
-  const sortedOrders = [...orders].sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return dateB - dateA;
-  });
-  
-  const currentData = sortedOrders.slice(startIndex, endIndex);
-  
-  tbody.innerHTML = '';
-  currentData.forEach((order, pageIndex) => {
-    const globalIndex = startIndex + pageIndex; // 计算全局索引
-    const orderList = JSON.parse(localStorage.getItem('orderList')) || [];
-    const orderItems = orderList.filter(item => item.orderCode === order.code);
-    const firstItem = orderItems[0];
-    const product = firstItem ? products.find(p => p.code === firstItem.productCode) : null;
-    const currency = product ? product.currency || '' : '';
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, orders.length);
+    
+    const sortedOrders = [...orders].sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB - dateA;
+    });
+    
+    const currentData = sortedOrders.slice(startIndex, endIndex);
+    
+    tbody.innerHTML = '';
+    currentData.forEach((order, pageIndex) => {
+        const globalIndex = startIndex + pageIndex;
+        const orderList = JSON.parse(localStorage.getItem('orderList')) || [];
+        const orderItems = orderList.filter(item => item.orderCode === order.code);
+        const firstItem = orderItems[0];
+        const product = firstItem ? products.find(p => p.code === firstItem.productCode) : null;
+        const currency = product ? product.currency || '€' : '€';
+        
+        const formattedAmount = Number(order.totalAmount).toLocaleString('es-ES', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        const status = order.status || 'Pendiente';
 
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${order.code}</td>
-        <td>${order.customerName}</td>
-        <td>${order.totalAmount} ${currency}</td>
-        <td>${order.date}</td>
-        <td>
-            <span class="action-icon view-icon" data-code="${order.code}"><i class="fas fa-eye"></i></span>
-            <span class="action-icon edit-icon" data-code="${order.code}"><i class="fas fa-edit"></i></span>
-            <span class="action-icon delete-icon" data-code="${order.code}"><i class="fas fa-trash-alt"></i></span>
-        </td>
-    `;
-    tbody.appendChild(row);
-  });
-  
-  // 更新分页控件
-  updatePagination(totalPages);
-  bindIconEvents();
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${order.code}</td>
+            <td>${order.customerName}</td>
+            <td>${formattedAmount} ${currency}</td>
+            <td>${order.date}</td>
+            <td>${order.deliveryDate || 'No Establecido'}</td>
+            <td class="${status === 'Enviado' ? 'status-enviado' : 'status-pendiente'}">${status}</td>
+            <td>
+                <span class="action-icon view-icon" data-code="${order.code}"><i class="fas fa-eye"></i></span>
+                <span class="action-icon edit-icon" data-code="${order.code}"><i class="fas fa-edit"></i></span>
+                <span class="action-icon delete-icon" data-code="${order.code}"><i class="fas fa-trash-alt"></i></span>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+    
+    updatePagination(totalPages);
+    bindIconEvents();
 }
 
-// 更新分页控件
+// Actualizar controles de paginación
 function updatePagination(totalPages) {
-  const pagination = document.querySelector('.pagination');
-  if (!pagination) return;
+    const pagination = document.querySelector('.pagination');
+    if (!pagination) return;
 
-  pagination.innerHTML = `
-      <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-      <span>第 ${currentPage} 页 / 共 ${totalPages} 页</span>
-      <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
-  `;
+    pagination.innerHTML = `
+        <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Anterior</button>
+        <span>Pág ${currentPage} / Total ${totalPages}</span>
+        <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Siguiente</button>
+    `;
 
-  pagination.querySelector('.prev-btn').addEventListener('click', () => {
-    if (currentPage > 1) {
-      currentPage--;
-      loadOrders();
-    }
-  });
+    pagination.querySelector('.prev-btn').addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            loadOrders();
+        }
+    });
 
-  pagination.querySelector('.next-btn').addEventListener('click', () => {
-    if (currentPage < totalPages) {
-      currentPage++;
-      loadOrders();
-    }
-  });
+    pagination.querySelector('.next-btn').addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            loadOrders();
+        }
+    });
 }
 
-// 保存订单数据到 localStorage
+// Guardar datos de pedido en localStorage
 function saveOrderData(orderData) {
-  const orders = JSON.parse(localStorage.getItem('orders')) || [];
-  const orderIndex = orders.findIndex(o => o.code === orderData.code);
-  if (orderIndex >= 0) {
-    orders[orderIndex] = orderData;
-  } else {
-    orders.push(orderData);
-  }
-  localStorage.setItem('orders', JSON.stringify(orders));
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    const orderIndex = orders.findIndex(o => o.code === orderData.code);
+    if (orderIndex >= 0) {
+        orders[orderIndex] = {
+            ...orders[orderIndex],
+            ...orderData
+        };
+    } else {
+        orders.push({
+            ...orderData,
+            status: orderData.status || 'Pendiente',
+            deliveryDate: orderData.deliveryDate || ''
+        });
+    }
+    localStorage.setItem('orders', JSON.stringify(orders));
 }
 
-// 添加订单 - 跳转到新页面
+// Añadir pedido - Redirigir a nueva página
 addBtn.addEventListener('click', function() {
-  window.location.href = 'add-order.html';
+    window.location.href = 'add-order.html';
 });
 
-// 取消按钮 - 关闭模态框
+// Cancelar - Cerrar modal
 cancelBtn.addEventListener('click', function() {
-  modal.style.display = 'none';
-  orderForm.reset();
-  isEditing = false;
-  editingRow = null;
-});
-
-// 保存或更新订单（仅用于编辑模式）
-orderForm.addEventListener('submit', function(e) {
-  e.preventDefault();
-  const code = orderCodeInput.value.trim();
-  const customerName = customerNameSelect.value;
-  const totalAmount = totalAmountInput.value.trim();
-  const date = orderDateInput.value;
-
-  if (code && customerName && totalAmount && date) {
-    const orderData = {
-      code,
-      customerName,
-      totalAmount,
-      date
-    };
-
-    if (isEditing && editingRow) {
-      editingRow.cells[0].textContent = code;
-      editingRow.cells[1].textContent = customerName;
-      editingRow.cells[2].textContent = totalAmount;
-      editingRow.cells[3].textContent = date;
-      saveOrderData(orderData);
-    } else {
-      const existingCodes = Array.from(tbody.querySelectorAll('td:first-child')).map(td => td.textContent);
-      if (existingCodes.includes(code)) {
-        alert('订单编号已存在，请使用唯一的编号！');
-        return;
-      }
-      const newRow = document.createElement('tr');
-      newRow.innerHTML = `
-          <td>${code}</td>
-          <td>${customerName}</td>
-          <td>${totalAmount}</td>
-          <td>${date}</td>
-          <td>
-              <span class="action-icon view-icon"><i class="fas fa-eye"></i></span>
-              <span class="action-icon edit-icon"><i class="fas fa-edit"></i></span>
-              <span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span>
-          </td>
-      `;
-      tbody.appendChild(newRow);
-      saveOrderData(orderData);
-    }
-
     modal.style.display = 'none';
     orderForm.reset();
     isEditing = false;
     editingRow = null;
-    loadOrders(); // 更新表格和分页
-  }
 });
 
-// 操作图标事件绑定
+// Guardar o actualizar pedido (solo en modo edición)
+orderForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const code = orderCodeInput.value.trim();
+    const customerName = customerNameSelect.value;
+    const totalAmount = totalAmountInput.value.trim();
+    const date = orderDateInput.value;
+    const deliveryDate = deliveryDateInput.value;
+    const status = statusSelect ? statusSelect.value : 'Pendiente';
+
+    if (code && customerName && totalAmount && date) {
+        const orderData = {
+            code,
+            customerName,
+            totalAmount,
+            date,
+            deliveryDate: deliveryDate || '',
+            status: status || 'Pendiente'
+        };
+
+        if (isEditing && editingRow) {
+            editingRow.cells[0].textContent = code;
+            editingRow.cells[1].textContent = customerName;
+            editingRow.cells[2].textContent = totalAmount;
+            editingRow.cells[3].textContent = date;
+            editingRow.cells[4].textContent = deliveryDate || 'No Establecido';
+            editingRow.cells[5].textContent = status;
+            editingRow.cells[5].className = status === 'Enviado' ? 'status-enviado' : 'status-pendiente';
+            saveOrderData(orderData);
+        } else {
+            const existingCodes = Array.from(tbody.querySelectorAll('td:first-child')).map(td => td.textContent);
+            if (existingCodes.includes(code)) {
+                alert('¡El Nº de pedido ya existe, usa uno único!');
+                return;
+            }
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${code}</td>
+                <td>${customerName}</td>
+                <td>${totalAmount}</td>
+                <td>${date}</td>
+                <td>${deliveryDate || 'No Establecido'}</td>
+                <td class="${status === 'Enviado' ? 'status-enviado' : 'status-pendiente'}">${status}</td>
+                <td>
+                    <span class="action-icon view-icon"><i class="fas fa-eye"></i></span>
+                    <span class="action-icon edit-icon"><i class="fas fa-edit"></i></span>
+                    <span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+            saveOrderData(orderData);
+        }
+
+        modal.style.display = 'none';
+        orderForm.reset();
+        isEditing = false;
+        editingRow = null;
+        loadOrders();
+    }
+});
+
+// Vincular eventos de íconos
 function bindIconEvents() {
-  document.querySelectorAll('.view-icon').forEach(icon => {
-    icon.removeEventListener('click', viewHandler);
-    icon.addEventListener('click', viewHandler);
-  });
-  document.querySelectorAll('.edit-icon').forEach(icon => {
-    icon.removeEventListener('click', editHandler);
-    icon.addEventListener('click', editHandler);
-  });
-  document.querySelectorAll('.delete-icon').forEach(icon => {
-    icon.removeEventListener('click', deleteHandler);
-    icon.addEventListener('click', deleteHandler);
-  });
+    document.querySelectorAll('.view-icon').forEach(icon => {
+        icon.removeEventListener('click', viewHandler);
+        icon.addEventListener('click', viewHandler);
+    });
+    document.querySelectorAll('.edit-icon').forEach(icon => {
+        icon.removeEventListener('click', editHandler);
+        icon.addEventListener('click', editHandler);
+    });
+    document.querySelectorAll('.delete-icon').forEach(icon => {
+        icon.removeEventListener('click', deleteHandler);
+        icon.addEventListener('click', deleteHandler);
+    });
 }
 
-// 查看事件 - 跳转到 add-order.html
+// Ver - Redirigir a add-order.html
 const viewHandler = function() {
-  const code = this.getAttribute('data-code');
-  window.open(`add-order.html?code=${encodeURIComponent(code)}&view=true`, '_blank');
+    const code = this.getAttribute('data-code');
+    window.open(`add-order.html?code=${encodeURIComponent(code)}&view=true`, '_blank');
 };
 
-// 编辑事件 - 跳转到 add-order.html
+// Editar - Redirigir a add-order.html
 const editHandler = function() {
-  const code = this.getAttribute('data-code');
-  window.open(`add-order.html?code=${encodeURIComponent(code)}&edit=true`, '_blank');
+    const code = this.getAttribute('data-code');
+    window.open(`add-order.html?code=${encodeURIComponent(code)}&edit=true`, '_blank');
 };
 
-// 删除事件
+// Eliminar
 const deleteHandler = function() {
-  const row = this.closest('tr');
-  const code = row.cells[0].textContent;
-  if (confirm(`确定删除订单：${code} 吗？`)) {
-    row.remove();
-    const orders = JSON.parse(localStorage.getItem('orders')) || [];
-    const updatedOrders = orders.filter(o => o.code !== code);
-    localStorage.setItem('orders', JSON.stringify(updatedOrders));
-    const orderList = JSON.parse(localStorage.getItem('orderList')) || [];
-    const updatedOrderList = orderList.filter(item => item.orderCode !== code);
-    localStorage.setItem('orderList', JSON.stringify(updatedOrderList));
-    loadOrders(); // 更新表格和分页
-  }
+    const row = this.closest('tr');
+    const code = row.cells[0].textContent;
+    if (confirm(`¿Seguro que deseas eliminar el pedido: ${code}?`)) {
+        row.remove();
+        const orders = JSON.parse(localStorage.getItem('orders')) || [];
+        const updatedOrders = orders.filter(o => o.code !== code);
+        localStorage.setItem('orders', JSON.stringify(updatedOrders));
+        const orderList = JSON.parse(localStorage.getItem('orderList')) || [];
+        const updatedOrderList = orderList.filter(item => item.orderCode !== code);
+        localStorage.setItem('orderList', JSON.stringify(updatedOrderList));
+        loadOrders();
+    }
 };
 
-// --- 新增筛选功能 ---
-// DOM 元素
+// --- Funcionalidad de filtro ---
+// Elementos DOM
 const searchBtn = document.querySelector('.search-btn');
 const filterPanel = document.getElementById('filterPanel');
 const closeFilter = filterPanel.querySelector('.close-filter');
 const filterForm = document.getElementById('filterForm');
 const resetBtn = filterForm.querySelector('.reset-btn');
 
-// 筛选后的数据
 let filteredData = JSON.parse(localStorage.getItem('orders') || '[]');
 
-// 应用筛选条件
+// Aplicar filtros
 function applyFilters(formData) {
-  const filters = {
-    orderCode: formData.get('orderCode')?.toLowerCase().trim(),
-    customerName: formData.get('customerName')?.toLowerCase().trim(),
-    orderDateFrom: formData.get('orderDateFrom'),
-    orderDateTo: formData.get('orderDateTo'),
-    totalAmount: formData.get('totalAmount') ? Number(formData.get('totalAmount')) : null,
-    status: formData.get('status') // 如果订单没有状态字段，可以忽略此项
-  };
+    const filters = {
+        orderCode: formData.get('orderCode')?.toLowerCase().trim(),
+        customerName: formData.get('customerName')?.toLowerCase().trim(),
+        orderDateFrom: formData.get('orderDateFrom'),
+        orderDateTo: formData.get('orderDateTo'),
+        totalAmount: formData.get('totalAmount') ? Number(formData.get('totalAmount')) : null,
+        status: formData.get('status')
+    };
 
-  filteredData = JSON.parse(localStorage.getItem('orders') || '[]').filter(item => {
-    let matches = true;
+    filteredData = JSON.parse(localStorage.getItem('orders') || '[]').filter(item => {
+        let matches = true;
 
-    if (filters.orderCode) {
-      matches = matches && item.code.toLowerCase().includes(filters.orderCode);
-    }
+        if (filters.orderCode) {
+            matches = matches && item.code.toLowerCase().includes(filters.orderCode);
+        }
 
-    if (filters.customerName) {
-      matches = matches && item.customerName.toLowerCase().includes(filters.customerName);
-    }
+        if (filters.customerName) {
+            matches = matches && item.customerName.toLowerCase().includes(filters.customerName);
+        }
 
-    if (filters.orderDateFrom || filters.orderDateTo) {
-      const orderDate = new Date(item.date);
-      if (filters.orderDateFrom) {
-        matches = matches && orderDate >= new Date(filters.orderDateFrom);
-      }
-      if (filters.orderDateTo) {
-        matches = matches && orderDate <= new Date(filters.orderDateTo);
-      }
-    }
+        if (filters.orderDateFrom || filters.orderDateTo) {
+            const orderDate = new Date(item.date);
+            if (filters.orderDateFrom) {
+                matches = matches && orderDate >= new Date(filters.orderDateFrom);
+            }
+            if (filters.orderDateTo) {
+                matches = matches && orderDate <= new Date(filters.orderDateTo);
+            }
+        }
 
-    if (filters.totalAmount !== null) {
-      matches = matches && Number(item.totalAmount) === filters.totalAmount;
-    }
+        if (filters.totalAmount !== null) {
+            matches = matches && Number(item.totalAmount) === filters.totalAmount;
+        }
 
-    if (filters.status) {
-      // 如果订单数据中没有状态字段，此条件将始终为 false，除非添加状态逻辑
-      matches = matches && item.status === filters.status;
-    }
+        if (filters.status) {
+            matches = matches && item.status === filters.status;
+        }
 
-    return matches;
-  });
+        return matches;
+    });
 }
 
-// 更新表格（使用筛选数据）
+// Actualizar tabla con datos filtrados
 function updateTableWithFilter() {
-  const products = JSON.parse(localStorage.getItem('products') || '[]');
+    const products = JSON.parse(localStorage.getItem('products') || '[]');
 
-  // 按日期降序排序
-  filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
+    filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  // 计算总页数
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-  // 确保当前页码有效
-  if (currentPage < 1) currentPage = 1;
-  if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage > totalPages) currentPage = totalPages;
 
-  // 计算当前页的数据范围
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
-  const currentData = filteredData.slice(startIndex, endIndex);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
+    const currentData = filteredData.slice(startIndex, endIndex);
 
-  // 清空表格并填充当前页数据
-  tbody.innerHTML = '';
-  currentData.forEach((order, pageIndex) => {
-    const globalIndex = startIndex + pageIndex;
-    const orderList = JSON.parse(localStorage.getItem('orderList') || '[]');
-    const orderItems = orderList.filter(item => item.orderCode === order.code);
-    const firstItem = orderItems[0];
-    const product = firstItem ? products.find(p => p.code === firstItem.productCode) : null;
-    const currency = product ? product.currency || '' : '';
+    tbody.innerHTML = '';
+    currentData.forEach((order, pageIndex) => {
+        const globalIndex = startIndex + pageIndex;
+        const orderList = JSON.parse(localStorage.getItem('orderList') || '[]');
+        const orderItems = orderList.filter(item => item.orderCode === order.code);
+        const firstItem = orderItems[0];
+        const product = firstItem ? products.find(p => p.code === firstItem.productCode) : null;
+        const currency = product ? product.currency || '€' : '€';
+        
+        const formattedAmount = Number(order.totalAmount).toLocaleString('es-ES', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        const status = order.status || 'Pendiente';
 
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${order.code}</td>
-        <td>${order.customerName}</td>
-        <td>${order.totalAmount} ${currency}</td>
-        <td>${order.date}</td>
-        <td>
-            <span class="action-icon view-icon" data-code="${order.code}"><i class="fas fa-eye"></i></span>
-            <span class="action-icon edit-icon" data-code="${order.code}"><i class="fas fa-edit"></i></span>
-            <span class="action-icon delete-icon" data-code="${order.code}"><i class="fas fa-trash-alt"></i></span>
-        </td>
-    `;
-    tbody.appendChild(row);
-  });
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${order.code}</td>
+            <td>${order.customerName}</td>
+            <td>${formattedAmount} ${currency}</td>
+            <td>${order.date}</td>
+            <td>${order.deliveryDate || 'No Establecido'}</td>
+            <td class="${status === 'Enviado' ? 'status-enviado' : 'status-pendiente'}">${status}</td>
+            <td>
+                <span class="action-icon view-icon" data-code="${order.code}"><i class="fas fa-eye"></i></span>
+                <span class="action-icon edit-icon" data-code="${order.code}"><i class="fas fa-edit"></i></span>
+                <span class="action-icon delete-icon" data-code="${order.code}"><i class="fas fa-trash-alt"></i></span>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
 
-  // 更新分页控件
-  updatePagination(totalPages);
-  bindIconEvents();
+    updatePagination(totalPages);
+    bindIconEvents();
 }
 
-// 显示/隐藏筛选框
+// Mostrar/Ocultar panel de filtros
 function toggleFilterPanel() {
-  filterPanel.classList.toggle('active');
+    filterPanel.classList.toggle('active');
 }
 
-// 关闭筛选框
+// Cerrar panel de filtros
 function closeFilterPanel() {
-  filterPanel.classList.remove('active');
+    filterPanel.classList.remove('active');
 }
 
-// 重置筛选表单
+// Resetear formulario de filtros
 function resetFilterForm() {
-  filterForm.reset();
-  filteredData = JSON.parse(localStorage.getItem('orders') || '[]');
-  currentPage = 1;
-  updateTableWithFilter();
-}
-
-// 初始化筛选功能
-function initFilter() {
-  searchBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toggleFilterPanel();
-  });
-
-  closeFilter.addEventListener('click', () => {
-    closeFilterPanel();
-  });
-
-  filterForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const formData = new FormData(filterForm);
-    applyFilters(formData);
+    filterForm.reset();
+    filteredData = JSON.parse(localStorage.getItem('orders') || '[]');
     currentPage = 1;
     updateTableWithFilter();
-    closeFilterPanel();
-  });
-
-  resetBtn.addEventListener('click', () => {
-    resetFilterForm();
-  });
-
-  document.addEventListener('click', (e) => {
-    if (filterPanel.classList.contains('active') && 
-        !filterPanel.contains(e.target) && 
-        e.target !== searchBtn) {
-      closeFilterPanel();
-    }
-  });
-
-  filterPanel.addEventListener('click', (e) => {
-    e.stopPropagation();
-  });
 }
 
-// 页面加载时初始化
+// Inicializar filtros
+function initFilter() {
+    searchBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFilterPanel();
+    });
+
+    closeFilter.addEventListener('click', () => {
+        closeFilterPanel();
+    });
+
+    filterForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(filterForm);
+        applyFilters(formData);
+        currentPage = 1;
+        updateTableWithFilter();
+        closeFilterPanel();
+    });
+
+    resetBtn.addEventListener('click', () => {
+        resetFilterForm();
+    });
+
+    document.addEventListener('click', (e) => {
+        if (filterPanel.classList.contains('active') && 
+            !filterPanel.contains(e.target) && 
+            e.target !== searchBtn) {
+            closeFilterPanel();
+        }
+    });
+
+    filterPanel.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+}
+
+// Inicialización al cargar página
 document.addEventListener('DOMContentLoaded', function() {
-  loadCustomersIntoSelect();
-  loadOrders(); // 初始加载使用原始 loadOrders
-  initFilter(); // 初始化筛选功能
+    loadCustomersIntoSelect();
+    loadOrders();
+    initFilter();
 });
 
-// 监听 storage 事件以实时更新
+// Actualizar en tiempo real con eventos de storage
 window.addEventListener('storage', function() {
-  loadOrders();
+    loadOrders();
 });

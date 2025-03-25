@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previsión Compras</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="purchaseforecast.css">
+</head>
+<body>
+    <!-- Barra superior gris -->
+    <header class="top-bar">
+        <h1>Sistema Gestión</h1>
+        <button class="company-profile-btn">Datos Empresa</button>
+    </header>
+
+    <!-- Menú lateral (igual a página principal) -->
+    <nav class="sidebar">
+        <ul>
+            <li class="dropdown">
+                <a href="#system" class="dropdown-toggle">Gestión Sistema</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="codemanagement.html">Gestión Códigos</a></li>
+                    <li><a href="#" data-page="authmanagement.html">Gestión Autorización</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#customer" class="dropdown-toggle">Gestión Clientes</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="ccategoria.html">Categoría Clientes</a></li>
+                    <li><a href="#" data-page="customer.html">Datos Clientes</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#supplier" class="dropdown-toggle">Gestión Proveedores</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="scategoria.html">Categoría Proveedores</a></li>
+                    <li><a href="#" data-page="supplier.html">Datos Proveedores</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#product" class="dropdown-toggle">Gestión Productos</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="pcategoria.html">Categoría Productos</a></li>
+                    <li><a href="#" data-page="brand.html">Gestión Marcas</a></li>
+                    <li><a href="#" data-page="product.html">Datos Productos</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#price" class="dropdown-toggle">Gestión Precios</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="prcategoria.html">Clasif. Precios</a></li>
+                    <li><a href="#" data-page="price.html">Datos Precios</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#purchase" class="dropdown-toggle">Gestión Compras</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="purchaseprice.html">Gestión Cotización Compras</a></li>
+                    <li><a href="#" data-page="purchaseorder.html">Gestión Pedidos Compras</a></li>
+                    <li><a href="#" data-page="purchaseorderinstocklist.html">Entrada Compras</a></li>
+                    <li><a href="#" data-page="purchaseforecast.html">Previsión Compras</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#sales" class="dropdown-toggle">Gestión Ventas</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="cotation.html">Gestión Cotización</a></li>
+                    <li><a href="#" data-page="order.html">Gestión Pedidos</a></li>
+                    <li><a href="#" data-page="despatch.html">Gestión Envíos</a></li>
+                </ul>
+            </li>
+            <li><a href="#" data-page="stockmanagement.html">Gestión Inventario</a></li>
+            <li class="dropdown">
+                <a href="#invoice" class="dropdown-toggle">Gestión Facturas</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="salesinvoicelist.html">Facturas Ventas</a></li>
+                    <li><a href="#" data-page="purchaseinvoice.html">Facturas Compras</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#finance" class="dropdown-toggle">Gestión Finanzas</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-page="receivables.html">Gestión Cobros</a></li>
+                    <li><a href="#" data-page="payables.html">Gestión Pagos</a></li>
+                    <li><a href="#" data-page="financialreport.html">Reportes Financieros</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Área contenido principal -->
+    <main class="content">
+        <div class="table-container">
+            <!-- Área botón -->
+            <div class="table-header">
+                <h2>Previsión Compras</h2>
+                <button class="generate-btn" id="generatePurchaseOrder">Generar Pedido Compra</button>
+            </div>
+            <!-- Lista previsión compras -->
+            <table class="forecast-table">
+                <thead>
+                    <tr>
+                        <th>Código Producto</th>
+                        <th>Nombre Producto</th>
+                        <th>Cantidad Inventario</th>
+                        <th>Cantidad Compra</th> <!-- Nueva columna -->
+                        <th>Cantidad Ventas</th> <!-- Nueva columna -->
+                        <th>Stock Seguridad</th>
+                        <th>Necesidad Compra</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Datos se llenan dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="common.js"></script>
+    <script src="purchaseforecast.js"></script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'920dd622dd8bc01a',t:'MTc0MjA2MDg1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'920ddbe84eec674f',t:'MTc0MjA2MTA4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'925664bc792e1389',t:'MTc0MjgyMTY2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

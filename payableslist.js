@@ -12,20 +12,20 @@ const totalsContainer = document.querySelector('#totals-container');
 const totalsSection = document.querySelector('.totals-section');
 const generatePayableBtn = document.querySelector('#generatePayableBtn');
 
-// 从供应商数据中加载供应商
+// Cargar proveedores desde datos
 function getSuppliers() {
     return JSON.parse(localStorage.getItem('suppliers') || '[]');
 }
 
-// 从发票数据中获取货币单位
+// Obtener moneda de la factura
 function getInvoiceCurrency(invoiceNo) {
     const invoiceData = JSON.parse(localStorage.getItem('invoiceData') || '[]');
     const invoice = invoiceData.find(inv => inv.invoiceNumber === invoiceNo);
-    console.log('Invoice for', invoiceNo, ':', invoice);
+    console.log('Factura para', invoiceNo, ':', invoice);
     return invoice && invoice.currency ? invoice.currency : '€';
 }
 
-// 动态调整表格容器高度
+// Ajustar altura del contenedor de la tabla
 function adjustTableHeight() {
     const totalsSectionRect = totalsSection.getBoundingClientRect();
     const tableContainerRect = tableContainer.getBoundingClientRect();
@@ -35,10 +35,10 @@ function adjustTableHeight() {
     tableContainer.style.overflowY = tableHeight > availableHeight ? 'auto' : 'hidden';
 }
 
-// 加载供应商下拉框
+// Cargar lista desplegable de proveedores
 function loadSuppliers() {
     const suppliers = getSuppliers();
-    supplierCodeSelect.innerHTML = '<option value="">请选择供应商</option>';
+    supplierCodeSelect.innerHTML = '<option value="">Selecciona proveedor</option>';
     suppliers.forEach(supplier => {
         const option = document.createElement('option');
         option.value = supplier.code;
@@ -47,7 +47,7 @@ function loadSuppliers() {
     });
 }
 
-// 设置默认日期
+// Establecer fechas por defecto
 function setDefaultDate() {
     const today = new Date().toISOString().split('T')[0];
     invoiceDateInput.value = today;
@@ -56,7 +56,7 @@ function setDefaultDate() {
     dueDateInput.value = dueDate.toISOString().split('T')[0];
 }
 
-// 更新总额显示
+// Actualizar totales
 function updateTotals() {
     const rows = Array.from(tbody.querySelectorAll('tr'));
     let grandTotal = 0;
@@ -89,15 +89,15 @@ function updateTotals() {
     document.querySelector('.grand-total').textContent = `${grandTotal.toFixed(2)} ${currency}`;
     totalsContainer.innerHTML = `
         <div class="totals-row">
-            <div><label>总金额:</label><span>${grandTotal.toFixed(2)} ${currency}</span></div>
-            <div><label>已付金额:</label><span>${totalPaid.toFixed(2)} ${currency}</span></div>
-            <div><label>未付金额:</label><span>${totalUnpaid.toFixed(2)} ${currency}</span></div>
+            <div><label>Monto Total:</label><span>${grandTotal.toFixed(2)} ${currency}</span></div>
+            <div><label>Monto Pagado:</label><span>${totalPaid.toFixed(2)} ${currency}</span></div>
+            <div><label>Monto Pendiente:</label><span>${totalUnpaid.toFixed(2)} ${currency}</span></div>
         </div>
     `;
     adjustTableHeight();
 }
 
-// 生成临时应付账款编号
+// Generar número temporal de cuenta por pagar
 function generateTemporaryPayableNumber() {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const payableRule = codeRules['payables'] || { prefix: 'PAY', digits: 4, suffix: '', counter: 0 };
@@ -114,7 +114,7 @@ function generateTemporaryPayableNumber() {
     return newNumber;
 }
 
-// 确认并占用编号
+// Confirmar y ocupar número
 function confirmPayableNumber(payableNo) {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const payableRule = codeRules['payables'] || { prefix: 'PAY', digits: 4, suffix: '', counter: 0 };
@@ -129,7 +129,7 @@ function confirmPayableNumber(payableNo) {
     }
 }
 
-// 加载应付详情并添加新行（仅针对部分结账）
+// Cargar detalles de cuenta por pagar (para pago parcial)
 function loadPayableDetails(payableNo) {
     const payablesData = JSON.parse(localStorage.getItem('payablesData') || '[]');
     const payablesList = JSON.parse(localStorage.getItem('payablesList') || '[]');
@@ -151,10 +151,8 @@ function loadPayableDetails(payableNo) {
         let totalPaidSoFar = 0;
         let lastUnpaidAmount = 0;
 
-        // 根据状态决定是否只读
-        const isEditable = payable.status === '未付款';
+        const isEditable = payable.status === 'No Pagado';
 
-        // 加载已有记录
         details.forEach(item => {
             const currency = getInvoiceCurrency(item.invoiceNo);
             const paymentDate = item.paymentDate || today;
@@ -174,15 +172,14 @@ function loadPayableDetails(payableNo) {
             if (isEditable || !isFullyPaid) bindInputEvents(row);
         });
 
-        // 仅在部分结账状态下自动添加新行，新行金额基于最后一行的未付金额
-        if (payable.status === '部分结账' && lastUnpaidAmount > 0) {
+        if (payable.status === 'Parcialmente Pagado' && lastUnpaidAmount > 0) {
             const firstInvoiceNo = details[0]?.invoiceNo || '';
             const currency = payablesList[0]?.currency || getInvoiceCurrency(firstInvoiceNo) || '€';
             const newRow = document.createElement('tr');
             newRow.innerHTML = `
                 <td><input type="text" class="invoice-no" value="${firstInvoiceNo}" readonly></td>
                 <td><input type="number" class="amount" value="${lastUnpaidAmount.toFixed(2)}" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
-                <td><input type="number" class="paid-amount" placeholder="输入已付金额" step="0.01"> <span class="currency-span">${currency}</span></td>
+                <td><input type="number" class="paid-amount" placeholder="Ingresa monto pagado" step="0.01"> <span class="currency-span">${currency}</span></td>
                 <td><input type="number" class="unpaid-amount" value="${lastUnpaidAmount.toFixed(2)}" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
                 <td><input type="date" class="payment-date" value="${today}"></td>
                 <td><span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span></td>
@@ -196,15 +193,15 @@ function loadPayableDetails(payableNo) {
     }
 }
 
-// 添加新行
+// Agregar nueva fila
 addBtn.addEventListener('click', function() {
     const today = new Date().toISOString().split('T')[0];
     const row = document.createElement('tr');
     row.innerHTML = `
-        <td><input type="text" class="invoice-no" placeholder="输入发票号码"></td>
-        <td><input type="number" class="amount" placeholder="输入金额" step="0.01"> <span class="currency-span">€</span></td>
-        <td><input type="number" class="paid-amount" placeholder="输入已付金额" step="0.01"> <span class="currency-span">€</span></td>
-        <td><input type="number" class="unpaid-amount" placeholder="输入未付金额" step="0.01" readonly> <span class="currency-span">€</span></td>
+        <td><input type="text" class="invoice-no" placeholder="Ingresa Nº factura"></td>
+        <td><input type="number" class="amount" placeholder="Ingresa monto" step="0.01"> <span class="currency-span">€</span></td>
+        <td><input type="number" class="paid-amount" placeholder="Ingresa monto pagado" step="0.01"> <span class="currency-span">€</span></td>
+        <td><input type="number" class="unpaid-amount" placeholder="Ingresa monto pendiente" step="0.01" readonly> <span class="currency-span">€</span></td>
         <td><input type="date" class="payment-date" value="${today}"></td>
         <td><span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span></td>
     `;
@@ -215,12 +212,12 @@ addBtn.addEventListener('click', function() {
     row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 
-// 返回应付管理页面
+// Volver a la página de gestión de cuentas por pagar
 backBtn.addEventListener('click', function() {
-    window.location.href = 'payables.html';
+    window.location.href = 'payables_es.html';
 });
 
-// 保存所有数据
+// Guardar todos los datos
 saveAllBtn.addEventListener('click', function() {
     const rows = Array.from(tbody.querySelectorAll('tr'));
     const payableNumber = payableNumberInput.value.trim();
@@ -230,7 +227,7 @@ saveAllBtn.addEventListener('click', function() {
     const dueDate = dueDateInput.value;
 
     if (!payableNumber || !supplierCode || !invoiceDate || !dueDate) {
-        alert('请确保应付编号、供应商代码、应付日期和到期日期填写完整！');
+        alert('¡Asegúrate de completar Nº cuenta, código proveedor, fecha cuenta y fecha vencimiento!');
         return;
     }
 
@@ -255,13 +252,13 @@ saveAllBtn.addEventListener('click', function() {
             supplierName,
             invoiceDate,
             dueDate,
-            status: unpaidAmount > 0 ? '未付款' : '已付款', // 单行状态
+            status: unpaidAmount > 0 ? 'No Pagado' : 'Pagado',
             currency
         };
     }).filter(item => item !== null);
 
     if (payablesListData.length === 0) {
-        alert('请至少添加一条有效的应付账款明细！');
+        alert('¡Agrega al menos un detalle válido de cuenta por pagar!');
         return;
     }
 
@@ -270,19 +267,17 @@ saveAllBtn.addEventListener('click', function() {
     const totalPaid = payablesListData.reduce((sum, item) => sum + item.paidAmount, 0);
     const totalUnpaid = payablesListData.reduce((sum, item) => sum + item.unpaidAmount, 0);
 
-    // 计算整体状态
     const roundedTotalUnpaid = Number(totalUnpaid.toFixed(2));
     const totalAmount = existingPayable ? existingPayable.amount : payablesListData.reduce((sum, item) => sum + item.amount, 0);
 
     let status;
     if (roundedTotalUnpaid === 0) {
-        status = '已付款'; // 所有未付金额为0，状态为“已付款”
+        status = 'Pagado';
     } else if (totalPaid > 0 && roundedTotalUnpaid > 0) {
-        // 检查是否为部分结账状态，且最后一行的未付金额是否为0
         const lastRowUnpaid = parseFloat(rows[rows.length - 1].querySelector('.unpaid-amount').value) || 0;
-        status = lastRowUnpaid === 0 ? '已付款' : '部分结账';
+        status = lastRowUnpaid === 0 ? 'Pagado' : 'Parcialmente Pagado';
     } else {
-        status = '未付款';
+        status = 'No Pagado';
     }
 
     const payable = {
@@ -295,7 +290,7 @@ saveAllBtn.addEventListener('click', function() {
         currency: payablesListData[0].currency || '€'
     };
 
-    console.log('Saving payable:', payable);
+    console.log('Guardando cuenta por pagar:', payable);
 
     const existingIndex = payablesData.findIndex(r => r.payableNo === payableNumber);
     if (existingIndex >= 0) {
@@ -308,10 +303,10 @@ saveAllBtn.addEventListener('click', function() {
     localStorage.setItem('payablesData', JSON.stringify(payablesData));
     localStorage.setItem('payablesList', JSON.stringify(payablesListData));
 
-    window.location.href = 'payables.html';
+    window.location.href = 'payables_es.html';
 });
 
-// 绑定输入框事件（动态更新未付金额）
+// Vincular eventos de entrada (actualizar monto pendiente)
 function bindInputEvents(row) {
     const invoiceNoInput = row.querySelector('.invoice-no');
     const amountInput = row.querySelector('.amount');
@@ -332,7 +327,7 @@ function bindInputEvents(row) {
     });
 }
 
-// 绑定操作图标事件
+// Vincular eventos de iconos
 function bindIconEvents() {
     document.querySelectorAll('.delete-icon').forEach(icon => {
         icon.removeEventListener('click', deleteHandler);
@@ -343,33 +338,32 @@ function bindIconEvents() {
 const deleteHandler = function() {
     const row = this.closest('tr');
     const invoiceNo = row.querySelector('.invoice-no').value;
-    if (confirm(`确定删除发票号码：${invoiceNo} 的应付账款明细吗？`)) {
+    if (confirm(`¿Seguro de eliminar el detalle de factura Nº ${invoiceNo}?`)) {
         row.remove();
         updateTotals();
     }
 };
 
-// 供应商代码和名称联动
+// Vincular código y nombre de proveedor
 supplierCodeSelect.addEventListener('change', function() {
     const suppliers = getSuppliers();
     const selectedSupplier = suppliers.find(c => c.code === this.value);
     supplierNameInput.value = selectedSupplier ? selectedSupplier.name : '';
 });
 
-// 生成应付编号按钮事件
+// Evento botón generar número
 generatePayableBtn.addEventListener('click', function() {
     const newPayableNumber = generateTemporaryPayableNumber();
     payableNumberInput.value = newPayableNumber;
 });
 
-// 初始化
+// Inicialización
 document.addEventListener('DOMContentLoaded', function() {
     loadSuppliers();
     setDefaultDate();
     updateTotals();
     window.addEventListener('resize', adjustTableHeight);
 
-    // 检查是否为编辑模式
     const urlParams = new URLSearchParams(window.location.search);
     const payableNo = urlParams.get('payableNo');
     const isEdit = urlParams.get('edit') === 'true';

@@ -1,20 +1,21 @@
-
-
-// 初始化采购订单数据
+// Inicializar datos de órdenes de compra
 let purchaseOrders = JSON.parse(localStorage.getItem('purchaseOrders')) || [];
 
-// 分页相关变量
-const itemsPerPage = 9; // 每页显示9条
-let currentPage = 1; // 当前页码
+// Definir valores de estado permitidos
+const validStatuses = ['No procesado', 'En proceso', 'Procesado'];
 
-// 获取供应商名称
+// Variables relacionadas con la paginación
+const itemsPerPage = 9; // 9 ítems por página
+let currentPage = 1; // Página actual
+
+// Obtener nombre del proveedor
 function getSupplierName(supplierCode) {
     const suppliers = JSON.parse(localStorage.getItem('suppliers') || '[]');
     const supplier = suppliers.find(s => s.code === supplierCode);
     return supplier ? supplier.name : supplierCode;
 }
 
-// 计算订单总额并返回带欧元符号的总价
+// Calcular el total de la orden y devolverlo con el símbolo de euro
 function getOrderTotal(orderCode) {
     const orderList = JSON.parse(localStorage.getItem('purchaseOrderList') || '[]');
     const orderItems = orderList.filter(item => item.orderCode === orderCode);
@@ -22,40 +23,44 @@ function getOrderTotal(orderCode) {
     orderItems.forEach(item => {
         total += parseFloat(item.totalPrice) || 0;
     });
-    return `${total.toFixed(2)} €`; // 固定使用欧元符号
+    return `${total.toFixed(2)} €`; // Usar símbolo de euro fijo
 }
 
-// 更新表格（带分页）
+// Actualizar tabla (con paginación)
 function updateTable() {
     const tbody = document.querySelector('.purchaseorder-table tbody');
     if (!tbody) return;
     tbody.innerHTML = '';
 
-    // 按订单日期降序排序
+    // Ordenar por fecha de orden descendente
     purchaseOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
 
-    // 计算总页数
+    // Calcular total de páginas
     const totalPages = Math.ceil(purchaseOrders.length / itemsPerPage);
 
-    // 确保当前页码有效
+    // Asegurar que la página actual sea válida
     if (currentPage < 1) currentPage = 1;
     if (currentPage > totalPages) currentPage = totalPages;
 
-    // 计算当前页的数据范围
+    // Calcular el rango de datos de la página actual
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, purchaseOrders.length);
     const currentData = purchaseOrders.slice(startIndex, endIndex);
 
     currentData.forEach((order, pageIndex) => {
-        const globalIndex = startIndex + pageIndex; // 计算全局索引
+        const globalIndex = startIndex + pageIndex; // Calcular índice global
         const tr = document.createElement('tr');
         const totalPrice = getOrderTotal(order.orderCode);
+        // Asegurar que el estado sea válido, de lo contrario usar "No procesado"
+        const status = validStatuses.includes(order.status) ? order.status : 'No procesado';
+        const statusClass = status === 'No procesado' ? 'unprocessed' : status === 'En proceso' ? 'processing' : 'processed';
         tr.innerHTML = `
             <td>${order.orderCode}</td>
             <td>${getSupplierName(order.supplierCode)}</td>
             <td>${totalPrice}</td>
             <td>${order.orderDate}</td>
             <td>${order.expectedArrivalDate || ''}</td>
+            <td class="status-column ${statusClass}">${status}</td>
             <td>
                 <span class="action-icon view-icon" data-index="${globalIndex}"><i class="fas fa-eye"></i></span>
                 <span class="action-icon edit-icon" data-index="${globalIndex}"><i class="fas fa-edit"></i></span>
@@ -65,25 +70,25 @@ function updateTable() {
         tbody.appendChild(tr);
     });
 
-    // 更新分页控件
+    // Actualizar controles de paginación
     updatePagination(totalPages);
 
     bindIconEvents();
 }
 
-// 更新分页控件
+// Actualizar controles de paginación
 function updatePagination(totalPages) {
     let pagination = document.querySelector('.pagination');
     if (!pagination) {
         pagination = document.createElement('div');
         pagination.className = 'pagination';
-        document.querySelector('.content-wrapper').appendChild(pagination); // 添加到 content-wrapper
+        document.querySelector('.content-wrapper').appendChild(pagination);
     }
 
     pagination.innerHTML = `
-        <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-        <span>第 ${currentPage} 页 / 共 ${totalPages} 页</span>
-        <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+        <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Página Anterior</button>
+        <span>Página ${currentPage} / Total ${totalPages}</span>
+        <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Página Siguiente</button>
     `;
 
     pagination.querySelector('.prev-btn').addEventListener('click', () => {
@@ -101,32 +106,34 @@ function updatePagination(totalPages) {
     });
 }
 
-// 保存到 localStorage
+// Guardar en localStorage
 function savePurchaseOrders() {
     localStorage.setItem('purchaseOrders', JSON.stringify(purchaseOrders));
 }
 
-// 初始化
+// Inicializar
 function init() {
     const addBtn = document.querySelector('.add-btn');
 
     if (!addBtn) {
-        console.error('所需 DOM 元素未找到');
+        console.error('Elemento DOM requerido no encontrado');
         return;
     }
 
     addBtn.addEventListener('click', function() {
         const newWindow = window.open('purchaseorderlist.html', '_blank');
         newWindow.onload = function() {
+            // Enviar estado predeterminado "No procesado" mediante postMessage
+            newWindow.postMessage({ defaultStatus: 'No procesado' }, '*');
             const docEl = newWindow.document.documentElement;
             if (docEl.requestFullscreen) {
-                docEl.requestFullscreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                docEl.requestFullscreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
             } else if (docEl.webkitRequestFullscreen) {
-                docEl.webkitRequestFullscreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                docEl.webkitRequestFullscreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
             } else if (docEl.mozRequestFullScreen) {
-                docEl.mozRequestFullScreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                docEl.mozRequestFullScreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
             } else if (docEl.msRequestFullscreen) {
-                docEl.msRequestFullscreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                docEl.msRequestFullscreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
             }
         };
     });
@@ -142,13 +149,13 @@ function init() {
             viewWindow.onload = function() {
                 const docEl = viewWindow.document.documentElement;
                 if (docEl.requestFullscreen) {
-                    docEl.requestFullscreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                    docEl.requestFullscreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
                 } else if (docEl.webkitRequestFullscreen) {
-                    docEl.webkitRequestFullscreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                    docEl.webkitRequestFullscreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
                 } else if (docEl.mozRequestFullScreen) {
-                    docEl.mozRequestFullScreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                    docEl.mozRequestFullScreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
                 } else if (docEl.msRequestFullscreen) {
-                    docEl.msRequestFullscreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                    docEl.msRequestFullscreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
                 }
             };
         } else if (target.classList.contains('edit-icon')) {
@@ -156,17 +163,17 @@ function init() {
             editWindow.onload = function() {
                 const docEl = editWindow.document.documentElement;
                 if (docEl.requestFullscreen) {
-                    docEl.requestFullscreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                    docEl.requestFullscreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
                 } else if (docEl.webkitRequestFullscreen) {
-                    docEl.webkitRequestFullscreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                    docEl.webkitRequestFullscreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
                 } else if (docEl.mozRequestFullScreen) {
-                    docEl.mozRequestFullScreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                    docEl.mozRequestFullScreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
                 } else if (docEl.msRequestFullscreen) {
-                    docEl.msRequestFullscreen().catch(err => console.error('无法自动进入全屏模式:', err));
+                    docEl.msRequestFullscreen().catch(err => console.error('No se puede entrar en modo pantalla completa:', err));
                 }
             };
         } else if (target.classList.contains('delete-icon')) {
-            if (confirm(`确定删除采购订单：${orderCode} 吗？`)) {
+            if (confirm(`¿Seguro que desea eliminar la orden de compra: ${orderCode}?`)) {
                 purchaseOrders.splice(index, 1);
                 savePurchaseOrders();
                 updateTable();
@@ -177,7 +184,7 @@ function init() {
     updateTable();
 }
 
-// 绑定操作图标事件
+// Vincular eventos de iconos de acción
 function bindIconEvents() {
     document.querySelectorAll('.view-icon').forEach(icon => {
         icon.removeEventListener('click', () => {});
@@ -193,7 +200,7 @@ function bindIconEvents() {
     });
 }
 
-// 监听 storage 事件以实时更新
+// Escuchar eventos de almacenamiento para actualización en tiempo real
 window.addEventListener('storage', function() {
     purchaseOrders = JSON.parse(localStorage.getItem('purchaseOrders')) || [];
     updateTable();

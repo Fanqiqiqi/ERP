@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>采购报价表明细</title>
+    <title>Detalles Cotización Compra</title>
     <link rel="stylesheet" href="purchasepricelist.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <header class="top-bar">
-        <h1>采购报价表明细</h1>
+        <h1>Detalles Cotización Compra</h1>
     </header>
     <main class="content">
         <div class="table-header">
-            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
-            <h2>采购报价表明细列表</h2>
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
+            <h2>Lista Detalles Cotización Compra</h2>
             <div class="button-group">
                 <button class="add-btn"><i class="fas fa-plus"></i></button>
                 <button class="save-all-btn"><i class="fas fa-save"></i></button>
@@ -23,53 +23,53 @@
         </div>
         <div class="quote-info">
             <div class="form-group">
-                <label for="quoteCode">采购报价单号:</label>
+                <label for="quoteCode">Nº Cotización Compra:</label>
                 <div style="position: relative;">
-                    <input type="text" id="quoteCode" name="quoteCode" placeholder="请输入报价单号" required>
-                    <button type="button" id="generateCodeBtn" class="generate-btn">生成</button>
+                    <input type="text" id="quoteCode" name="quoteCode" placeholder="Ingresa nº cotización" required>
+                    <button type="button" id="generateCodeBtn" class="generate-btn">Generar</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="supplierCode">供应商代码:</label>
+                <label for="supplierCode">Código Proveedor:</label>
                 <select id="supplierCode" name="supplierCode" required>
-                    <option value="">供应商代码</option>
-                    <!-- 动态加载供应商 -->
+                    <option value="">Código Proveedor</option>
+                    <!-- Carga dinámica proveedores -->
                 </select>
             </div>
             <div class="form-group">
-                <label for="supplierName">供应商名称:</label>
+                <label for="supplierName">Nombre Proveedor:</label>
                 <input type="text" id="supplierName" name="supplierName" readonly>
             </div>
             <div class="form-group">
-                <label for="quoteDate">日期:</label>
+                <label for="quoteDate">Fecha:</label>
                 <input type="date" id="quoteDate" name="quoteDate" required>
             </div>
             <div class="form-group">
-                <label for="status">状态:</label>
+                <label for="status">Estado:</label>
                 <select id="status" name="status" required>
-                    <option value="待确认">待确认</option>
-                    <option value="确认">确认</option>
+                    <option value="待确认">Pendiente</option>
+                    <option value="确认">Confirmado</option>
                 </select>
             </div>
         </div>
         <table class="purchasepricelist-table">
             <thead>
                 <tr>
-                    <th>产品代码</th>
-                    <th>产品名称</th>
-                    <th>产品采购价格</th>
-                    <th>新采购价格</th>
-                    <th>税率</th> <!-- 新增 -->
-                    <th>总价</th> <!-- 新增 -->
-                    <th>报价日期</th>
-                    <th>操作</th>
+                    <th>Código Producto</th>
+                    <th>Nombre Producto</th>
+                    <th>Precio Compra</th>
+                    <th>Nuevo Precio Compra</th>
+                    <th>Tasa Impuesto</th>
+                    <th>Total</th>
+                    <th>Fecha Cotización</th>
+                    <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- 动态加载采购报价表明细 -->
+                <!-- Carga dinámica detalles cotización -->
             </tbody>
         </table>
     </main>
     <script src="purchasepricelist.js"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92568f41bd6f4554',t:'MTc0MjgyMzQwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>采购订单明细</title>
+    <title>Detalles de Orden de Compra</title>
     <link rel="stylesheet" href="purchaseorderlist.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <header class="top-bar">
-        <h1>采购订单明细</h1>
+        <h1>Detalles de Orden de Compra</h1>
     </header>
     <main class="content">
         <div class="table-header">
-            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
-            <h2>采购订单明细列表</h2>
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
+            <h2>Lista de Detalles de Orden de Compra</h2>
             <div class="button-group">
                 <button class="add-btn"><i class="fas fa-plus"></i></button>
                 <button class="save-all-btn"><i class="fas fa-save"></i></button>
@@ -23,28 +23,28 @@
         </div>
         <div class="order-info">
             <div class="form-group">
-                <label for="orderCode">采购订单号:</label>
+                <label for="orderCode">Nº Orden de Compra:</label>
                 <div style="position: relative; flex-grow: 1;">
-                    <input type="text" id="orderCode" name="orderCode" placeholder="请输入订单号" required>
-                    <button type="button" id="generateOrderCodeBtn" class="generate-btn">生成</button>
+                    <input type="text" id="orderCode" name="orderCode" placeholder="Ingresa nº orden" required>
+                    <button type="button" id="generateOrderCodeBtn" class="generate-btn">Generar</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="supplierCode">供应商代码:</label>
+                <label for="supplierCode">Código Proveedor:</label>
                 <select id="supplierCode" name="supplierCode" required>
-                    <option value="">请选择供应商</option>
+                    <option value="">Selecciona proveedor</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="supplierName">供应商名称:</label>
-                <input type="text" id="supplierName" name="supplierName" placeholder="请输入供应商名称">
+                <label for="supplierName">Nombre Proveedor:</label>
+                <input type="text" id="supplierName" name="supplierName" placeholder="Ingresa nombre proveedor">
             </div>
             <div class="form-group">
-                <label for="orderDate">订单日期:</label>
+                <label for="orderDate">Fecha Orden:</label>
                 <input type="date" id="orderDate" name="orderDate" required>
             </div>
             <div class="form-group">
-                <label for="expectedArrivalDate">预计到达日期:</label>
+                <label for="expectedArrivalDate">Fecha Llegada Estimada:</label>
                 <input type="date" id="expectedArrivalDate" name="expectedArrivalDate">
             </div>
         </div>
@@ -52,13 +52,13 @@
             <table class="purchaseorderlist-table">
                 <thead>
                     <tr>
-                        <th>产品代码</th>
-                        <th>产品名称</th>
-                        <th>采购价格</th>
-                        <th>数量</th>
-                        <th>税率</th>
-                        <th>总价</th>
-                        <th>操作</th>
+                        <th>Código Producto</th>
+                        <th>Nombre Producto</th>
+                        <th>Precio Compra</th>
+                        <th>Cantidad</th>
+                        <th>Tasa Impuesto</th>
+                        <th>Total</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,14 +66,15 @@
             </table>
         </div>
         <div class="totals-section">
-            <h3>订单总额:</h3>
+            <h3>Total Orden:</h3>
             <div id="totals-container">
             </div>
         </div>
     </main>
     <script src="purchaseorderlist.js"></script>
+    <!-- 原有的 Cloudflare 脚本保持不变 -->
     <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91a156914fc2bfac',t:'MTc0MDkyMzE2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
     <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91a162262f6bbd00',t:'MTc0MDkyMzYzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
     <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91a18e62dd89ed8c',t:'MTc0MDkyNTQ1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9256877b8ccfc013',t:'MTc0MjgyMzA5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

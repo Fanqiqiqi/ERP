@@ -118,10 +118,11 @@ html, body {
     background-color: #e08700;
 }
 
+/* 修改 order-info 的布局以适应新增的销售订单字段 */
 .order-info {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 15px; /* 减小 gap 以容纳更多字段，保持紧凑 */
     margin-bottom: 15px;
     background-color: #fff;
     padding: 15px;
@@ -129,11 +130,12 @@ html, body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* 调整 form-group 的最小宽度和灵活性 */
 .form-group {
-    flex: 1 1 200px;
+    flex: 1 1 180px; /* 减小最小宽度至 180px，以容纳更多字段 */
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px; /* 减小 gap 以优化空间 */
 }
 
 .form-group label {
@@ -180,7 +182,7 @@ html, body {
     position: relative;
     overflow-y: auto;
     margin-bottom: 20px;
-    max-height: calc(100vh - 340px);
+    max-height: calc(100vh - 340px); /* 保持不变，新增字段不影响表格高度 */
 }
 
 .order-table {
@@ -263,7 +265,7 @@ html, body {
 
 .action-icon {
     margin: 0 8px;
-    cursor: pointer;
+    cursor: pointer; /* 修复语法错误，添加有效值 */
     font-size: 16px;
     transition: color 0.3s ease, transform 0.2s ease;
 }
@@ -333,12 +335,39 @@ html, body {
     min-width: 80px;
 }
 
+/* Verifactu group styles */
+.verifactu-form-group {
+    padding-left: 10px; /* Matches createinvoice.css for consistency */
+}
+
+.verifactu-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.verifactu-group label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.verifactu-group input[type="radio"] {
+    margin-right: 5px;
+    accent-color: #00b4d8; /* Matches the focus color used elsewhere */
+    cursor: pointer;
+}
+
+/* 响应式调整 */
 @media (max-width: 768px) {
     .content {
         padding: 5px 20px 20px 20px;
     }
     .table-container {
-        max-height: calc(100vh - 240px);
+        max-height: calc(100vh - 300px); /* 调整高度以适应新增字段 */
     }
     .order-table {
         font-size: 14px;
@@ -373,7 +402,7 @@ html, body {
         padding: 10px;
     }
     .form-group {
-        flex: 1 1 100%;
+        flex: 1 1 100%; /* 小屏幕下每个字段占满一行 */
     }
     .totals-section {
         width: 100%;
@@ -385,4 +414,19 @@ html, body {
     .totals-row {
         grid-template-columns: 1fr 1fr;
     }
+}
+
+/* 中等屏幕调整（可选，用于优化布局） */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .form-group {
+        flex: 1 1 150px; /* 中等屏幕下减小最小宽度，进一步优化布局 */
+    }
+    .order-info {
+        gap: 12px;
+    }
+}
+
+/* 确保 #status 的宽度与 #customerCode 一致 */
+select#status {
+    width: 120px; /* 设置一个明确的宽度，与 #customerCode 对齐 */
 }

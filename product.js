@@ -1,19 +1,17 @@
-
-
-// 表单元素
+// Elementos formulario
 const addBtn = document.querySelector('.add-btn');
 const tbody = document.querySelector('.product-table tbody');
 
-// 分页相关变量
-const itemsPerPage = 9; // 每页显示9条
-let currentPage = 1; // 当前页码
+// Variables paginación
+const itemsPerPage = 9; // 9 ítems por página
+let currentPage = 1; // Página actual
 
-// 从 localStorage 中加载产品类别
+// Cargar categorías productos desde localStorage
 function loadProductCategories() {
   const categories = JSON.parse(localStorage.getItem('pcategories') || '[]');
   const productCategorySelect = document.getElementById('productCategory');
-  if (productCategorySelect) { // 防止在 product.html 中报错
-    productCategorySelect.innerHTML = '<option value="">请选择类别</option>';
+  if (productCategorySelect) { // Evitar error en product.html
+    productCategorySelect.innerHTML = '<option value="">Selecciona Categoría</option>';
     categories.forEach(category => {
       const option = document.createElement('option');
       option.value = category.code;
@@ -23,7 +21,7 @@ function loadProductCategories() {
   }
 }
 
-// 计算总价（含税）
+// Calcular precio total (con impuestos)
 function calculateTotalPrice(price, taxRate) {
   const priceNum = parseFloat(price) || 0;
   const taxRateNum = parseFloat(taxRate) || 0;
@@ -31,41 +29,47 @@ function calculateTotalPrice(price, taxRate) {
   return totalPrice.toFixed(2);
 }
 
-// 货币符号映射
+// Símbolos moneda
 const currencySymbols = {
   'EUR': '€',
   'USD': '$',
   'CNY': '¥',
-  '': '' // 默认无符号
+  '': '' // Sin símbolo por defecto
 };
 
-// 加载产品数据（带分页）
+// Cargar datos productos (con paginación)
 function loadProducts() {
   const products = JSON.parse(localStorage.getItem('products') || '[]');
+  const categories = JSON.parse(localStorage.getItem('pcategories') || '[]'); // Cargar categorías
   tbody.innerHTML = '';
 
-  // 计算总页数
+  // Calcular total páginas
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
-  // 确保当前页码有效
+  // Validar página actual
   if (currentPage < 1) currentPage = 1;
   if (currentPage > totalPages) currentPage = totalPages;
 
-  // 计算当前页的数据范围
+  // Rango datos página actual
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, products.length);
   const currentData = products.slice(startIndex, endIndex);
 
   currentData.forEach((product, pageIndex) => {
-    const globalIndex = startIndex + pageIndex; // 计算全局索引
-    const totalPrice = calculateTotalPrice(product.purchasePrice, product.taxRate);
+    const globalIndex = startIndex + pageIndex; // Índice global
+    const totalPrice = calculateTotalPrice(product.purchasePrice, product.taxRate); // Total basado en precio compra
     const currencySymbol = currencySymbols[product.currency] || product.currency || '';
+    
+    // Buscar el nombre de la categoría basado en el código
+    const category = categories.find(cat => cat.code === product.category);
+    const categoryName = category ? category.name : product.category || ''; // Si no se encuentra, usar el代码或空
+
     const row = document.createElement('tr');
     row.innerHTML = `
       <td>${product.code}</td>
       <td>${product.name}</td>
-      <td>${product.category || ''}</td>
-      <td>${product.purchasePrice} ${currencySymbol}</td>
+      <td>${categoryName}</td> <!-- Mostrar nombre de la categoría en lugar del código -->
+      <td>${product.sellingPrice || ''} ${currencySymbol}</td> <!-- Mostrar precio venta -->
       <td>${totalPrice} ${currencySymbol}</td>
       <td>${product.description}</td>
       <td>
@@ -77,13 +81,13 @@ function loadProducts() {
     tbody.appendChild(row);
   });
 
-  // 更新分页控件
+  // Actualizar paginación
   updatePagination(totalPages);
 
   bindIconEvents();
 }
 
-// 更新分页控件
+// Actualizar control paginación
 function updatePagination(totalPages) {
   let pagination = document.querySelector('.pagination');
   if (!pagination) {
@@ -93,9 +97,9 @@ function updatePagination(totalPages) {
   }
 
   pagination.innerHTML = `
-    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-    <span>第 ${currentPage} 页 / 共 ${totalPages} 页</span>
-    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Página Anterior</button>
+    <span>Página ${currentPage} / Total ${totalPages}</span>
+    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Página Siguiente</button>
   `;
 
   pagination.querySelector('.prev-btn').addEventListener('click', () => {
@@ -113,25 +117,25 @@ function updatePagination(totalPages) {
   });
 }
 
-// 保存产品数据
+// Guardar datos productos
 function saveProducts() {
-  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const rows = Array.from(tbody.querySelectorAll('tr')); // Corrección: eliminado 'tr tr'
   const products = rows.map(row => {
     const existingProducts = JSON.parse(localStorage.getItem('products') || '[]');
     const existingProduct = existingProducts.find(p => p.code === row.cells[0].textContent) || {};
-    const priceText = row.cells[3].textContent.split(' ')[0]; // 提取价格部分
+    const priceText = row.cells[3].textContent.split(' ')[0]; // Extraer precio
     const editedProduct = JSON.parse(sessionStorage.getItem('editProduct') || '{}');
     return {
       code: row.cells[0].textContent,
       name: row.cells[1].textContent,
-      category: row.cells[2].textContent,
+      category: row.cells[2].textContent, // Aquí仍然存储的是类别编号，不是名称
       purchasePrice: priceText,
       description: row.cells[5].textContent,
       supplierProductCode: existingProduct.supplierProductCode || '',
       supplierProductName: existingProduct.supplierProductName || '',
       unit: existingProduct.unit || '',
       specification: existingProduct.specification || '',
-      price: priceText, // 兼容旧数据
+      price: priceText, // Compatibilidad datos antiguos
       sellingPrice: existingProduct.sellingPrice || '',
       retailPrice: existingProduct.retailPrice || '',
       taxRate: existingProduct.taxRate || editedProduct.taxRate || '0%',
@@ -143,12 +147,12 @@ function saveProducts() {
   localStorage.setItem('products', JSON.stringify(products));
 }
 
-// 打开添加产品页面
+// Abrir página agregar producto
 addBtn.addEventListener('click', function() {
   window.location.href = 'add-product.html';
 });
 
-// 绑定查看、编辑和删除图标事件
+// Vincular eventos íconos
 function bindIconEvents() {
   document.querySelectorAll('.view-icon').forEach(icon => {
     icon.removeEventListener('click', viewHandler);
@@ -164,7 +168,7 @@ function bindIconEvents() {
   });
 }
 
-// 查看事件
+// Evento ver
 const viewHandler = function() {
   const row = this.closest('tr');
   const code = row.cells[0].textContent;
@@ -174,7 +178,7 @@ const viewHandler = function() {
   window.location.href = 'add-product.html?mode=view';
 };
 
-// 编辑事件
+// Evento editar
 const editHandler = function() {
   const row = this.closest('tr');
   const code = row.cells[0].textContent;
@@ -184,18 +188,18 @@ const editHandler = function() {
   window.location.href = 'add-product.html?mode=edit';
 };
 
-// 删除事件
+// Evento eliminar
 const deleteHandler = function() {
   const row = this.closest('tr');
   const code = row.cells[0].textContent;
-  if (confirm(`确定删除产品：${code} 吗？`)) {
+  if (confirm(`¿Seguro eliminar producto: ${code}?`)) {
     row.remove();
     saveProducts();
-    loadProducts(); // 刷新表格以更新分页
+    loadProducts(); // Refrescar tabla
   }
 };
 
-// 页面加载时初始化
+// Inicializar al cargar página
 document.addEventListener('DOMContentLoaded', function() {
   loadProductCategories();
   loadProducts();

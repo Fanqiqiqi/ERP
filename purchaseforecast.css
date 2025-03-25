@@ -1,0 +1,137 @@
+/* Área de contenido principal */
+.content {
+    margin-left: 220px;
+    margin-top: 60px;
+    padding: 40px;
+}
+
+.content-wrapper {
+    position: relative;
+    min-height: calc(100vh - 60px); /* Resta altura barra superior */
+    padding-bottom: 60px; /* Espacio para paginación */
+}
+
+/* Contenedor tabla */
+.table-container {
+    position: relative;
+    margin-top: 20px;
+    min-height: 360px; /* Igual a purchaseorder.css, 9 filas aprox. 40px cada una */
+}
+
+/* Cabecera tabla */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.table-header h2 {
+    font-size: 28px; /* Igual a purchaseorder.css */
+    color: #2e3b3e; /* Igual a purchaseorder.css */
+}
+
+/* Estilo botón */
+.generate-btn {
+    background-color: #00b4d8; /* Igual a add-btn en purchaseorder.css */
+    color: #fff;
+    border: none;
+    padding: 10px 20px; /* Igual a add-btn */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease; /* Igual a purchaseorder.css */
+}
+
+.generate-btn:hover {
+    background-color: #0093b3; /* Igual a hover de add-btn */
+    transform: translateY(-2px); /* Efecto hover */
+}
+
+/* Estilo tabla */
+.forecast-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Igual a purchaseorder-table */
+}
+
+.forecast-table th,
+.forecast-table td {
+    width: 14.28%; /* Ajustado para 7 columnas */
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+.forecast-table th:nth-child(1),
+.forecast-table td:nth-child(1) { /* Código producto */
+    width: 10%;
+}
+.forecast-table th:nth-child(2),
+.forecast-table td:nth-child(2) { /* Nombre producto */
+    width: 20%;
+}
+.forecast-table th:nth-child(3),
+.forecast-table td:nth-child(3) { /* Cantidad inventario */
+    width: 12%;
+}
+.forecast-table th:nth-child(4),
+.forecast-table td:nth-child(4) { /* Cantidad compra */
+    width: 12%;
+}
+.forecast-table th:nth-child(5),
+.forecast-table td:nth-child(5) { /* Cantidad ventas */
+    width: 14%;
+}
+.forecast-table th:nth-child(6),
+.forecast-table td:nth-child(6) { /* Inventario seguro */
+    width: 16%;
+}
+.forecast-table th:nth-child(7),
+.forecast-table td:nth-child(7) { /* Necesidad compra */
+    width: 16%;
+}
+.forecast-table th {
+    background-color: #f8f8f8; /* Igual a purchaseorder-table */
+    font-weight: 600;
+    color: #2e3b3e; /* Igual a purchaseorder-table */
+}
+
+.forecast-table tr:hover {
+    background-color: #f9f9f9; /* Igual a purchaseorder-table */
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+    .content {
+        margin-left: 80px; /* Igual a purchaseorder.css */
+    }
+
+    .table-container {
+        margin-top: 10px; /* Reducir margen en pantallas pequeñas */
+    }
+
+    .table-header {
+        flex-direction: column; /* Vertical en pantallas pequeñas */
+        align-items: flex-end;
+    }
+
+    .table-header h2 {
+        font-size: 24px; /* Reducir título en pantallas pequeñas */
+        margin-bottom: 10px; /* Añadir espacio */
+    }
+
+    .generate-btn {
+        font-size: 14px; /* Igual a purchaseorder-table */
+        padding: 8px 16px; /* Reducir botón */
+    }
+
+    .forecast-table {
+        font-size: 14px; /* Igual a purchaseorder-table */
+    }
+
+    .forecast-table th,
+    .forecast-table td {
+        padding: 10px 12px; /* Reducir padding en pantallas pequeñas */
+    }
+}

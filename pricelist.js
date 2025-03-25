@@ -7,21 +7,21 @@ const priceCategorySelect = document.querySelector('#priceCategory');
 const table = document.querySelector('.pricelist-table');
 const theadRow = table.querySelector('thead tr');
 
-// 获取 URL 参数
+// Obtener parámetros URL
 const urlParams = new URLSearchParams(window.location.search);
 const priceCode = urlParams.get('priceCode');
 const isEditMode = urlParams.get('edit') === 'true';
-const isViewMode = !isEditMode && priceCode; // 查看模式：有 priceCode 且非编辑模式
+const isViewMode = !isEditMode && priceCode; // Modo vista: tiene priceCode y no es edición
 
-// 从产品数据中加载已有产品
+// Cargar productos existentes
 function getProducts() {
   return JSON.parse(localStorage.getItem('products') || '[]');
 }
 
-// 从 localStorage 中加载价格表类别（键名：prcategories）
+// Cargar categorías de lista de precios desde localStorage (prcategories)
 function loadPriceCategories() {
   const categories = JSON.parse(localStorage.getItem('prcategories') || '[]');
-  priceCategorySelect.innerHTML = '<option value="">请选择类别</option>';
+  priceCategorySelect.innerHTML = '<option value="">Selecciona categoría</option>';
   categories.forEach(category => {
     const option = document.createElement('option');
     option.value = category.code;
@@ -41,41 +41,41 @@ function loadPriceCategories() {
     }
   }
 
-  // 查看模式下禁用价格表类别选择
+  // Deshabilitar selector en modo vista
   if (isViewMode) {
     priceCategorySelect.disabled = true;
   }
 }
 
-// 加载价格表明细数据
+// Cargar detalles de lista de precios
 function loadPriceList() {
   const priceList = JSON.parse(localStorage.getItem('priceList') || '[]');
-  const products = getProducts(); // 获取产品数据
+  const products = getProducts(); // Obtener productos
   tbody.innerHTML = '';
 
-  // 动态调整表头
+  // Ajustar encabezado dinámicamente
   if (isViewMode) {
     table.classList.add('view-mode');
     theadRow.innerHTML = `
-      <th>产品代码</th>
-      <th>产品名称</th>
-      <th>采购价格</th>
-      <th>销售价格</th>
-      <th>新销售价格</th>
+      <th>Código Producto</th>
+      <th>Nombre Producto</th>
+      <th>Precio Compra</th>
+      <th>Precio Venta</th>
+      <th>Nuevo Precio Venta</th>
     `;
   } else {
     table.classList.remove('view-mode');
     theadRow.innerHTML = `
-      <th>产品代码</th>
-      <th>产品名称</th>
-      <th>采购价格</th>
-      <th>销售价格</th>
-      <th>新销售价格</th>
-      <th>操作</th>
+      <th>Código Producto</th>
+      <th>Nombre Producto</th>
+      <th>Precio Compra</th>
+      <th>Precio Venta</th>
+      <th>Nuevo Precio Venta</th>
+      <th>Acción</th>
     `;
   }
 
-  // 如果有 priceCode 参数，加载对应数据；否则保持清空
+  // Cargar datos si hay priceCode; si no, vaciar tabla
   if (priceCode) {
     const prices = JSON.parse(localStorage.getItem('prices') || '[]');
     const price = prices.find(p => p.code === priceCode);
@@ -85,23 +85,23 @@ function loadPriceList() {
       const filteredPriceList = priceList.filter(item => item.categoryCode === category.code);
 
       filteredPriceList.forEach((item, index) => {
-        const product = products.find(p => p.code === item.productCode); // 查找对应产品
-        const currency = product ? product.currency || '' : ''; // 获取货币单位
+        const product = products.find(p => p.code === item.productCode); // Buscar producto
+        const currency = product ? product.currency || '' : item.currency || ''; // 从产品或 priceList 获取货币
         const row = document.createElement('tr');
         if (isEditMode) {
           row.innerHTML = `
-            <td><input type="text" class="product-code" value="${item.productCode || ''}" placeholder="输入产品代码"></td>
-            <td><input type="text" class="product-name" value="${item.productName || ''}" placeholder="输入产品名称"></td>
-            <td><input type="number" class="purchase-price" value="${item.purchasePrice || ''}" placeholder="采购价格" step="0.01" readonly> <span>${currency}</span></td>
-            <td><input type="number" class="selling-price" value="${item.sellingPrice || ''}" placeholder="销售价格" step="0.01" readonly> <span>${currency}</span></td>
-            <td><input type="number" class="new-selling-price" value="${item.newSellingPrice || ''}" placeholder="新销售价" step="0.01"> <span>${currency}</span></td>
+            <td><input type="text" class="product-code" value="${item.productCode || ''}" placeholder="Código producto"></td>
+            <td><input type="text" class="product-name" value="${item.productName || ''}" placeholder="Nombre producto"></td>
+            <td><input type="number" class="purchase-price" value="${item.purchasePrice || ''}" placeholder="Precio compra" step="0.01" readonly> <span>${currency}</span></td>
+            <td><input type="number" class="selling-price" value="${item.sellingPrice || ''}" placeholder="Precio venta" step="0.01" readonly> <span>${currency}</span></td>
+            <td><input type="number" class="new-selling-price" value="${item.newSellingPrice || ''}" placeholder="Nuevo precio" step="0.01"> <span>${currency}</span></td>
             <td>
               <span class="action-icon delete-icon" data-index="${index}"><i class="fas fa-trash-alt"></i></span>
             </td>
           `;
           bindInputEvents(row);
         } else {
-          // 查看模式显示 5 列，无操作列
+          // Modo vista: 5 columnas sin acción
           row.innerHTML = `
             <td>${item.productCode}</td>
             <td>${item.productName}</td>
@@ -117,7 +117,7 @@ function loadPriceList() {
     tbody.innerHTML = '';
   }
 
-  // 根据模式显示/隐藏按钮
+  // Mostrar/ocultar botones según modo
   if (isViewMode) {
     addBtn.style.display = 'none';
     saveAllBtn.style.display = 'none';
@@ -130,12 +130,12 @@ function loadPriceList() {
   bindIconEvents();
 }
 
-// 保存价格表明细数据到 prices（价格表资料）
+// Guardar datos en prices (lista de precios)
 function savePriceListToPrices() {
   const rows = Array.from(tbody.querySelectorAll('tr'));
   const selectedCategoryCode = priceCategorySelect.value;
   if (!selectedCategoryCode) {
-    alert('请选择价格表类别！');
+    alert('¡Selecciona una categoría de lista de precios!');
     return false;
   }
 
@@ -147,7 +147,7 @@ function savePriceListToPrices() {
     const sellingPriceInput = row.querySelector('.selling-price');
     const newSellingPriceInput = row.querySelector('.new-selling-price');
 
-    let productCode, productName, purchasePrice, sellingPrice, newSellingPrice;
+    let productCode, productName, purchasePrice, sellingPrice, newSellingPrice, currency;
 
     if (codeInput && nameInput && purchasePriceInput && sellingPriceInput && newSellingPriceInput) {
       productCode = codeInput.value.trim();
@@ -155,17 +155,22 @@ function savePriceListToPrices() {
       purchasePrice = purchasePriceInput.value.trim();
       sellingPrice = sellingPriceInput.value.trim();
       newSellingPrice = newSellingPriceInput.value.trim();
+      currency = newSellingPriceInput.nextElementSibling.textContent.trim(); // 从表格中获取货币
     } else {
       productCode = row.cells[0].textContent.trim();
       productName = row.cells[1].textContent.trim();
       purchasePrice = row.cells[2].textContent.split(' ')[0].trim();
       sellingPrice = row.cells[3].textContent.split(' ')[0].trim();
       newSellingPrice = row.cells[4].textContent.split(' ')[0].trim();
+      currency = row.cells[4].textContent.split(' ')[1] || ''; // 从视图模式获取货币
     }
 
     if (!productCode || !productName || !purchasePrice || !sellingPrice) {
       allValid = false;
     }
+
+    const product = getProducts().find(p => p.code === productCode);
+    currency = product ? product.currency || currency : currency; // 优先使用产品中的货币
 
     return {
       productCode,
@@ -173,12 +178,13 @@ function savePriceListToPrices() {
       purchasePrice,
       sellingPrice,
       newSellingPrice,
-      categoryCode: selectedCategoryCode
+      categoryCode: selectedCategoryCode,
+      currency // 保存货币到 priceList
     };
   });
 
   if (!allValid) {
-    alert('请确保所有产品信息填写完整！');
+    alert('¡Asegúrate de completar toda la información de los productos!');
     return false;
   }
 
@@ -212,15 +218,15 @@ function savePriceListToPrices() {
   return true;
 }
 
-// 添加新行
+// Agregar nueva fila
 addBtn.addEventListener('click', function() {
   const row = document.createElement('tr');
   row.innerHTML = `
-    <td><input type="text" class="product-code" placeholder="输入产品代码"></td>
-    <td><input type="text" class="product-name" placeholder="输入产品名称"></td>
-    <td><input type="number" class="purchase-price" placeholder="采购价格" step="0.01" readonly> <span></span></td>
-    <td><input type="number" class="selling-price" placeholder="销售价格" step="0.01" readonly> <span></span></td>
-    <td><input type="number" class="new-selling-price" placeholder="新销售价" step="0.01"> <span></span></td>
+    <td><input type="text" class="product-code" placeholder="Código producto"></td>
+    <td><input type="text" class="product-name" placeholder="Nombre producto"></td>
+    <td><input type="number" class="purchase-price" placeholder="Precio compra" step="0.01" readonly> <span></span></td>
+    <td><input type="number" class="selling-price" placeholder="Precio venta" step="0.01" readonly> <span></span></td>
+    <td><input type="number" class="new-selling-price" placeholder="Nuevo precio" step="0.01"> <span></span></td>
     <td>
       <span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span>
     </td>
@@ -230,13 +236,13 @@ addBtn.addEventListener('click', function() {
   bindIconEvents();
 });
 
-// 返回主页面
+// Volver a página principal
 backBtn.addEventListener('click', function() {
   window.location.href = 'price.html';
   window.close();
 });
 
-// 保存所有数据并跳转回主页面
+// Guardar todo y volver
 saveAllBtn.addEventListener('click', function() {
   const rows = Array.from(tbody.querySelectorAll('tr'));
   rows.forEach(row => {
@@ -270,12 +276,12 @@ saveAllBtn.addEventListener('click', function() {
   }
 });
 
-// 打印功能
+// Imprimir
 printBtn.addEventListener('click', function() {
   window.print();
 });
 
-// 绑定输入框事件（自动补全）
+// Vincular eventos de entrada (autocompletado)
 function bindInputEvents(row) {
   const codeInput = row.querySelector('.product-code');
   const nameInput = row.querySelector('.product-name');
@@ -306,7 +312,7 @@ function bindInputEvents(row) {
             nameInput.value = product.name;
             purchasePriceInput.value = product.purchasePrice || '';
             sellingPriceInput.value = product.sellingPrice || '';
-            newSellingPriceInput.placeholder = `新销售价 (${product.currency || ''})`;
+            newSellingPriceInput.placeholder = `Nuevo precio (${product.currency || ''})`;
             const currency = product.currency || '';
             purchasePriceInput.nextElementSibling.textContent = currency;
             sellingPriceInput.nextElementSibling.textContent = currency;
@@ -331,9 +337,9 @@ function bindInputEvents(row) {
   });
 }
 
-// 绑定操作图标事件
+// Vincular eventos de íconos
 function bindIconEvents() {
-  if (isViewMode) return; // 查看模式不绑定事件
+  if (isViewMode) return; // No vincular en modo vista
   document.querySelectorAll('.delete-icon').forEach(icon => {
     icon.removeEventListener('click', deleteHandler);
     icon.addEventListener('click', deleteHandler);
@@ -343,7 +349,7 @@ function bindIconEvents() {
 const deleteHandler = function() {
   const row = this.closest('tr');
   const productCode = row.cells[0].textContent;
-  if (confirm(`确定删除产品：${productCode} 的价格明细吗？`)) {
+  if (confirm(`¿Seguro de eliminar el detalle de precio del producto: ${productCode}?`)) {
     row.remove();
     savePriceListToPrices();
   }

@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>价格表明细</title>
+  <title>Detalles de Lista de Precios</title>
   <link rel="stylesheet" href="pricelist.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
   <header class="top-bar">
-    <h1>价格表明细</h1>
+    <h1>Detalles de Lista de Precios</h1>
   </header>
   <main class="content">
     <div class="table-header">
-      <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
-      <h2>价格表明细列表</h2>
+      <button class="back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
+      <h2>Lista de Detalles de Precios</h2>
       <div class="category-select">
-        <label for="priceCategory">价格表类别:</label>
+        <label for="priceCategory">Categoría de Lista:</label>
         <select id="priceCategory" name="priceCategory">
-          <option value="">请选择类别</option>
-          <!-- 动态加载价格表类别 -->
+          <option value="">Selecciona categoría</option>
+          <!-- Carga dinámica de categorías -->
         </select>
       </div>
       <button class="add-btn"><i class="fas fa-plus"></i></button>
@@ -29,19 +29,19 @@
     <table class="pricelist-table">
       <thead>
         <tr>
-          <th>产品代码</th>
-          <th>产品名称</th>
-          <th>采购价格</th>
-          <th>销售价格</th>
-          <th>新销售价格</th>
-          <th>操作</th>
+          <th>Código Producto</th>
+          <th>Nombre Producto</th>
+          <th>Precio Compra</th>
+          <th>Precio Venta</th>
+          <th>Nuevo Precio Venta</th>
+          <th>Acción</th>
         </tr>
       </thead>
       <tbody>
-        <!-- 动态加载价格表明细 -->
+        <!-- Carga dinámica de detalles -->
       </tbody>
     </table>
   </main>
   <script src="pricelist.js"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9256588f9ee0676a',t:'MTc0MjgyMTE2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

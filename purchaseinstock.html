@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>采购入库明细</title>
+    <title>Detalles de Entrada de Compras</title>
     <link rel="stylesheet" href="purchaseinstock.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <main class="content">
         <div class="table-header">
-            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
-            <h2>采购入库明细列表</h2>
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
+            <h2>Lista de Detalles de Entrada de Compras</h2>
             <div class="button-group">
                 <button class="add-btn"><i class="fas fa-plus"></i></button>
                 <button class="save-all-btn"><i class="fas fa-save"></i></button>
@@ -20,62 +20,62 @@
         </div>
         <div class="instock-info">
             <div class="form-group">
-                <label for="instockCode">入库单号:</label>
+                <label for="instockCode">Código de Entrada:</label>
                 <div style="position: relative;">
-                    <input type="text" id="instockCode" name="instockCode" placeholder="请输入入库单号" required>
-                    <button type="button" id="generateInstockCodeBtn" class="generate-btn">生成</button>
+                    <input type="text" id="instockCode" name="instockCode" placeholder="Ingresa el código" required>
+                    <button type="button" id="generateInstockCodeBtn" class="generate-btn">Generar</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="orderCode">采购订单号:</label>
-                <input type="text" id="orderCode" name="orderCode" placeholder="请输入采购订单号">
+                <label for="orderCode">Código de Orden:</label>
+                <input type="text" id="orderCode" name="orderCode" placeholder="Ingresa la orden">
             </div>
             <div class="form-group">
-                <label for="supplierCode">供应商代码:</label>
+                <label for="supplierCode">Código Proveedor:</label>
                 <select id="supplierCode" name="supplierCode" required>
-                    <option value="">请选择供应商</option>
-                    <!-- 动态加载供应商 -->
+                    <option value="">Selecciona proveedor</option>
+                    <!-- Carga dinámica de proveedores -->
                 </select>
             </div>
             <div class="form-group">
-                <label for="supplierName">供应商名称:</label>
-                <input type="text" id="supplierName" name="supplierName" placeholder="请输入供应商名称">
+                <label for="supplierName">Nombre Proveedor:</label>
+                <input type="text" id="supplierName" name="supplierName" placeholder="Ingresa el nombre">
             </div>
             <div class="form-group">
-                <label for="instockDate">入库日期:</label>
+                <label for="instockDate">Fecha de Entrada:</label>
                 <input type="date" id="instockDate" name="instockDate" required>
             </div>
             <div class="form-group lote-group">
                 <label for="lote">LOTE:</label>
-                <input type="text" id="lote" name="lote" placeholder="请输入LOTE" class="lote-input">
+                <input type="text" id="lote" name="lote" placeholder="Ingresa LOTE" class="lote-input">
             </div>
         </div>
         <div class="table-container">
             <table class="purchaseinstock-table">
                 <thead>
                     <tr>
-                        <th>产品代码</th>
-                        <th>产品名称</th>
-                        <th>采购价格</th>
-                        <th>采购数量</th>
-                        <th>入库数量</th>
-                        <th>税率</th>
-                        <th>总价</th>
-                        <th>操作</th>
+                        <th>Código Producto</th>
+                        <th>Nombre Producto</th>
+                        <th>Precio Compra</th>
+                        <th>Cantidad Compra</th>
+                        <th>Cantidad Entrada</th>
+                        <th>Tasa Impuesto</th>
+                        <th>Total</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- 动态加载采购入库明细 -->
+                    <!-- Carga dinámica de detalles -->
                 </tbody>
             </table>
         </div>
         <div class="totals-section">
-            <h3>入库总额:</h3>
+            <h3>Total de Entrada:</h3>
             <div id="totals-container">
-                <!-- 动态生成税率分组总额 -->
+                <!-- Totales agrupados por tasa -->
             </div>
         </div>
     </main>
     <script src="purchaseinstock.js"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'925668a35dff06e2',t:'MTc0MjgyMTgyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

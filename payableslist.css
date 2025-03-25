@@ -88,7 +88,7 @@ html, body {
     background-color: #218838;
 }
 
-/* 发票信息区域 */
+/* Información de la factura */
 .invoice-info {
     display: flex;
     flex-wrap: wrap;
@@ -130,7 +130,7 @@ html, body {
     box-shadow: 0 0 5px rgba(0,180,216,0.3);
 }
 
-/* 生成按钮样式 */
+/* Botón de generación */
 .generate-btn {
     position: absolute;
     right: 5px;
@@ -148,7 +148,7 @@ html, body {
     background-color: #0093b3;
 }
 
-/* 表格容器 */
+/* Contenedor de la tabla */
 .table-container {
     position: relative;
     overflow-y: auto;
@@ -156,7 +156,7 @@ html, body {
     max-height: calc(100vh - 340px);
 }
 
-/* 表格 */
+/* Tabla */
 .receivables-table {
     width: 100%;
     border-collapse: collapse;
@@ -169,7 +169,7 @@ html, body {
     padding: 12px 15px;
     text-align: center;
     border-bottom: 1px solid #ddd;
-    width: 16.66%; /* 6列平均分配：100% / 6 */
+    width: 16.66%;
 }
 
 .receivables-table th {
@@ -185,10 +185,10 @@ html, body {
     background-color: #f9f9f9;
 }
 
-/* 输入框样式 */
+/* Estilos de inputs */
 .receivables-table input[type="number"],
 .receivables-table input[type="text"] {
-    width: 90px; /* 调整为更小的宽度以适应6列 */
+    width: 90px;
     padding: 8px;
     font-size: 14px;
     border: 1px solid #ddd;
@@ -199,7 +199,7 @@ html, body {
 }
 
 .receivables-table input[type="date"] {
-    width: 120px; /* 日期输入框稍宽一些 */
+    width: 120px;
     padding: 8px;
     font-size: 14px;
     border: 1px solid #ddd;
@@ -214,20 +214,20 @@ html, body {
     box-shadow: 0 0 5px rgba(0,180,216,0.3);
 }
 
-/* 只读输入框样式 */
+/* Inputs de solo lectura */
 .receivables-table input[readonly] {
-    background-color: #f0f0f0; /* 灰色背景表示只读 */
+    background-color: #f0f0f0;
     cursor: not-allowed;
 }
 
-/* 货币单位样式 */
+/* Unidad monetaria */
 .receivables-table input + .currency-span {
     margin-left: 5px;
     font-size: 14px;
     color: #333;
 }
 
-/* 操作图标 */
+/* Iconos de acción */
 .action-icon {
     margin: 0 8px;
     cursor: pointer;
@@ -244,7 +244,7 @@ html, body {
     transform: scale(1.2);
 }
 
-/* 总额区域 */
+/* Sección de totales */
 .totals-section {
     position: fixed;
     bottom: 20px;
@@ -301,21 +301,21 @@ html, body {
     min-width: 80px;
 }
 
-/* 响应式 */
+/* Responsivo */
 @media (max-width: 768px) {
     .content {
         padding: 5px 20px 20px 20px;
     }
     .table-container {
-        overflow-x: auto; /* 添加水平滚动 */
+        overflow-x: auto;
         max-height: calc(100vh - 240px);
     }
     .receivables-table {
-        min-width: 700px; /* 确保6列内容不挤压 */
+        min-width: 700px;
     }
     .receivables-table th,
     .receivables-table td {
-        width: auto; /* 小屏幕上取消固定宽度 */
+        width: auto;
         padding: 8px 10px;
     }
     .receivables-table input[type="number"],
@@ -330,7 +330,7 @@ html, body {
         padding: 6px;
     }
     .receivables-table input[readonly] {
-        background-color: #f0f0f0; /* 保持只读样式 */
+        background-color: #f0f0f0;
         cursor: not-allowed;
     }
     .table-header h2 {

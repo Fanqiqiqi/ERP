@@ -1,6 +1,4 @@
-
-
-/* 主内容 */
+/* Contenido principal */
 .content {
     margin-left: 220px;
     margin-top: 60px;
@@ -9,12 +7,12 @@
 
 .content-wrapper {
     position: relative;
-    min-height: calc(100vh - 60px); /* 减去顶部横条高度 */
-    padding-bottom: 60px; /* 为分页控件留出空间 */
+    min-height: calc(100vh - 60px); /* Resta altura barra superior */
+    padding-bottom: 60px; /* Espacio para paginación */
 }
 
 .table-container {
-    min-height: 360px; /* 假设每行高度约40px，9行约为360px */
+    min-height: 360px; /* Altura mínima, 9 filas aprox. 40px cada una */
 }
 
 .table-header {
@@ -44,7 +42,7 @@
     background-color: #0093b3;
 }
 
-/* 表格 */
+/* Tabla */
 .purchaseprice-table {
     width: 100%;
     border-collapse: collapse;
@@ -61,7 +59,7 @@
 
 .purchaseprice-table th,
 .purchaseprice-table td {
-    width: 20%; /* 五列平均分配 */
+    width: 20%; /* Cinco columnas distribuidas */
 }
 
 .purchaseprice-table th {
@@ -74,7 +72,7 @@
     background-color: #f9f9f9;
 }
 
-/* 操作图标 */
+/* Iconos de acción */
 .action-icon {
     margin: 0 8px;
     cursor: pointer;
@@ -109,11 +107,11 @@
     transform: scale(1.2);
 }
 
-/* 分页控件样式 */
+/* Estilo paginación */
 .pagination {
     position: fixed;
     bottom: 0;
-    left: 220px; /* 与 sidebar 宽度一致 */
+    left: 220px; /* Igual ancho sidebar */
     right: 0;
     background-color: #fff;
     padding: 10px 0;
@@ -151,7 +149,7 @@
     color: #2e3b3e;
 }
 
-/* 响应式 */
+/* Responsive */
 @media (max-width: 768px) {
     .sidebar {
         width: 80px;
@@ -179,41 +177,41 @@
         margin: 0 5px;
     }
     .pagination {
-        left: 80px; /* 与响应式 sidebar 宽度一致 */
+        left: 80px; /* Igual ancho sidebar responsive */
     }
 }
-/* 针对公司资料模态框的特定样式 */
+/* Estilos específicos para modal datos empresa */
 #companyProfileModal .modal-content {
     width: 90%;
-    max-width: 1200px; /* 与 supplier.css 一致 */
+    max-width: 1200px; /* Igual a supplier.css */
     max-height: 80vh;
-    overflow-x: auto; /* 支持水平滚动 */
+    overflow-x: auto; /* Soporte scroll horizontal */
   }
   
   #companyProfileModal .form-container {
     display: flex;
-    flex-wrap: nowrap; /* 不换行，与 supplier.css 一致 */
+    flex-wrap: nowrap; /* Sin salto de línea, igual a supplier.css */
     gap: 20px;
     justify-content: space-between;
   }
   
   #companyProfileModal .form-section {
     flex: 1;
-    min-width: 250px; /* 与 supplier.css 一致 */
+    min-width: 250px; /* Igual a supplier.css */
   }
   
   #companyProfileModal .form-section h4 {
-    font-size: 16px; /* 与 supplier.css 一致 */
+    font-size: 16px; /* Igual a supplier.css */
     color: #2e3b3e;
     margin-bottom: 15px;
-    border-bottom: 1px solid #ddd; /* 添加分隔线，与 supplier.css 一致 */
+    border-bottom: 1px solid #ddd; /* Línea separación, igual a supplier.css */
     padding-bottom: 5px;
   }
   
   #companyProfileModal .form-group input {
     width: 100%;
-    padding: 8px; /* 与 supplier.css 一致 */
-    font-size: 14px; /* 与 supplier.css 一致 */
+    padding: 8px; /* Igual a supplier.css */
+    font-size: 14px; /* Igual a supplier.css */
     border: 1px solid #ddd;
     border-radius: 5px;
     outline: none;
@@ -225,12 +223,12 @@
     box-shadow: 0 0 5px rgba(0, 180, 216, 0.3);
   }
   
-  /* 调整模态框按钮样式 */
+  /* Estilo botones modal */
   #companyProfileModal .modal-buttons {
     display: flex;
-    justify-content: flex-end; /* 与 supplier.css 一致 */
+    justify-content: flex-end; /* Igual a supplier.css */
     gap: 10px;
-    margin-top: 20px; /* 与 supplier.css 一致 */
+    margin-top: 20px; /* Igual a supplier.css */
   }
   
   #companyProfileModal .close-btn {
@@ -265,14 +263,14 @@
     transform: translateY(-2px);
   }
   
-  /* 响应式设计 */
+  /* Diseño responsive */
   @media (max-width: 768px) {
     #companyProfileModal .modal-content {
       width: 95%;
       max-height: 90vh;
     }
     #companyProfileModal .form-container {
-      flex-wrap: wrap; /* 在小屏幕下允许换行，与 supplier.css 一致 */
+      flex-wrap: wrap; /* Permite salto en pantallas pequeñas, igual a supplier.css */
     }
     #companyProfileModal .form-section {
       min-width: 100%;

@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>创建应付账款</title>
+    <title>Crear Cuentas por Pagar</title>
     <link rel="stylesheet" href="payableslist.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <main class="content">
         <div class="table-header">
-            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
-            <h2>应付账款明细列表</h2>
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
+            <h2>Lista de Detalles de Cuentas por Pagar</h2>
             <div class="button-group">
                 <button class="add-btn"><i class="fas fa-plus"></i></button>
                 <button class="save-all-btn"><i class="fas fa-save"></i></button>
@@ -19,55 +19,55 @@
         </div>
         <div class="invoice-info">
             <div class="form-group">
-                <label for="payableNumber">应付编号:</label>
+                <label for="payableNumber">Nº Cuenta por Pagar:</label>
                 <div style="position: relative;">
-                    <input type="text" id="payableNumber" name="payableNumber" placeholder="请输入应付编号" required>
-                    <button type="button" id="generatePayableBtn" class="generate-btn">生成</button>
+                    <input type="text" id="payableNumber" name="payableNumber" placeholder="Ingresa Nº de cuenta" required>
+                    <button type="button" id="generatePayableBtn" class="generate-btn">Generar</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="supplierCode">供应商代码:</label>
+                <label for="supplierCode">Código Proveedor:</label>
                 <select id="supplierCode" name="supplierCode" required>
-                    <option value="">请选择供应商</option>
+                    <option value="">Selecciona proveedor</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="supplierName">供应商名称:</label>
-                <input type="text" id="supplierName" name="supplierName" placeholder="请输入供应商名称" readonly>
+                <label for="supplierName">Nombre Proveedor:</label>
+                <input type="text" id="supplierName" name="supplierName" placeholder="Ingresa nombre proveedor" readonly>
             </div>
             <div class="form-group">
-                <label for="invoiceDate">应付日期:</label>
+                <label for="invoiceDate">Fecha Cuenta:</label>
                 <input type="date" id="invoiceDate" name="invoiceDate" required>
             </div>
             <div class="form-group">
-                <label for="dueDate">到期日期:</label>
+                <label for="dueDate">Fecha Vencimiento:</label>
                 <input type="date" id="dueDate" name="dueDate" required>
             </div>
         </div>
         <div class="table-container">
-            <table class="receivables-table"> <!-- 可改为 payables-table -->
+            <table class="receivables-table">
                 <thead>
                     <tr>
-                        <th>发票号码</th>
-                        <th>金额</th>
-                        <th>已付金额</th>
-                        <th>未付金额</th>
-                        <th>结款日期</th>
-                        <th>操作</th>
+                        <th>Nº Factura</th>
+                        <th>Monto</th>
+                        <th>Monto Pagado</th>
+                        <th>Monto Pendiente</th>
+                        <th>Fecha Pago</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- 动态加载应付账款明细 -->
+                    <!-- Detalles cargados dinámicamente -->
                 </tbody>
             </table>
         </div>
         <div class="totals-section">
-            <h3>应付总额: <span class="grand-total">0.00</span></h3>
+            <h3>Total por Pagar: <span class="grand-total">0.00</span></h3>
             <div id="totals-container">
-                <!-- 动态生成总额信息 -->
+                <!-- Totales generados dinámicamente -->
             </div>
         </div>
     </main>
     <script src="payableslist.js"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92564548d8524545',t:'MTc0MjgyMDM3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

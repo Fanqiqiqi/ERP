@@ -148,7 +148,7 @@ body {
     transition: border-color 0.3s ease;
 }
 
-/* 确保预计到达日期与其他输入框一致 */
+/* Asegurar que la fecha estimada de llegada coincida con otros campos */
 .form-group input#expectedArrivalDate {
     padding-right: 8px;
     max-width: 150px;

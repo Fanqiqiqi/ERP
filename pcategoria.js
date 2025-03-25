@@ -1,42 +1,41 @@
+// Variables relacionadas con el modal
+const modal = document.getElementById('addCategoryModal');
+const modalTitle = modal.querySelector('.modal-content h3');
+const addBtn = document.querySelector('.add-btn');
+const cancelBtn = document.querySelector('.cancel-btn');
+const categoryForm = document.getElementById('categoryForm');
+const categoryCodeInput = document.getElementById('categoryCode');
+const categoryNameInput = document.getElementById('categoryName');
+const tbody = document.querySelector('.category-table tbody');
 
-// 模态框相关变量
-const modal = document.getElementById('addCategoryModal'); // 添加类别模态框
-const modalTitle = modal.querySelector('.modal-content h3'); // 模态框标题
-const addBtn = document.querySelector('.add-btn'); // 添加按钮
-const cancelBtn = document.querySelector('.cancel-btn'); // 取消按钮
-const categoryForm = document.getElementById('categoryForm'); // 类别表单
-const categoryCodeInput = document.getElementById('categoryCode'); // 类别编码输入框
-const categoryNameInput = document.getElementById('categoryName'); // 类别名称输入框
-const tbody = document.querySelector('.category-table tbody'); // 表格主体
+// Variables de paginación
+const itemsPerPage = 9; // 9 ítems por página
+let currentPage = 1; // Página actual
 
-// 分页相关变量
-const itemsPerPage = 9; // 每页显示9条数据
-let currentPage = 1; // 当前页码
+let isEditing = false; // Estado de edición
+let editingRow = null; // Fila en edición
 
-let isEditing = false; // 是否处于编辑状态
-let editingRow = null; // 当前编辑的表格行
-
-// 加载产品类别数据并更新表格（带分页）
+// Cargar datos de categorías y actualizar tabla (con paginación)
 function updateTable() {
-  const categories = JSON.parse(localStorage.getItem('pcategories') || '[]'); // 从本地存储获取类别数据，若无则为空数组
-  tbody.innerHTML = ''; // 清空表格主体
+  const categories = JSON.parse(localStorage.getItem('pcategories') || '[]');
+  tbody.innerHTML = '';
 
-  // 计算总页数
+  // Calcular total de páginas
   const totalPages = Math.ceil(categories.length / itemsPerPage);
 
-  // 确保当前页码有效
+  // Validar página actual
   if (currentPage < 1) currentPage = 1;
   if (currentPage > totalPages) currentPage = totalPages;
 
-  // 计算当前页的数据范围
-  const startIndex = (currentPage - 1) * itemsPerPage; // 开始索引
-  const endIndex = Math.min(startIndex + itemsPerPage, categories.length); // 结束索引
-  const currentData = categories.slice(startIndex, endIndex); // 当前页数据
+  // Calcular rango de datos para la página actual
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, categories.length);
+  const currentData = categories.slice(startIndex, endIndex);
 
-  // 填充表格
+  // Llenar tabla
   currentData.forEach((category, pageIndex) => {
-    const globalIndex = startIndex + pageIndex; // 计算全局索引
-    const row = document.createElement('tr'); // 创建新行
+    const globalIndex = startIndex + pageIndex;
+    const row = document.createElement('tr');
     row.innerHTML = `
       <td>${category.code}</td>
       <td>${category.name}</td>
@@ -45,91 +44,88 @@ function updateTable() {
         <span class="action-icon delete-icon" data-index="${globalIndex}"><i class="fas fa-trash-alt"></i></span>
       </td>
     `;
-    tbody.appendChild(row); // 添加到表格
+    tbody.appendChild(row);
   });
 
-  // 更新分页控件
+  // Actualizar paginación
   updatePagination(totalPages);
 
-  // 绑定操作图标事件
+  // Vincular eventos de íconos
   bindIconEvents();
 }
 
-// 更新分页控件
+// Actualizar controles de paginación
 function updatePagination(totalPages) {
-  let pagination = document.querySelector('.pagination'); // 获取分页控件
+  let pagination = document.querySelector('.pagination');
   if (!pagination) {
-    pagination = document.createElement('div'); // 如果不存在则创建
+    pagination = document.createElement('div');
     pagination.className = 'pagination';
-    document.querySelector('.content').appendChild(pagination); // 添加到内容区域
+    document.querySelector('.content').appendChild(pagination);
   }
 
-  // 更新分页控件内容
   pagination.innerHTML = `
-    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-    <span>第 ${currentPage} 页 / 共 ${totalPages} 页</span>
-    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Pág. Anterior</button>
+    <span>Pág. ${currentPage} / Total ${totalPages}</span>
+    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Pág. Siguiente</button>
   `;
 
-  // 绑定上一页按钮事件
   pagination.querySelector('.prev-btn').addEventListener('click', () => {
     if (currentPage > 1) {
-      currentPage--; // 上一页
-      updateTable(); // 刷新表格
+      currentPage--;
+      updateTable();
     }
   });
 
-  // 绑定下一页按钮事件
   pagination.querySelector('.next-btn').addEventListener('click', () => {
     if (currentPage < totalPages) {
-      currentPage++; // 下一页
-      updateTable(); // 刷新表格
+      currentPage++;
+      updateTable();
     }
   });
 }
 
-// 保存产品类别数据到本地存储
+// Guardar datos de categorías en almacenamiento local
 function saveCategories() {
-  const rows = Array.from(tbody.querySelectorAll('tr')); // 获取所有表格行
+  const rows = Array.from(tbody.querySelectorAll('tr'));
   const categories = rows.map(row => ({
-    code: row.cells[0].textContent, // 类别编码
-    name: row.cells[1].textContent // 类别名称
+    code: row.cells[0].textContent,
+    name: row.cells[1].textContent
   }));
-  localStorage.setItem('pcategories', JSON.stringify(categories)); // 保存到本地存储
+  localStorage.setItem('pcategories', JSON.stringify(categories));
 }
 
-// 添加类别 - 显示模态框
+// Mostrar modal para agregar categoría
 addBtn.addEventListener('click', function() {
-  isEditing = false; // 设置为新增模式
-  modalTitle.textContent = '添加新类别'; // 更新模态框标题
-  categoryForm.reset(); // 重置表单
-  categoryCodeInput.removeAttribute('readonly'); // 编码输入框可编辑
-  modal.style.display = 'flex'; // 显示模态框
+  isEditing = false;
+  modalTitle.textContent = 'Agregar Nueva Categoría';
+  categoryForm.reset();
+  categoryCodeInput.removeAttribute('readonly');
+  modal.style.display = 'flex';
 });
 
-// 取消按钮 - 关闭模态框
+// Cerrar modal con botón cancelar
 cancelBtn.addEventListener('click', function() {
-  modal.style.display = 'none'; // 隐藏模态框
-  categoryForm.reset(); // 重置表单
-  isEditing = false; // 退出编辑模式
-  editingRow = null; // 清空编辑行
+  modal.style.display = 'none';
+  categoryForm.reset();
+  isEditing = false;
+  editingRow = null;
 });
 
-// 保存或更新类别
+// Guardar o actualizar categoría
 categoryForm.addEventListener('submit', function(e) {
-  e.preventDefault(); // 阻止表单默认提交
-  const code = categoryCodeInput.value.trim(); // 获取类别编码
-  const name = categoryNameInput.value.trim(); // 获取类别名称
-  if (code && name) { // 确保输入不为空
-    if (isEditing && editingRow) { // 编辑模式
-      editingRow.cells[1].textContent = name; // 更新名称
-    } else { // 新增模式
-      const existingCodes = Array.from(tbody.querySelectorAll('td:first-child')).map(td => td.textContent); // 获取现有编码
+  e.preventDefault();
+  const code = categoryCodeInput.value.trim();
+  const name = categoryNameInput.value.trim();
+  if (code && name) {
+    if (isEditing && editingRow) {
+      editingRow.cells[1].textContent = name;
+    } else {
+      const existingCodes = Array.from(tbody.querySelectorAll('td:first-child')).map(td => td.textContent);
       if (existingCodes.includes(code)) {
-        alert('类别编码已存在，请使用唯一的编码！'); // 检查编码唯一性
+        alert('¡El código de categoría ya existe, usa un código único!');
         return;
       }
-      const newRow = document.createElement('tr'); // 创建新行
+      const newRow = document.createElement('tr');
       newRow.innerHTML = `
         <td>${code}</td>
         <td>${name}</td>
@@ -138,50 +134,48 @@ categoryForm.addEventListener('submit', function(e) {
           <span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span>
         </td>
       `;
-      tbody.appendChild(newRow); // 添加到表格
+      tbody.appendChild(newRow);
     }
-    saveCategories(); // 保存数据
-    modal.style.display = 'none'; // 关闭模态框
-    categoryForm.reset(); // 重置表单
-    isEditing = false; // 退出编辑模式
-    editingRow = null; // 清空编辑行
-    updateTable(); // 刷新表格
+    saveCategories();
+    modal.style.display = 'none';
+    categoryForm.reset();
+    isEditing = false;
+    editingRow = null;
+    updateTable();
   }
 });
 
-// 绑定操作图标事件
+// Vincular eventos de íconos de acción
 function bindIconEvents() {
-  // 编辑/查看图标事件
   document.querySelectorAll('.view-icon').forEach(icon => {
     icon.addEventListener('click', function() {
-      const index = this.getAttribute('data-index'); // 获取数据索引
-      const categories = JSON.parse(localStorage.getItem('pcategories') || '[]'); // 获取类别数据
-      isEditing = true; // 进入编辑模式
-      editingRow = tbody.children[index - (currentPage - 1) * itemsPerPage]; // 计算当前页相对索引
-      modalTitle.textContent = '编辑类别'; // 更新模态框标题
-      categoryCodeInput.value = categories[index].code; // 填充编码
-      categoryNameInput.value = categories[index].name; // 填充名称
-      categoryCodeInput.setAttribute('readonly', 'readonly'); // 编码只读
-      modal.style.display = 'flex'; // 显示模态框
+      const index = this.getAttribute('data-index');
+      const categories = JSON.parse(localStorage.getItem('pcategories') || '[]');
+      isEditing = true;
+      editingRow = tbody.children[index - (currentPage - 1) * itemsPerPage];
+      modalTitle.textContent = 'Editar Categoría';
+      categoryCodeInput.value = categories[index].code;
+      categoryNameInput.value = categories[index].name;
+      categoryCodeInput.setAttribute('readonly', 'readonly');
+      modal.style.display = 'flex';
     });
   });
 
-  // 删除图标事件
   document.querySelectorAll('.delete-icon').forEach(icon => {
     icon.addEventListener('click', function() {
-      const index = this.getAttribute('data-index'); // 获取数据索引
-      const categories = JSON.parse(localStorage.getItem('pcategories') || '[]'); // 获取类别数据
-      const code = categories[index].code; // 获取要删除的编码
-      if (confirm(`确定删除类别：${code} 吗？`)) { // 确认删除
-        categories.splice(index, 1); // 从数组中移除
-        localStorage.setItem('pcategories', JSON.stringify(categories)); // 更新本地存储
-        updateTable(); // 刷新表格
+      const index = this.getAttribute('data-index');
+      const categories = JSON.parse(localStorage.getItem('pcategories') || '[]');
+      const code = categories[index].code;
+      if (confirm(`¿Seguro de eliminar la categoría: ${code}?`)) {
+        categories.splice(index, 1);
+        localStorage.setItem('pcategories', JSON.stringify(categories));
+        updateTable();
       }
     });
   });
 }
 
-// 页面加载时初始化表格
+// Inicializar tabla al cargar página
 document.addEventListener('DOMContentLoaded', function() {
-  updateTable(); // 加载并显示表格
+  updateTable();
 });

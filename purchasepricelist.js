@@ -1,4 +1,4 @@
-// purchasepricelist.js
+// purchasepricelist_es.js
 
 const tbody = document.querySelector('.purchasepricelist-table tbody');
 const addBtn = document.querySelector('.add-btn');
@@ -14,25 +14,25 @@ const table = document.querySelector('.purchasepricelist-table');
 const theadRow = table.querySelector('thead tr');
 const generateCodeBtn = document.querySelector('#generateCodeBtn');
 
-// 获取 URL 参数
+// Obtener parámetros URL
 const urlParams = new URLSearchParams(window.location.search);
 const priceCode = urlParams.get('priceCode');
 const isEditMode = urlParams.get('edit') === 'true';
 const isViewMode = !isEditMode && priceCode;
 
-let tempGeneratedCode = null; // 临时存储生成的代码和计数器
+let tempGeneratedCode = null; // Almacenar temporalmente código generado y contador
 
-// 从产品数据中加载已有产品
+// Cargar productos existentes
 function getProducts() {
     return JSON.parse(localStorage.getItem('products') || '[]');
 }
 
-// 从供应商数据中加载供应商
+// Cargar proveedores
 function getSuppliers() {
     return JSON.parse(localStorage.getItem('suppliers') || '[]');
 }
 
-// 生成采购报价单号（仅生成，不保存计数器）
+// Generar nº cotización compra (solo generar, no guarda contador)
 function generatePurchasePriceCode() {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const purchasePriceRule = codeRules['purchasequote'] || { prefix: 'PP', digits: 4, suffix: '', counter: 0 };
@@ -48,12 +48,12 @@ function generatePurchasePriceCode() {
         newCode = `${purchasePriceRule.prefix}${number}${purchasePriceRule.suffix}`;
     } while (existingCodes.includes(newCode));
     
-    // 临时存储代码和计数器，不更新 localStorage
+    // Almacenar temporalmente código y contador, sin actualizar localStorage
     tempGeneratedCode = { code: newCode, counter: counter };
     return newCode;
 }
 
-// 保存计数器到 localStorage（在保存时调用）
+// Guardar contador en localStorage (llamado al guardar)
 function savePurchasePriceCodeCounter(counter) {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const purchasePriceRule = codeRules['purchasequote'] || { prefix: 'PP', digits: 4, suffix: '', counter: 0 };
@@ -62,17 +62,17 @@ function savePurchasePriceCodeCounter(counter) {
     localStorage.setItem('codeRules', JSON.stringify(codeRules));
 }
 
-// 计算总价（含税）
+// Calcular total (con impuesto)
 function calculateTotalPrice(newPurchasePrice, taxRate) {
     const price = parseFloat(newPurchasePrice) || 0;
-    const tax = parseFloat(taxRate.replace('%', '')) / 100 || 0; // 处理百分比格式
+    const tax = parseFloat(taxRate.replace('%', '')) / 100 || 0; // Manejar formato porcentaje
     return (price * (1 + tax)).toFixed(2);
 }
 
-// 加载供应商下拉框（只显示代码）
+// Cargar dropdown proveedores (solo códigos)
 function loadSuppliers() {
     const suppliers = getSuppliers();
-    supplierCodeSelect.innerHTML = '<option value="">请选择供应商</option>';
+    supplierCodeSelect.innerHTML = '<option value="">Selecciona proveedor</option>';
     suppliers.forEach(supplier => {
         const option = document.createElement('option');
         option.value = supplier.code;
@@ -98,13 +98,13 @@ function loadSuppliers() {
     }
 }
 
-// 设置默认日期为今天
+// Establecer fecha por defecto (hoy)
 function setDefaultDate() {
     const today = new Date().toISOString().split('T')[0];
     quoteDateInput.value = today;
 }
 
-// 加载采购报价表明细数据
+// Cargar detalles cotización compra
 function loadPriceList() {
     const priceList = JSON.parse(localStorage.getItem('purchasePriceList') || '[]');
     const products = getProducts();
@@ -113,25 +113,25 @@ function loadPriceList() {
     if (isViewMode) {
         table.classList.add('view-mode');
         theadRow.innerHTML = `
-            <th>产品代码</th>
-            <th>产品名称</th>
-            <th>产品采购价格</th>
-            <th>新采购价格</th>
-            <th>税率</th>
-            <th>总价</th>
-            <th>报价日期</th>
+            <th>Código Producto</th>
+            <th>Nombre Producto</th>
+            <th>Precio Compra</th>
+            <th>Nuevo Precio Compra</th>
+            <th>Tasa Impuesto</th>
+            <th>Total</th>
+            <th>Fecha Cotización</th>
         `;
     } else {
         table.classList.remove('view-mode');
         theadRow.innerHTML = `
-            <th>产品代码</th>
-            <th>产品名称</th>
-            <th>产品采购价格</th>
-            <th>新采购价格</th>
-            <th>税率</th>
-            <th>总价</th>
-            <th>报价日期</th>
-            <th>操作</th>
+            <th>Código Producto</th>
+            <th>Nombre Producto</th>
+            <th>Precio Compra</th>
+            <th>Nuevo Precio Compra</th>
+            <th>Tasa Impuesto</th>
+            <th>Total</th>
+            <th>Fecha Cotización</th>
+            <th>Acción</th>
         `;
     }
 
@@ -143,8 +143,8 @@ function loadPriceList() {
             filteredPriceList.forEach((item, index) => {
                 const product = products.find(p => p.code === item.productCode);
                 const currency = product ? product.currency || '' : '';
-                let taxRate = product ? product.taxRate || '0%' : '0%'; // 从产品数据中获取税率
-                // 如果 taxRate 是小数，转换为百分比
+                let taxRate = product ? product.taxRate || '0%' : '0%'; // Obtener tasa impuesto de producto
+                // Si taxRate es decimal, convertir a porcentaje
                 if (!taxRate.includes('%') && !isNaN(parseFloat(taxRate))) {
                     taxRate = `${(parseFloat(taxRate) * 100).toFixed(0)}%`;
                 }
@@ -152,13 +152,13 @@ function loadPriceList() {
                 const row = document.createElement('tr');
                 if (isEditMode) {
                     row.innerHTML = `
-                        <td><input type="text" class="product-code" value="${item.productCode || ''}" placeholder="输入产品代码"></td>
-                        <td><input type="text" class="product-name" value="${item.productName || ''}" placeholder="输入产品名称"></td>
-                        <td><input type="number" class="purchase-price" value="${item.purchasePrice || ''}" placeholder="采购价格" step="0.01" readonly> <span>${currency}</span></td>
-                        <td><input type="number" class="new-purchase-price" value="${item.newPurchasePrice || ''}" placeholder="新采购价格" step="0.01"> <span>${currency}</span></td>
-                        <td><input type="text" class="tax-rate" value="${taxRate}" placeholder="税率" readonly></td>
-                        <td><input type="text" class="total-price" value="${totalPrice}" placeholder="总价" readonly> <span>${currency}</span></td>
-                        <td><input type="date" class="quote-date" value="${item.quoteDate || ''}" placeholder="报价日期"></td>
+                        <td><input type="text" class="product-code" value="${item.productCode || ''}" placeholder="Ingresa código producto"></td>
+                        <td><input type="text" class="product-name" value="${item.productName || ''}" placeholder="Ingresa nombre producto"></td>
+                        <td><input type="number" class="purchase-price" value="${item.purchasePrice || ''}" placeholder="Precio compra" step="0.01" readonly> <span>${currency}</span></td>
+                        <td><input type="number" class="new-purchase-price" value="${item.newPurchasePrice || ''}" placeholder="Nuevo precio compra" step="0.01"> <span>${currency}</span></td>
+                        <td><input type="text" class="tax-rate" value="${taxRate}" placeholder="Tasa impuesto" readonly></td>
+                        <td><input type="text" class="total-price" value="${totalPrice}" placeholder="Total" readonly> <span>${currency}</span></td>
+                        <td><input type="date" class="quote-date" value="${item.quoteDate || ''}" placeholder="Fecha cotización"></td>
                         <td>
                             <span class="action-icon delete-icon" data-index="${index}"><i class="fas fa-trash-alt"></i></span>
                         </td>
@@ -182,7 +182,7 @@ function loadPriceList() {
     } else {
         setDefaultDate();
         tbody.innerHTML = '';
-        tempGeneratedCode = null; // 重置临时代码
+        tempGeneratedCode = null; // Reiniciar código temporal
     }
 
     if (isViewMode) {
@@ -204,7 +204,7 @@ function loadPriceList() {
     bindIconEvents();
 }
 
-// 保存采购报价表明细数据到 purchasePrices
+// Guardar detalles cotización compra en purchasePrices
 function savePriceListToPurchasePrices() {
     const rows = Array.from(tbody.querySelectorAll('tr'));
     const selectedSupplierCode = supplierCodeSelect.value;
@@ -213,7 +213,7 @@ function savePriceListToPurchasePrices() {
     const status = statusSelect.value;
 
     if (!quoteCode || !selectedSupplierCode || !quoteDate) {
-        alert('请确保采购报价单号、供应商代码和日期填写完整！');
+        alert('¡Asegúrate de completar nº cotización, código proveedor y fecha!');
         return false;
     }
 
@@ -258,7 +258,7 @@ function savePriceListToPurchasePrices() {
     });
 
     if (!allValid) {
-        alert('请确保所有产品信息填写完整！');
+        alert('¡Asegúrate de completar toda la info de productos!');
         return false;
     }
 
@@ -280,7 +280,7 @@ function savePriceListToPurchasePrices() {
             quoteDate: quoteDate,
             status: status
         });
-        // 如果使用了临时生成的代码，则保存计数器
+        // Si se usó código temporal, guardar contador
         if (tempGeneratedCode && tempGeneratedCode.code === quoteCode) {
             savePurchasePriceCodeCounter(tempGeneratedCode.counter);
         }
@@ -295,34 +295,22 @@ function savePriceListToPurchasePrices() {
     localStorage.setItem('purchasePrices', JSON.stringify(prices));
     localStorage.setItem('purchasePriceList', JSON.stringify(updatedPriceList));
 
-    // 如果状态为“确认”，更新产品的新采购价格
-    if (status === '确认') {
-        const products = JSON.parse(localStorage.getItem('products') || '[]');
-        priceListData.forEach(item => {
-            const productIndex = products.findIndex(p => p.code === item.productCode);
-            if (productIndex !== -1 && item.newPurchasePrice) {
-                products[productIndex].purchasePrice = item.newPurchasePrice;
-            }
-        });
-        localStorage.setItem('products', JSON.stringify(products));
-    }
-
     window.dispatchEvent(new Event('storage'));
-    tempGeneratedCode = null; // 保存后清空临时代码
+    tempGeneratedCode = null; // Limpiar código temporal tras guardar
     return true;
 }
 
-// 添加新行
+// Agregar nueva fila
 addBtn.addEventListener('click', function() {
     const row = document.createElement('tr');
     row.innerHTML = `
-        <td><input type="text" class="product-code" placeholder="输入产品代码"></td>
-        <td><input type="text" class="product-name" placeholder="输入产品名称"></td>
-        <td><input type="number" class="purchase-price" placeholder="采购价格" step="0.01" readonly> <span></span></td>
-        <td><input type="number" class="new-purchase-price" placeholder="新采购价格" step="0.01"> <span></span></td>
-        <td><input type="text" class="tax-rate" placeholder="税率" readonly></td>
-        <td><input type="text" class="total-price" placeholder="总价" readonly> <span></span></td>
-        <td><input type="date" class="quote-date" value="${quoteDateInput.value}" placeholder="报价日期"></td>
+        <td><input type="text" class="product-code" placeholder="Ingresa código producto"></td>
+        <td><input type="text" class="product-name" placeholder="Ingresa nombre producto"></td>
+        <td><input type="number" class="purchase-price" placeholder="Precio compra" step="0.01" readonly> <span></span></td>
+        <td><input type="number" class="new-purchase-price" placeholder="Nuevo precio compra" step="0.01"> <span></span></td>
+        <td><input type="text" class="tax-rate" placeholder="Tasa impuesto" readonly></td>
+        <td><input type="text" class="total-price" placeholder="Total" readonly> <span></span></td>
+        <td><input type="date" class="quote-date" value="${quoteDateInput.value}" placeholder="Fecha cotización"></td>
         <td>
             <span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span>
         </td>
@@ -332,14 +320,14 @@ addBtn.addEventListener('click', function() {
     bindIconEvents();
 });
 
-// 返回主页面
+// Volver a página principal
 backBtn.addEventListener('click', function() {
-    tempGeneratedCode = null; // 返回时清空临时代码
+    tempGeneratedCode = null; // Limpiar código temporal al volver
     window.location.href = 'purchaseprice.html';
     window.close();
 });
 
-// 保存所有数据并跳转回主页面
+// Guardar todo y volver a página principal
 saveAllBtn.addEventListener('click', function() {
     const rows = Array.from(tbody.querySelectorAll('tr'));
     rows.forEach(row => {
@@ -367,18 +355,18 @@ saveAllBtn.addEventListener('click', function() {
         }
     });
 
-    // 保存成功后跳转到 purchaseprice.html
+    // Si guarda con éxito, volver a purchaseprice.html
     if (savePriceListToPurchasePrices()) {
         window.location.href = 'purchaseprice.html';
     }
 });
 
-// 打印功能
+// Función imprimir
 printBtn.addEventListener('click', function() {
     window.print();
 });
 
-// 生成代码按钮事件
+// Evento botón generar código
 generateCodeBtn.addEventListener('click', function() {
     if (!isEditMode && !isViewMode) {
         const newCode = generatePurchasePriceCode();
@@ -386,7 +374,7 @@ generateCodeBtn.addEventListener('click', function() {
     }
 });
 
-// 绑定输入框事件（自动补全）
+// Vincular eventos inputs (autocompletado)
 function bindInputEvents(row) {
     const codeInput = row.querySelector('.product-code');
     const nameInput = row.querySelector('.product-name');
@@ -417,18 +405,18 @@ function bindInputEvents(row) {
                         codeInput.value = product.code;
                         nameInput.value = product.name;
                         purchasePriceInput.value = product.purchasePrice || '';
-                        newPurchasePriceInput.placeholder = `新采购价格 (${product.currency || ''})`;
+                        newPurchasePriceInput.placeholder = `Nuevo precio compra (${product.currency || ''})`;
                         let taxRate = product.taxRate || '0%';
-                        // 如果 taxRate 是小数，转换为百分比
+                        // Si taxRate es decimal, convertir a porcentaje
                         if (!taxRate.includes('%') && !isNaN(parseFloat(taxRate))) {
                             taxRate = `${(parseFloat(taxRate) * 100).toFixed(0)}%`;
                         }
-                        taxRateInput.value = taxRate; // 自动填充税率
+                        taxRateInput.value = taxRate; // Rellenar tasa impuesto
                         const currency = product.currency || '';
                         purchasePriceInput.nextElementSibling.textContent = currency;
                         newPurchasePriceInput.nextElementSibling.textContent = currency;
                         totalPriceInput.nextElementSibling.textContent = currency;
-                        totalPriceInput.value = calculateTotalPrice(newPurchasePriceInput.value || product.purchasePrice, taxRate); // 计算总价
+                        totalPriceInput.value = calculateTotalPrice(newPurchasePriceInput.value || product.purchasePrice, taxRate); // Calcular total
                         suggestionsDiv.remove();
                     });
                     suggestionsDiv.appendChild(suggestion);
@@ -441,7 +429,7 @@ function bindInputEvents(row) {
         });
     });
 
-    // 新采购价格变化时自动更新总价
+    // Actualizar total al cambiar nuevo precio compra
     newPurchasePriceInput.addEventListener('input', function() {
         totalPriceInput.value = calculateTotalPrice(this.value, taxRateInput.value);
     });
@@ -454,7 +442,7 @@ function bindInputEvents(row) {
     });
 }
 
-// 绑定操作图标事件
+// Vincular eventos íconos acción
 function bindIconEvents() {
     if (isViewMode) return;
     document.querySelectorAll('.delete-icon').forEach(icon => {
@@ -466,13 +454,13 @@ function bindIconEvents() {
 const deleteHandler = function() {
     const row = this.closest('tr');
     const productCode = row.cells[0].textContent;
-    if (confirm(`确定删除产品：${productCode} 的采购报价明细吗？`)) {
+    if (confirm(`¿Seguro de eliminar detalle cotización compra del producto: ${productCode}?`)) {
         row.remove();
         savePriceListToPurchasePrices();
     }
 };
 
-// 联动供应商代码和名称
+// Vincular código y nombre proveedor
 supplierCodeSelect.addEventListener('change', function() {
     const suppliers = getSuppliers();
     const selectedSupplier = suppliers.find(s => s.code === this.value);

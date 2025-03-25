@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>添加出货单</title>
+    <title>Agregar Envío</title>
     <link rel="stylesheet" href="despatchout.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <main class="content">
         <div class="table-header">
-            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
-            <button class="invoice-btn"><i class="fas fa-file-invoice"></i> 转发票</button>
-            <h2>出货单明细列表</h2>
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
+            <button class="invoice-btn"><i class="fas fa-file-invoice"></i> Generar Factura</button>
+            <h2>Lista Detalles Envío</h2>
             <div class="button-group">
                 <button class="add-btn"><i class="fas fa-plus"></i></button>
                 <button class="print-btn"><i class="fas fa-print"></i></button>
@@ -21,58 +21,69 @@
         </div>
         <div class="order-info">
             <div class="form-group">
-                <label for="despatchCode">出货单编号:</label>
+                <label for="despatchCode">Nº Albarán:</label>
                 <div style="position: relative;">
-                    <input type="text" id="despatchCode" name="despatchCode" placeholder="请输入出货单编号" required>
-                    <button type="button" id="generateCodeBtn" class="generate-btn">生成</button>
+                    <input type="text" id="despatchCode" name="despatchCode" placeholder="Ingresa Nº Envío" required>
+                    <button type="button" id="generateCodeBtn" class="generate-btn">Generar</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="customerCode">客户代码:</label>
+                <label for="orderCode">Orden Venta:</label>
+                <input type="text" id="orderCode" name="orderCode" placeholder="Selecciona Orden Venta">
+            </div>
+            <div class="form-group">
+                <label for="customerCode">Cód. Cliente:</label>
                 <select id="customerCode" name="customerCode" required>
-                    <option value="">请选择客户</option>
+                    <option value="">Sel. Cliente</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="customerName">客户名称:</label>
-                <input type="text" id="customerName" name="customerName" placeholder="请输入客户名称" readonly>
+                <label for="customerName">Nombre Cliente:</label>
+                <input type="text" id="customerName" name="customerName" placeholder="Ingresa Nombre Cliente" readonly>
             </div>
             <div class="form-group">
-                <label for="despatchDate">出货日期:</label>
+                <label for="despatchDate">Fecha Albarán:</label>
                 <input type="date" id="despatchDate" name="despatchDate" required>
             </div>
             <div class="form-group">
-                <label for="status">状态:</label>
+                <label for="status">Estado:</label>
                 <select id="status" name="status" required>
-                    <option value="未开票">未开票</option>
-                    <option value="已开票">已开票</option>
+                    <option value="Sin Factura">No Facturado</option>
+                    <option value="Con Factura">Facturado</option>
                 </select>
+            </div>
+            <div class="form-group verifactu-form-group">
+                <label>Verifactu:</label>
+                <div class="verifactu-group">
+                    <label><input type="radio" name="verifactu" value="yes" checked> Sí</label>
+                    <label><input type="radio" name="verifactu" value="no"> No</label>
+                </div>
             </div>
         </div>
         <div class="table-container">
             <table class="order-table">
                 <thead>
                     <tr>
-                        <th>产品代码</th>
-                        <th>产品名称</th>
+                        <th>Cód. Producto</th>
+                        <th>Nombre Prod.</th>
                         <th>LOTE</th>
-                        <th>库存</th>
-                        <th>数量</th>
-                        <th>销售价格</th>
-                        <th>税率</th>
-                        <th>总价</th>
-                        <th>操作</th>
+                        <th>Stock</th>
+                        <th>Cant.</th>
+                        <th>Precio Venta</th>
+                        <th>IVA</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- 动态加载出货单明细 -->
+                    <!-- Detalles dinámicos -->
                 </tbody>
             </table>
         </div>
         <div class="totals-section">
-            <h3>出货总额: <span class="grand-total">0.00</span></h3>
+            <h3>Total Envío: <span class="grand-total">0.00</span></h3>
             <div id="totals-container">
-                <!-- 动态生成税率分组总额 -->
+                <!-- Totales por tasa generados dinámicamente -->
             </div>
         </div>
     </main>

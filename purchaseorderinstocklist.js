@@ -1,22 +1,22 @@
-// purchaseorderinstocklist.js
+// purchaseorderinstocklist_es.js
 document.addEventListener('DOMContentLoaded', function() {
     init();
 });
 
-// 初始化采购入库单数据
+// Inicializar datos de entradas de compra
 let purchaseInstocks = JSON.parse(localStorage.getItem('purchaseInstocks')) || [];
 
-// 分页相关变量
-const itemsPerPage = 9; // 每页显示9条
-let currentPage = 1; // 当前页码
-let filteredData = [...purchaseInstocks]; // 用于存储筛选后的数据
+// Variables relacionadas con la paginación
+const itemsPerPage = 9; // 9 ítems por página
+let currentPage = 1; // Página actual
+let filteredData = [...purchaseInstocks]; // Almacenar datos filtrados
 
-// 保存到 localStorage
+// Guardar en localStorage
 function savePurchaseInstocks() {
     localStorage.setItem('purchaseInstocks', JSON.stringify(purchaseInstocks));
 }
 
-// 应用筛选条件
+// Aplicar condiciones de filtrado
 function applyFilters(formData) {
     const filters = {
         instockCode: formData.get('instockCode')?.toLowerCase().trim(),
@@ -45,7 +45,7 @@ function applyFilters(formData) {
 
         const suppliers = JSON.parse(localStorage.getItem('suppliers') || '[]');
         const supplier = suppliers.find(s => s.code === item.supplierCode);
-        const supplierName = supplier ? supplier.name : '未知供应商';
+        const supplierName = supplier ? supplier.name : 'Proveedor desconocido';
         if (filters.supplierName) {
             matches = matches && supplierName.toLowerCase().includes(filters.supplierName);
         }
@@ -58,23 +58,23 @@ function applyFilters(formData) {
     });
 }
 
-// 更新表格（带分页）
+// Actualizar tabla (con paginación)
 function updateTable() {
     const tbody = document.querySelector('.purchaseorderinstock-table tbody');
     if (!tbody) return;
     tbody.innerHTML = '';
 
-    // 按入库日期降序排序
+    // Ordenar por fecha de entrada descendente
     filteredData.sort((a, b) => new Date(b.instockDate) - new Date(a.instockDate));
 
-    // 计算总页数
+    // Calcular total de páginas
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-    // 确保当前页码有效
+    // Asegurar que la página actual sea válida
     if (currentPage < 1) currentPage = 1;
     if (currentPage > totalPages) currentPage = totalPages;
 
-    // 计算当前页的数据范围
+    // Calcular el rango de datos de la página actual
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
     const currentData = filteredData.slice(startIndex, endIndex);
@@ -82,12 +82,12 @@ function updateTable() {
     const suppliers = JSON.parse(localStorage.getItem('suppliers') || '[]');
 
     currentData.forEach((instock, pageIndex) => {
-        const globalIndex = purchaseInstocks.indexOf(instock); // 使用原始数据中的索引
+        const globalIndex = purchaseInstocks.indexOf(instock); // Usar índice de datos originales
         const supplier = suppliers.find(s => s.code === instock.supplierCode);
-        const supplierName = supplier ? supplier.name : '未知供应商';
+        const supplierName = supplier ? supplier.name : 'Proveedor desconocido';
 
-        // 格式化金额为千位制，保留两位小数
-        const formattedPrice = Number(instock.totalPrice).toLocaleString('zh-CN', {
+        // Formatear monto con separadores de miles y dos decimales
+        const formattedPrice = Number(instock.totalPrice).toLocaleString('es-ES', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
@@ -107,13 +107,13 @@ function updateTable() {
         tbody.appendChild(tr);
     });
 
-    // 更新分页控件
+    // Actualizar controles de paginación
     updatePagination(totalPages);
 
     bindIconEvents();
 }
 
-// 更新分页控件
+// Actualizar controles de paginación
 function updatePagination(totalPages) {
     let pagination = document.querySelector('.pagination');
     if (!pagination) {
@@ -123,9 +123,9 @@ function updatePagination(totalPages) {
     }
 
     pagination.innerHTML = `
-        <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-        <span>第 ${currentPage} 页 / 共 ${totalPages} 页</span>
-        <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+        <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Página Anterior</button>
+        <span>Página ${currentPage} / Total ${totalPages}</span>
+        <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Página Siguiente</button>
     `;
 
     pagination.querySelector('.prev-btn').addEventListener('click', () => {
@@ -143,7 +143,7 @@ function updatePagination(totalPages) {
     });
 }
 
-// 重置筛选表单
+// Restablecer formulario de filtros
 function resetFilterForm() {
     document.getElementById('filterForm').reset();
     filteredData = [...purchaseInstocks];
@@ -151,12 +151,12 @@ function resetFilterForm() {
     updateTable();
 }
 
-// 显示/隐藏筛选框
+// Mostrar/Ocultar panel de filtros
 function toggleFilterPanel() {
     document.getElementById('filterPanel').classList.toggle('active');
 }
 
-// 关闭筛选框
+// Cerrar panel de filtros
 function closeFilterPanel() {
     document.getElementById('filterPanel').classList.remove('active');
 }
@@ -170,7 +170,7 @@ function init() {
     const resetBtn = filterForm.querySelector('.reset-btn');
 
     if (!addBtn || !searchBtn || !filterPanel || !closeFilter || !filterForm || !resetBtn) {
-        console.error('所需 DOM 元素未找到');
+        console.error('Elemento DOM requerido no encontrado');
         return;
     }
 
@@ -235,10 +235,10 @@ function init() {
                 requestFullscreen(docEl);
             };
         } else if (target.classList.contains('delete-icon')) {
-            if (confirm(`确定删除采购入库单：${instockCode} 吗？`)) {
+            if (confirm(`¿Seguro que desea eliminar la entrada de compra: ${instockCode}?`)) {
                 purchaseInstocks.splice(index, 1);
                 savePurchaseInstocks();
-                filteredData = [...purchaseInstocks]; // 更新筛选数据
+                filteredData = [...purchaseInstocks]; // Actualizar datos filtrados
                 updateTable();
             }
         }
@@ -247,28 +247,28 @@ function init() {
     updateTable();
 }
 
-// 封装全屏请求函数
+// Función encapsulada para solicitud de pantalla completa
 function requestFullscreen(docEl) {
     if (docEl.requestFullscreen) {
         docEl.requestFullscreen().catch(err => {
-            console.error('无法自动进入全屏模式:', err);
+            console.error('No se puede entrar en modo pantalla completa:', err);
         });
     } else if (docEl.webkitRequestFullscreen) { // Safari
         docEl.webkitRequestFullscreen().catch(err => {
-            console.error('无法自动进入全屏模式:', err);
+            console.error('No se puede entrar en modo pantalla completa:', err);
         });
     } else if (docEl.mozRequestFullScreen) { // Firefox
         docEl.mozRequestFullScreen().catch(err => {
-            console.error('无法自动进入全屏模式:', err);
+            console.error('No se puede entrar en modo pantalla completa:', err);
         });
     } else if (docEl.msRequestFullscreen) { // IE/Edge
         docEl.msRequestFullscreen().catch(err => {
-            console.error('无法自动进入全屏模式:', err);
+            console.error('No se puede entrar en modo pantalla completa:', err);
         });
     }
 }
 
-// 绑定操作图标事件
+// Vincular eventos de iconos de acción
 function bindIconEvents() {
     document.querySelectorAll('.view-icon').forEach(icon => {
         icon.removeEventListener('click', () => {});
@@ -284,7 +284,7 @@ function bindIconEvents() {
     });
 }
 
-// 监听 storage 事件以实时更新
+// Escuchar eventos de almacenamiento para actualización en tiempo real
 window.addEventListener('storage', function() {
     purchaseInstocks = JSON.parse(localStorage.getItem('purchaseInstocks')) || [];
     filteredData = [...purchaseInstocks];

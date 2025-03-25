@@ -1,22 +1,20 @@
-// 数据存储（模拟后端，可替换为 localStorage 或 API）
+// Datos (simula backend, usa localStorage)
 let payablesData = JSON.parse(localStorage.getItem('payablesData') || '[]');
 
-// DOM 元素
+// Elementos DOM
 const tbody = document.getElementById('payables-body');
 const addBtn = document.querySelector('.add-btn');
 
-// 分页相关变量
-const itemsPerPage = 9; // 每页显示9条
-let currentPage = 1; // 当前页码
+// Variables de paginación
+const itemsPerPage = 9;
+let currentPage = 1;
 
-// 页面加载时执行
+// Carga inicial
 document.addEventListener('DOMContentLoaded', function() {
-    // 初始化下拉菜单为隐藏状态
     document.querySelectorAll('.dropdown-menu').forEach(menu => {
         menu.style.display = 'none';
     });
 
-    // 下拉菜单切换功能
     document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
         toggle.addEventListener('click', function(e) {
             e.preventDefault();
@@ -40,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 点击菜单项跳转
     document.querySelectorAll('.sidebar a').forEach(link => {
         link.addEventListener('click', function(e) {
             if (this.classList.contains('dropdown-toggle')) return;
@@ -50,64 +47,56 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 点击顶部标题返回主页
     document.querySelector('.top-bar h1').addEventListener('click', function() {
         window.location.href = 'index.html';
     });
 
-    // 初始化表格
     updateTable();
 
-    // 添加应付按钮事件 - 跳转到 payableslist.html
     addBtn.addEventListener('click', () => {
         window.location.href = 'payableslist.html';
     });
 
-    // 绑定操作事件
     bindActionEvents();
 });
 
-// 更新表格（带分页）
+// Actualizar tabla con paginación
 function updateTable() {
-    // 对 payablesData 按发票号降序排序（越大越靠前），然后按日期降序排序
     payablesData.sort((a, b) => {
         const invoiceComparison = String(b.payableNo).localeCompare(String(a.payableNo));
         if (invoiceComparison !== 0) {
-            return invoiceComparison; // 如果发票号不同，按发票号降序返回
+            return invoiceComparison;
         }
         const dateA = new Date(a.invoiceDate);
         const dateB = new Date(b.invoiceDate);
         return dateB - dateA;
     });
 
-    // 计算总页数
     const totalPages = Math.ceil(payablesData.length / itemsPerPage);
 
-    // 确保当前页码有效
     if (currentPage < 1) currentPage = 1;
     if (currentPage > totalPages) currentPage = totalPages;
 
-    // 计算当前页的数据范围
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, payablesData.length);
     const currentData = payablesData.slice(startIndex, endIndex);
 
-    // 清空表格并填充当前页数据
     tbody.innerHTML = '';
     currentData.forEach((item, pageIndex) => {
-        const globalIndex = startIndex + pageIndex; // 计算全局索引
-        const tr = document.createElement('tr');
-        const formattedAmount = parseFloat(item.amount).toLocaleString('zh-CN', {
+        const globalIndex = startIndex + pageIndex;
+        const formattedAmount = parseFloat(item.amount).toLocaleString('es-ES', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
+        
+        const statusText = item.status === '已付款' ? 'Pagado' : item.status === '部分结账' ? 'Parcial' : 'No Pagado';
         
         tr.innerHTML = `
             <td>${item.payableNo || 'N/A'}</td>
             <td>${item.invoiceDate}</td>
             <td>${item.dueDate}</td>
             <td>${formattedAmount} €</td>
-            <td class="${item.status === '已付款' ? 'status-paid' : item.status === '部分结账' ? 'status-partial' : 'status-unpaid'}">${item.status || '未付款'}</td>
+            <td class="${item.status === '已付款' ? 'status-paid' : item.status === '部分结账' ? 'status-partial' : 'status-unpaid'}">${statusText}</td>
             <td>
                 <span class="action-icon view-icon" data-index="${globalIndex}"><i class="fas fa-eye"></i></span>
                 <span class="action-icon adjust-icon" data-index="${globalIndex}"><i class="fas fa-edit"></i></span>
@@ -116,24 +105,21 @@ function updateTable() {
         tbody.appendChild(tr);
     });
 
-    // 更新分页控件
     updatePagination(totalPages);
-
     bindActionEvents();
 }
 
-// 更新分页控件
+// Actualizar paginación
 function updatePagination(totalPages) {
     const pagination = document.querySelector('.pagination');
     if (!pagination) return;
 
     pagination.innerHTML = `
-        <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-        <span>第 ${currentPage} 页 / 共 ${totalPages} 页</span>
-        <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+        <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Anterior</button>
+        <span>Pág ${currentPage} / Total ${totalPages}</span>
+        <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Siguiente</button>
     `;
 
-    // 绑定分页按钮事件
     pagination.querySelector('.prev-btn').addEventListener('click', () => {
         if (currentPage > 1) {
             currentPage--;
@@ -149,13 +135,13 @@ function updatePagination(totalPages) {
     });
 }
 
-// 绑定操作事件
+// Vincular eventos de acción
 function bindActionEvents() {
     document.querySelectorAll('.view-icon').forEach(icon => {
         icon.addEventListener('click', function() {
             const index = this.getAttribute('data-index');
             const invoiceNo = payablesData[index].payableNo;
-            alert(`查看发票详情: ${invoiceNo}`);
+            alert(`Ver detalles factura: ${invoiceNo}`);
         });
     });
 

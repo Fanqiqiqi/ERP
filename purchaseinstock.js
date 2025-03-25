@@ -15,29 +15,28 @@ const theadRow = table.querySelector('thead tr');
 const totalsContainer = document.querySelector('#totals-container');
 const totalsSection = document.querySelector('.totals-section');
 
-// 获取 URL 参数
+// Obtener parámetros de URL
 const urlParams = new URLSearchParams(window.location.search);
 const instockCode = urlParams.get('instockCode');
 const isEditMode = urlParams.get('edit') === 'true';
 const isViewMode = !isEditMode && instockCode;
 
-// 临时存储生成的入库单号
+// Almacenar temporalmente el código de entrada generado
 let tempInstockCode = null;
 
-// 从产品数据中加载已有产品
+// Cargar productos existentes
 function getProducts() {
     const products = JSON.parse(localStorage.getItem('products') || '[]');
-    console.log('All registered products:', products);
+    console.log('Todos los productos registrados:', products);
     return products;
 }
 
-// 从供应商数据中加载供应商
+// Cargar proveedores
 function getSuppliers() {
     return JSON.parse(localStorage.getItem('suppliers') || '[]');
 }
 
-// 从采购报价中获取确认的新采购价格和税率
-// 从采购报价中获取确认的新采购价格和税率，并支持 fallback 到产品价格
+// Obtener precio de compra confirmado y tasa de impuesto
 function getConfirmedPurchasePriceAndTax(productCode, supplierCode) {
     const priceList = JSON.parse(localStorage.getItem('purchasePriceList') || '[]');
     const products = getProducts();
@@ -50,7 +49,7 @@ function getConfirmedPurchasePriceAndTax(productCode, supplierCode) {
 
     const product = products.find(p => p.code === productCode);
     let purchasePrice = '';
-    let taxRate = '0'; // 默认值为 '0'，不带百分比
+    let taxRate = '0';
 
     if (confirmedPrice) {
         purchasePrice = confirmedPrice.newPurchasePrice;
@@ -59,22 +58,18 @@ function getConfirmedPurchasePriceAndTax(productCode, supplierCode) {
     }
 
     if (product && product.taxRate !== undefined) {
-        taxRate = product.taxRate.toString(); // 转换为字符串，确保一致性
+        taxRate = product.taxRate.toString();
         if (!taxRate.includes('%')) {
-            // 如果没有百分比符号，且是数值，转换为百分比格式
             const rateValue = parseFloat(taxRate);
             taxRate = isNaN(rateValue) ? '0' : rateValue < 1 ? `${(rateValue * 100).toFixed(0)}%` : `${rateValue.toFixed(0)}%`;
         }
     }
 
-    console.log(`For product ${productCode} with supplier ${supplierCode}: Price = ${purchasePrice}, Tax Rate = ${taxRate}`);
-
-    return {
-        price: purchasePrice,
-        taxRate: taxRate
-    };
+    console.log(`Para producto ${productCode} con proveedor ${supplierCode}: Precio = ${purchasePrice}, Tasa = ${taxRate}`);
+    return { price: purchasePrice, taxRate: taxRate };
 }
-// 动态调整表格容器高度
+
+// Ajustar altura del contenedor de la tabla
 function adjustTableHeight() {
     const totalsSectionRect = totalsSection.getBoundingClientRect();
     const tableContainerRect = tableContainer.getBoundingClientRect();
@@ -88,10 +83,10 @@ function adjustTableHeight() {
     tableContainer.style.overflowY = tableHeight > availableHeight ? 'auto' : 'hidden';
 }
 
-// 加载供应商下拉框并初始化字段
+// Cargar proveedores en el select
 function loadSuppliers() {
     const suppliers = getSuppliers();
-    supplierCodeSelect.innerHTML = '<option value="">请选择供应商</option>';
+    supplierCodeSelect.innerHTML = '<option value="">Selecciona proveedor</option>';
     suppliers.forEach(supplier => {
         const option = document.createElement('option');
         option.value = supplier.code;
@@ -123,13 +118,13 @@ function loadSuppliers() {
     }
 }
 
-// 设置默认日期为今天
+// Establecer fecha por defecto (hoy)
 function setDefaultDate() {
     const today = new Date().toISOString().split('T')[0];
     instockDateInput.value = today;
 }
 
-// 更新总额显示
+// Actualizar totales
 function updateTotals() {
     const rows = Array.from(tbody.querySelectorAll('tr'));
     const taxGroups = {};
@@ -137,7 +132,7 @@ function updateTotals() {
 
     if (rows.length === 0) {
         const h3 = totalsContainer.parentElement.querySelector('h3');
-        h3.innerHTML = `入库总额: <span class="grand-total">0.00</span>`;
+        h3.innerHTML = `Total de Entrada: <span class="grand-total">0.00</span>`;
         totalsContainer.innerHTML = '';
         adjustTableHeight();
         return;
@@ -162,7 +157,7 @@ function updateTotals() {
     });
 
     const h3 = totalsContainer.parentElement.querySelector('h3');
-    h3.innerHTML = `入库总额: <span class="grand-total">${grandTotalWithTax.toFixed(2)}</span>`;
+    h3.innerHTML = `Total de Entrada: <span class="grand-total">${grandTotalWithTax.toFixed(2)}</span>`;
 
     totalsContainer.innerHTML = '';
     Object.keys(taxGroups).forEach(taxRate => {
@@ -170,10 +165,10 @@ function updateTotals() {
         const totalsRow = document.createElement('div');
         totalsRow.className = 'totals-row';
         totalsRow.innerHTML = `
-            <div><label>税前总价:</label><span>${group.subtotal.toFixed(2)}</span></div>
-            <div><label>税率:</label><span>${taxRate}%</span></div>
-            <div><label>税值:</label><span>${group.taxValue.toFixed(2)}</span></div>
-            <div><label>税后总价:</label><span>${group.totalWithTax.toFixed(2)}</span></div>
+            <div><label>Subtotal:</label><span>${group.subtotal.toFixed(2)}</span></div>
+            <div><label>Tasa:</label><span>${taxRate}%</span></div>
+            <div><label>Impuesto:</label><span>${group.taxValue.toFixed(2)}</span></div>
+            <div><label>Total con Impuesto:</label><span>${group.totalWithTax.toFixed(2)}</span></div>
         `;
         totalsContainer.appendChild(totalsRow);
     });
@@ -181,7 +176,7 @@ function updateTotals() {
     adjustTableHeight();
 }
 
-// 加载采购入库明细数据
+// Cargar detalles de entrada
 function loadInstockList() {
     const instockList = JSON.parse(localStorage.getItem('purchaseInstockList') || '[]');
     const products = getProducts();
@@ -190,25 +185,25 @@ function loadInstockList() {
     if (isViewMode) {
         table.classList.add('view-mode');
         theadRow.innerHTML = `
-            <th>产品代码</th>
-            <th>产品名称</th>
-            <th>采购价格</th>
-            <th>采购数量</th>
-            <th>入库数量</th>
-            <th>税率</th>
-            <th>总价</th>
+            <th>Código Producto</th>
+            <th>Nombre Producto</th>
+            <th>Precio Compra</th>
+            <th>Cantidad Compra</th>
+            <th>Cantidad Entrada</th>
+            <th>Tasa Impuesto</th>
+            <th>Total</th>
         `;
     } else {
         table.classList.remove('view-mode');
         theadRow.innerHTML = `
-            <th>产品代码</th>
-            <th>产品名称</th>
-            <th>采购价格</th>
-            <th>采购数量</th>
-            <th>入库数量</th>
-            <th>税率</th>
-            <th>总价</th>
-            <th>操作</th>
+            <th>Código Producto</th>
+            <th>Nombre Producto</th>
+            <th>Precio Compra</th>
+            <th>Cantidad Compra</th>
+            <th>Cantidad Entrada</th>
+            <th>Tasa Impuesto</th>
+            <th>Total</th>
+            <th>Acción</th>
         `;
     }
 
@@ -216,19 +211,19 @@ function loadInstockList() {
         const instocks = JSON.parse(localStorage.getItem('purchaseInstocks') || '[]');
         const instock = instocks.find(i => i.instockCode === instockCode);
         if (instock) {
-            const items = instock.items || instockList.filter(item => item.instockCode === instockCode); // Fallback to purchaseInstockList
+            const items = instock.items || instockList.filter(item => item.instockCode === instockCode);
             items.forEach((item, index) => {
                 const product = products.find(p => p.code === item.productCode);
                 const currency = product ? product.currency || '' : '';
                 const row = document.createElement('tr');
                 if (isEditMode) {
                     row.innerHTML = `
-                        <td><input type="text" class="product-code" value="${item.productCode || ''}" placeholder="输入产品代码"></td>
-                        <td><input type="text" class="product-name" value="${item.productName || ''}" placeholder="输入产品名称"></td>
+                        <td><input type="text" class="product-code" value="${item.productCode || ''}" placeholder="Código"></td>
+                        <td><input type="text" class="product-name" value="${item.productName || ''}" placeholder="Nombre"></td>
                         <td><input type="number" class="purchase-price" value="${item.purchasePrice || ''}" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
                         <td><input type="number" class="purchase-quantity" value="${item.purchaseQuantity || ''}" step="1" readonly></td>
-                        <td><input type="number" class="quantity" value="${item.quantity || ''}" placeholder="输入数量"></td>
-                        <td><input type="text" class="tax-rate" value="${item.taxRate || '0'}%" step="0.01" placeholder="输入税率 (%)"></td>
+                        <td><input type="number" class="quantity" value="${item.quantity || ''}" placeholder="Cantidad"></td>
+                        <td><input type="text" class="tax-rate" value="${item.taxRate || '0'}%" step="0.01" placeholder="Tasa (%)"></td>
                         <td><input type="number" class="total-price" value="${item.totalPrice || ''}" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
                         <td>
                             <span class="action-icon delete-icon" data-index="${index}"><i class="fas fa-trash-alt"></i></span>
@@ -268,8 +263,7 @@ function loadInstockList() {
     updateTotals();
 }
 
-// 保存采购入库明细数据到 purchaseInstocks 并更新库存
-// 保存采购入库明细数据到 purchaseInstocks 并更新库存
+// Guardar datos de entrada
 function saveInstockListToPurchaseInstocks() {
     const rows = Array.from(tbody.querySelectorAll('tr'));
     const selectedSupplierCode = supplierCodeSelect.value;
@@ -278,13 +272,12 @@ function saveInstockListToPurchaseInstocks() {
     const lote = loteInput.value.trim();
     const instockDate = instockDateInput.value.trim();
 
-    // 获取供应商名称
     const suppliers = getSuppliers();
     const selectedSupplier = suppliers.find(s => s.code === selectedSupplierCode);
-    const supplierName = selectedSupplier ? selectedSupplier.name : '未指定';
+    const supplierName = selectedSupplier ? selectedSupplier.name : 'No especificado';
 
     if (!instockCode || !selectedSupplierCode || !instockDate) {
-        alert('请确保入库单号、供应商代码和入库日期填写完整！');
+        alert('¡Asegúrate de completar el código de entrada, código de proveedor y fecha!');
         return false;
     }
 
@@ -294,7 +287,7 @@ function saveInstockListToPurchaseInstocks() {
         (!isEditMode || i.instockCode !== urlParams.get('instockCode'))
     );
     if (existingInstock) {
-        alert('该入库单号已存在，请使用不同的入库单号！');
+        alert('¡Este código de entrada ya existe, usa uno diferente!');
         return false;
     }
 
@@ -331,11 +324,11 @@ function saveInstockListToPurchaseInstocks() {
         } else {
             productCode = row.cells[0].textContent.trim();
             productName = row.cells[1].textContent.trim();
-            purchasePrice = row.cells[2].textContent.replace(/[^0-9.]/g, '').trim(); // Remove currency
+            purchasePrice = row.cells[2].textContent.replace(/[^0-9.]/g, '').trim();
             purchaseQuantity = row.cells[3].textContent.trim();
             quantity = row.cells[4].textContent.trim();
             taxRate = row.cells[5].textContent.replace('%', '').trim();
-            totalPrice = row.cells[6].textContent.replace(/[^0-9.]/g, '').trim(); // Remove currency
+            totalPrice = row.cells[6].textContent.replace(/[^0-9.]/g, '').trim();
         }
 
         if (!productCode || !productName || !purchasePrice || !quantity || !taxRate || !totalPrice) {
@@ -352,12 +345,12 @@ function saveInstockListToPurchaseInstocks() {
             totalPrice,
             instockCode: instockCode,
             supplierCode: selectedSupplierCode,
-            supplierName: supplierName // 新增供应商名称
+            supplierName: supplierName
         };
     });
 
     if (!allValid) {
-        alert('请确保所有产品信息填写完整！');
+        alert('¡Asegúrate de completar toda la información de los productos!');
         return false;
     }
 
@@ -370,7 +363,7 @@ function saveInstockListToPurchaseInstocks() {
         supplierCode: selectedSupplierCode,
         orderCode: orderCode,
         lote: lote,
-        items: instockListData, // Store all line items
+        items: instockListData,
         totalPrice: totalPrice,
         instockDate: instockDate
     };
@@ -402,11 +395,23 @@ function saveInstockListToPurchaseInstocks() {
 
     updateStockData(instockListData, lote, totalPrice);
 
+    if (orderCode) {
+        let purchaseOrders = JSON.parse(localStorage.getItem('purchaseOrders') || '[]');
+        const orderIndex = purchaseOrders.findIndex(order => order.orderCode === orderCode);
+        if (orderIndex !== -1) {
+            purchaseOrders[orderIndex].status = 'Procesado';
+            localStorage.setItem('purchaseOrders', JSON.stringify(purchaseOrders));
+            console.log(`Estado de orden ${orderCode} actualizado a 'Procesado'`);
+        } else {
+            console.warn(`Orden ${orderCode} no encontrada`);
+        }
+    }
+
     window.dispatchEvent(new Event('storage'));
     return true;
 }
 
-// 更新库存数据
+// Actualizar datos de inventario
 function updateStockData(instockListData, lote, totalPrice) {
     let stockData = JSON.parse(localStorage.getItem('stockData') || '[]');
 
@@ -422,12 +427,12 @@ function updateStockData(instockListData, lote, totalPrice) {
             stockData[existingStockIndex].quantity = parseInt(stockData[existingStockIndex].quantity) + quantity;
             stockData[existingStockIndex].amount = (parseFloat(stockData[existingStockIndex].amount) + parseFloat(amount)).toFixed(2);
             stockData[existingStockIndex].lastUpdated = new Date().toISOString().split('T')[0];
-            stockData[existingStockIndex].supplierName = item.supplierName; // 更新供应商名称
+            stockData[existingStockIndex].supplierName = item.supplierName;
         } else {
             stockData.push({
                 productCode: item.productCode,
                 productName: item.productName,
-                supplierName: item.supplierName, // 新增供应商名称
+                supplierName: item.supplierName,
                 quantity: quantity,
                 lote: lote || '',
                 amount: amount,
@@ -438,7 +443,8 @@ function updateStockData(instockListData, lote, totalPrice) {
 
     localStorage.setItem('stockData', JSON.stringify(stockData));
 }
-// 生成入库单号（仅生成，不占用）
+
+// Generar código de entrada
 function generateInstockCode() {
     const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
     const instockRule = codeRules['instock'] || { prefix: 'INS', digits: 4, suffix: '', counter: 0 };
@@ -455,14 +461,14 @@ function generateInstockCode() {
     } while (existingCodes.includes(newCode));
 
     tempInstockCode = newCode;
-    console.log('Generated temporary instock code:', newCode);
+    console.log('Código temporal generado:', newCode);
     return newCode;
 }
 
-// 添加新行（手动输入模式）
+// Agregar nueva fila (modo manual)
 addBtn.addEventListener('click', function() {
     if (orderCodeInput.value) {
-        if (!confirm('当前已有采购订单数据，手动添加将清空现有数据并进入手动模式，是否继续？')) return;
+        if (!confirm('Hay datos de orden, agregar manual borrará los datos, ¿continuar?')) return;
         tbody.innerHTML = '';
         orderCodeInput.value = '';
         supplierCodeSelect.value = '';
@@ -470,13 +476,13 @@ addBtn.addEventListener('click', function() {
     }
     const row = document.createElement('tr');
     row.innerHTML = `
-        <td><input type="text" class="product-code" placeholder="输入产品代码"></td>
-        <td><input type="text" class="product-name" placeholder="输入产品名称"></td>
-        <td><input type="number" class="purchase-price" placeholder="输入采购价格" step="0.01"> <span class="currency-span"></span></td>
-        <td><input type="number" class="purchase-quantity" placeholder="输入采购数量" step="1"></td>
-        <td><input type="number" class="quantity" placeholder="输入实际入库数量"></td>
-        <td><input type="text" class="tax-rate" placeholder="输入税率 (%)" step="0.01"></td>
-        <td><input type="number" class="total-price" placeholder="总价" step="0.01" readonly> <span class="currency-span"></span></td>
+        <td><input type="text" class="product-code" placeholder="Código"></td>
+        <td><input type="text" class="product-name" placeholder="Nombre"></td>
+        <td><input type="number" class="purchase-price" placeholder="Precio" step="0.01"> <span class="currency-span"></span></td>
+        <td><input type="number" class="purchase-quantity" placeholder="Cantidad Compra" step="1"></td>
+        <td><input type="number" class="quantity" placeholder="Cantidad Entrada"></td>
+        <td><input type="text" class="tax-rate" placeholder="Tasa (%)" step="0.01"></td>
+        <td><input type="number" class="total-price" placeholder="Total" step="0.01" readonly> <span class="currency-span"></span></td>
         <td>
             <span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span>
         </td>
@@ -488,15 +494,17 @@ addBtn.addEventListener('click', function() {
     row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 
-// 返回主页面
+// Volver a la página principal
 backBtn.addEventListener('click', function() {
     window.location.href = 'purchaseorderinstocklist.html';
     window.close();
 });
 
-// 保存所有数据并跳转回主页面
+// Guardar todo y volver
 saveAllBtn.addEventListener('click', function() {
     const rows = Array.from(tbody.querySelectorAll('tr'));
+    const loteValue = loteInput.value.trim();
+
     rows.forEach(row => {
         const codeInput = row.querySelector('.product-code');
         const nameInput = row.querySelector('.product-name');
@@ -527,18 +535,24 @@ saveAllBtn.addEventListener('click', function() {
         }
     });
 
+    if (!loteValue) {
+        if (!confirm('¿Omitir el número LOTE?')) {
+            return;
+        }
+    }
+
     if (saveInstockListToPurchaseInstocks()) {
         window.location.href = 'purchaseorderinstocklist.html';
         window.close();
     }
 });
 
-// 打印功能
+// Imprimir
 printBtn.addEventListener('click', function() {
     window.print();
 });
 
-// 绑定输入框事件（用于采购订单模式）
+// Vincular eventos de entrada (modo orden)
 function bindInputEvents(row) {
     const codeInput = row.querySelector('.product-code');
     const nameInput = row.querySelector('.product-name');
@@ -613,7 +627,6 @@ function bindInputEvents(row) {
         }, { once: true });
     });
 
-    // Existing quantity and tax rate input listeners remain unchanged
     quantityInput.addEventListener('input', function() {
         const purchasePrice = parseFloat(purchasePriceInput.value) || 0;
         const quantity = parseFloat(quantityInput.value) || 0;
@@ -638,7 +651,7 @@ function bindInputEvents(row) {
     });
 }
 
-// 绑定手动输入事件（显示所有注册产品）
+// Vincular eventos manuales
 function bindManualInputEvents(row) {
     const codeInput = row.querySelector('.product-code');
     const nameInput = row.querySelector('.product-name');
@@ -708,7 +721,6 @@ function bindManualInputEvents(row) {
         }, { once: true });
     });
 
-    // Existing listeners for price, quantity, and tax rate remain unchanged
     purchasePriceInput.addEventListener('input', function() {
         const purchasePrice = parseFloat(purchasePriceInput.value) || 0;
         const quantity = parseFloat(quantityInput.value) || 0;
@@ -752,7 +764,8 @@ function bindManualInputEvents(row) {
         updateTotals();
     });
 }
-// 绑定操作图标事件
+
+// Vincular eventos de íconos
 function bindIconEvents() {
     if (isViewMode) return;
     document.querySelectorAll('.delete-icon').forEach(icon => {
@@ -764,21 +777,21 @@ function bindIconEvents() {
 const deleteHandler = function() {
     const row = this.closest('tr');
     const productCode = row.cells[0].textContent;
-    if (confirm(`确定删除产品：${productCode} 的入库明细吗？`)) {
+    if (confirm(`¿Eliminar detalle del producto: ${productCode}?`)) {
         row.remove();
         saveInstockListToPurchaseInstocks();
         updateTotals();
     }
 };
 
-// 联动供应商代码和名称
+// Vincular código y nombre del proveedor
 supplierCodeSelect.addEventListener('change', function() {
     const suppliers = getSuppliers();
     const selectedSupplier = suppliers.find(s => s.code === this.value);
     supplierNameInput.value = selectedSupplier ? selectedSupplier.name : '';
 });
 
-// 添加供应商名称自动补全
+// Autocompletado de nombre de proveedor
 function bindSupplierAutocomplete() {
     supplierNameInput.addEventListener('input', function() {
         const value = this.value.toLowerCase();
@@ -819,7 +832,7 @@ function bindSupplierAutocomplete() {
     }, { once: true });
 }
 
-// 点击采购订单号输入框弹出采购单选择页面并接收数据
+// Abrir ventana de selección de orden
 orderCodeInput.addEventListener('click', function() {
     if (isViewMode || isEditMode) return;
     const width = screen.width;
@@ -830,7 +843,7 @@ orderCodeInput.addEventListener('click', function() {
         `width=${width},height=${height},top=0,left=0,fullscreen=yes`
     );
     window.addEventListener('message', function handler(event) {
-        console.log('Received message in purchaseinstock:', event.data);
+        console.log('Mensaje recibido:', event.data);
         if (event.data && event.data.orderCode) {
             const { orderCode, items, supplierCode } = event.data;
             orderCodeInput.value = orderCode;
@@ -846,12 +859,12 @@ orderCodeInput.addEventListener('click', function() {
                 const priceAndTax = getConfirmedPurchasePriceAndTax(item.productCode, supplierCode);
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><input type="text" class="product-code" value="${item.productCode || ''}" placeholder="输入产品代码"></td>
-                    <td><input type="text" class="product-name" value="${item.productName || ''}" placeholder="输入产品名称"></td>
+                    <td><input type="text" class="product-code" value="${item.productCode || ''}" placeholder="Código"></td>
+                    <td><input type="text" class="product-name" value="${item.productName || ''}" placeholder="Nombre"></td>
                     <td><input type="number" class="purchase-price" value="${priceAndTax.price || ''}" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
                     <td><input type="number" class="purchase-quantity" value="${item.purchaseQuantity || ''}" step="1" readonly></td>
-                    <td><input type="number" class="quantity" value="" placeholder="输入实际入库数量"></td>
-                    <td><input type="text" class="tax-rate" value="${priceAndTax.taxRate || '0%'}" step="0.01" placeholder="输入税率 (%)"></td>
+                    <td><input type="number" class="quantity" value="" placeholder="Cantidad Entrada"></td>
+                    <td><input type="text" class="tax-rate" value="${priceAndTax.taxRate || '0%'}" step="0.01" placeholder="Tasa (%)"></td>
                     <td><input type="number" class="total-price" value="" step="0.01" readonly> <span class="currency-span">${currency}</span></td>
                     <td>
                         <span class="action-icon delete-icon"><i class="fas fa-trash-alt"></i></span>
@@ -867,7 +880,7 @@ orderCodeInput.addEventListener('click', function() {
     }, { once: true });
 });
 
-// 页面加载时初始化
+// Inicialización al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
     loadSuppliers();
     loadInstockList();
@@ -886,6 +899,6 @@ document.addEventListener('DOMContentLoaded', function() {
             generateInstockCodeBtn.style.display = 'none';
         }
     } else {
-        console.error('generateInstockCodeBtn not found in DOM');
+        console.error('Botón Generar no encontrado');
     }
 });

@@ -1,149 +1,128 @@
-
-
-/* 主内容区域 */
+/* Área contenido principal */
 .content {
-    margin-left: 220px;
-    margin-top: 60px;
-    padding: 40px;
+  margin-left: 220px;
+  margin-top: 60px;
+  padding: 40px;
 }
 
 .content h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #2e3b3e;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #2e3b3e;
 }
 
 .content p {
-    font-size: 16px;
-    color: #666;
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 80px;
-    }
-    .sidebar > ul > li > a {
-        font-size: 14px;
-        padding: 10px;
-        text-align: center;
-    }
-    .dropdown-menu {
-        padding-left: 10px;
-    }
-    .dropdown-menu a {
-        font-size: 12px;
-        padding: 8px 10px;
-    }
-    .content {
-        margin-left: 80px;
-    }
-}
-/* 针对公司资料模态框的特定样式 */
-#companyProfileModal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
-  z-index: 2000;
-  justify-content: center;
-  align-items: center;
-  overflow: auto;
-}
-
-#companyProfileModal .modal-content {
-  background-color: #fff;
-  width: 90%;
-  max-width: 1200px; /* 与 supplier.css 一致 */
-  max-height: 80vh;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  animation: slideIn 0.3s ease-out;
-  overflow-x: auto;
-}
-
-#companyProfileModal .modal-content h3 {
-  font-size: 22px;
-  color: #2e3b3e;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* 表单容器 */
-#companyProfileModal .form-container {
-  display: flex;
-  flex-wrap: nowrap; /* 与 supplier.html 一致 */
-  gap: 20px;
-  justify-content: space-between;
-}
-
-/* 表单分组 */
-#companyProfileModal .form-section {
-  flex: 1;
-  min-width: 250px;
-}
-
-#companyProfileModal .form-section h4 {
   font-size: 16px;
-  color: #2e3b3e;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 5px;
+  color: #666;
 }
 
-#companyProfileModal .form-group {
-  margin-bottom: 15px;
+/* Diseño responsivo */
+@media (max-width: 768px) {
+  .sidebar {
+      width: 80px;
+  }
+  .sidebar > ul > li > a {
+      font-size: 14px;
+      padding: 10px;
+      text-align: center;
+  }
+  .dropdown-menu {
+      padding-left: 10px;
+  }
+  .dropdown-menu a {
+      font-size: 12px;
+      padding: 8px 10px;
+  }
+  .content {
+      margin-left: 80px;
+  }
 }
 
+/* Estilos específicos para modal datos empresa */
+#companyProfileModal .modal-content {
+    width: 90%;
+    max-width: 1000px; /* 适当缩小最大宽度，确保不过分占用屏幕 */
+    min-height: 600px;
+    max-height: 80vh; /* 限制最大高度，配合滚动 */
+    overflow-y: auto; /* 启用垂直滚动 */
+    padding: 2rem;
+    position: relative; /* 确保按钮定位基于此容器 */
+}
+
+#companyProfileModal .form-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 自适应列，最小宽度250px */
+    gap: 0.8rem; /* 减小间距，与HTML一致 */
+    padding-bottom: 4rem; /* 留出按钮空间 */
+}
+
+/* 确保输入框适应网格并缩小字体 */
 #companyProfileModal .form-group label {
-  display: block;
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 5px;
+    font-size: 0.9rem; /* 缩小标签字体 */
 }
 
 #companyProfileModal .form-group input,
-#companyProfileModal .form-group select {
-  width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  outline: none;
-  transition: border-color 0.3s ease;
+#companyProfileModal .form-group .dropdown-input {
+    width: 100%;
+    padding: 0.6rem; /* 稍微减小内边距 */
+    font-size: 0.9rem; /* 缩小输入框字体 */
+    border: 1px solid #ddd;
+    border-radius: 8px;
 }
 
-#companyProfileModal .form-group input:focus,
-#companyProfileModal .form-group select:focus {
+/* 调整按钮位置并确保可见 */
+#companyProfileModal .prev-btn,
+#companyProfileModal .save-btn {
+    position: absolute;
+    bottom: 15px; /* 更靠近底部，增加可见性 */
+    padding: 0.6rem 1.5rem; /* 缩小按钮尺寸 */
+    font-size: 1rem; /* 按钮字体保持可读 */
+}
+
+#companyProfileModal .prev-btn {
+    left: 20px;
+}
+
+#companyProfileModal .save-btn {
+    right: 20px;
+}
+
+/* 原有样式保留 */
+#companyProfileModal .form-section {
+  flex: 1;
+  min-width: 250px; /* Consistente con supplier.css */
+}
+
+#companyProfileModal .form-section h4 {
+  font-size: 16px; /* Consistente con supplier.css */
+  color: #2e3b3e;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd; /* Línea separación, como supplier.css */
+  padding-bottom: 5px;
+}
+
+#companyProfileModal .form-group input:focus {
   border-color: #00b4d8;
-  box-shadow: 0 0 5px rgba(0,180,216,0.3);
+  box-shadow: 0 0 5px rgba(0, 180, 216, 0.3);
 }
 
-/* 按钮样式 */
+/* Ajuste botones modal */
 #companyProfileModal .modal-buttons {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end; /* Consistente con supplier.css */
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 20px; /* Consistente con supplier.css */
 }
 
-#companyProfileModal .close-btn,
-#companyProfileModal .save-btn {
+#companyProfileModal .close-btn {
+  background-color: #e63946;
+  color: #fff;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
-}
-
-#companyProfileModal .close-btn {
-  background-color: #e63946;
-  color: #fff;
 }
 
 #companyProfileModal .close-btn:hover {
@@ -154,6 +133,12 @@
 #companyProfileModal .save-btn {
   background-color: #00b4d8;
   color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 #companyProfileModal .save-btn:hover {
@@ -164,14 +149,14 @@
 /* 响应式设计 */
 @media (max-width: 768px) {
   #companyProfileModal .modal-content {
-      width: 95%;
-      max-height: 90vh;
+    width: 95%;
+    max-height: 90vh;
+    padding: 1.5rem;
   }
   #companyProfileModal .form-container {
-      flex-wrap: wrap; /* 与 supplier.css 一致 */
+    grid-template-columns: 1fr; /* 小屏幕时单列显示 */
   }
   #companyProfileModal .form-section {
-      min-width: 100%;
+    min-width: 100%;
   }
 }
-/* 针对注册/登录区域的样式 */
