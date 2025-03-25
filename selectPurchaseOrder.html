@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>选择采购订单</title>
+    <title>Seleccionar Orden de Compra</title>
     <link rel="stylesheet" href="purchaseinstock.css"> <!-- 重用现有样式 -->
     <link rel="stylesheet" href="selectPurchaseOrder.css"> <!-- 独立样式 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -11,26 +11,26 @@
 <body>
     <div class="order-list-container">
         <div class="header-wrapper">
-            <h2>选择采购订单</h2>
-            <button class="confirm-btn">确认</button>
+            <h2>Seleccionar Orden de Compra</h2>
+            <button class="confirm-btn">Confirmar</button>
         </div>
         <div class="table-wrapper">
             <table class="order-table">
                 <thead>
                     <tr>
-                        <th>订单号码</th>
-                        <th>供应商名字</th>
-                        <th>订单金额</th>
-                        <th>采购单日期</th>
-                        <th>选择</th>
+                        <th>Número del Pedido</th>
+                        <th>Nombre del Proveedor</th>
+                        <th>Importe del Pedido</th>
+                        <th>Fecha</th>
+                        <th>Seleccionar</th>
                     </tr>
                 </thead>
                 <tbody id="orderTableBody">
-                    <!-- 动态加载采购订单 -->
+                    <!-- Carga dinámica de órdenes de compra -->
                 </tbody>
             </table>
         </div>
     </div>
     <script src="selectPurchaseOrder.js"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9256dd3fed02497a',t:'MTc0MjgyNjYwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

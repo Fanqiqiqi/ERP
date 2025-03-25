@@ -1,194 +1,150 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>应收管理</title>
+    <title>Gestión de Cuentas por Cobrar</title>
     <link rel="stylesheet" href="common.css">
     <link rel="stylesheet" href="receivables.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <header class="top-bar">
-        <h1>管理系统</h1>
-        <button class="auth-btn login-btn">登录</button>
-        <button class="auth-btn register-btn">注册</button>
-        <button class="company-profile-btn">公司资料</button>
+        <h1>Sistema de Gestión</h1>
+        <button class="company-profile-btn">Datos de Empresa</button>
     </header>
     <div class="modal" id="companyProfileModal">
         <div class="modal-content">
-          <h3>公司资料</h3>
+          <h3>Datos de Empresa</h3>
           <form id="companyProfileForm">
             <div class="form-container">
-              <!-- 第一组：基本信息 -->
+              <!-- Grupo 1: Info Básica -->
               <div class="form-section">
-                <h4>基本信息</h4>
+                <h4>Info Básica</h4>
                 <div class="form-group">
-                  <label for="companyName">公司名称</label>
+                  <label for="companyName">Nombre Empresa</label>
                   <input type="text" id="companyName" name="companyName" value="" required>
                 </div>
                 <div class="form-group">
-                  <label for="taxNumber">税号</label>
-                  <input type="text" id="taxNumber" name="taxNumber" placeholder="请输入税号" required>
+                  <label for="taxNumber">Nº Tributario</label>
+                  <input type="text" id="taxNumber" name="taxNumber" placeholder="Ingresa nº tributario" required>
                 </div>
               </div>
       
-              <!-- 第二组：地址信息 -->
+              <!-- Grupo 2: Dirección -->
               <div class="form-section">
-                <h4>地址信息</h4>
+                <h4>Dirección</h4>
                 <div class="form-group">
-                  <label for="companyAddress">地址</label>
+                  <label for="companyAddress">Dirección</label>
                   <input type="text" id="companyAddress" name="companyAddress" value="" required>
                 </div>
                 <div class="form-group">
-                  <label for="city">城市</label>
+                  <label for="city">Ciudad</label>
                   <input type="text" id="city" name="city" value="" required>
                 </div>
                 <div class="form-group">
-                  <label for="province">省份</label>
+                  <label for="province">Provincia</label>
                   <input type="text" id="province" name="province" value="" required>
                 </div>
                 <div class="form-group">
-                  <label for="country">国家</label>
+                  <label for="country">País</label>
                   <input type="text" id="country" name="country" value="" required>
                 </div>
                 <div class="form-group">
-                  <label for="postalCode">邮编</label>
+                  <label for="postalCode">Código Postal</label>
                   <input type="text" id="postalCode" name="postalCode" placeholder="" required>
                 </div>
               </div>
       
-              <!-- 第三组：联系信息 -->
+              <!-- Grupo 3: Contacto -->
               <div class="form-section">
-                <h4>联系信息</h4>
+                <h4>Contacto</h4>
                 <div class="form-group">
-                  <label for="companyPhone">电话</label>
+                  <label for="companyPhone">Teléfono</label>
                   <input type="text" id="companyPhone" name="companyPhone" value="" required>
                 </div>
                 <div class="form-group">
-                  <label for="companyEmail">电子邮件</label>
+                  <label for="companyEmail">Correo</label>
                   <input type="email" id="companyEmail" name="companyEmail" value="" required>
                 </div>
               </div>
             </div>
             <div class="modal-buttons">
-              <button type="button" class="close-btn">关闭</button>
-              <button type="submit" class="save-btn">保存</button>
+              <button type="button" class="close-btn">Cerrar</button>
+              <button type="submit" class="save-btn">Guardar</button>
             </div>
           </form>
         </div>
       </div>
-      <div class="modal" id="registerModal">
-        <div class="modal-content auth-modal">
-            <h3>注册账户</h3>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="registerEmail">电子邮箱</label>
-                    <input type="email" id="registerEmail" name="email" placeholder="请输入邮箱" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerUsername">用户名</label>
-                    <input type="text" id="registerUsername" name="username" placeholder="请输入用户名" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerPassword">密码</label>
-                    <input type="password" id="registerPassword" name="password" placeholder="请输入密码" required>
-                </div>
-                <div class="modal-buttons">
-                    <button type="button" class="close-btn">关闭</button>
-                    <button type="submit" class="save-btn auth-submit">注册</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 新增：登录模态框 -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content auth-modal">
-            <h3>登录系统</h3>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="loginIdentifier">用户名或电子邮箱</label>
-                    <input type="text" id="loginIdentifier" name="identifier" placeholder="请输入用户名或邮箱" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">密码</label>
-                    <input type="password" id="loginPassword" name="password" placeholder="请输入密码" required>
-                </div>
-                <div class="modal-buttons">
-                    <button type="button" class="close-btn">关闭</button>
-                    <button type="submit" class="save-btn auth-submit">登录</button>
-                </div>
-            </form>
-        </div>
-    </div>
     <nav class="sidebar">
         <ul>
             <li class="dropdown">
-                <a href="#system" class="dropdown-toggle">系统管理</a>
+                <a href="#system" class="dropdown-toggle">Gestión Sistema</a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" data-page="codemanagement.html">代码管理</a></li>
-                    <li><a href="#" data-page="authmanagement.html">授权管理</a></li>
+                    <li><a href="#" data-page="codemanagement.html">Gestión Códigos</a></li>
+                    <li><a href="#" data-page="authmanagement.html">Gestión Autorización</a></li>
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#customer" class="dropdown-toggle">客户管理</a>
+                <a href="#customer" class="dropdown-toggle">Gestión Clientes</a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" data-page="ccategoria.html">客户类别</a></li>
-                    <li><a href="#" data-page="customer.html">客户资料</a></li>
+                    <li><a href="#" data-page="ccategoria.html">Categoría Clientes</a></li>
+                    <li><a href="#" data-page="customer.html">Datos Clientes</a></li>
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#supplier" class="dropdown-toggle">供应商管理</a>
+                <a href="#supplier" class="dropdown-toggle">Gestión Proveedores</a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" data-page="scategoria.html">供应商类别</a></li>
-                    <li><a href="#" data-page="supplier.html">供应商资料</a></li>
+                    <li><a href="#" data-page="scategoria.html">Categoría Proveedores</a></li>
+                    <li><a href="#" data-page="supplier.html">Datos Proveedores</a></li>
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#product" class="dropdown-toggle">产品管理</a>
+                <a href="#product" class="dropdown-toggle">Gestión Productos</a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" data-page="pcategoria.html">产品类别</a></li>
-                    <li><a href="#" data-page="product.html">产品资料</a></li>
+                    <li><a href="#" data-page="pcategoria.html">Categoría Productos</a></li>
+                    <li><a href="#" data-page="brand.html">Gestión Marcas</a></li>
+                    <li><a href="#" data-page="product.html">Datos Productos</a></li>
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#price" class="dropdown-toggle">价格管理</a>
+                <a href="#price" class="dropdown-toggle">Gestión Precios</a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" data-page="prcategoria.html">价格表分类</a></li>
-                    <li><a href="#" data-page="price.html">价格表资料</a></li>
+                    <li><a href="#" data-page="prcategoria.html">Clasif. Precios</a></li>
+                    <li><a href="#" data-page="price.html">Datos Precios</a></li>
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#purchase" class="dropdown-toggle">采购管理</a>
+                <a href="#purchase" class="dropdown-toggle">Gestión Compras</a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" data-page="purchaseprice.html">采购报价管理</a></li>
-                    <li><a href="#" data-page="purchaseorder.html">采购订单管理</a></li>
-                    <li><a href="#" data-page="purchaseorderinstocklist.html">采购入库</a></li>
+                    <li><a href="#" data-page="purchaseprice.html">Gestión Cotiz. Compras</a></li>
+                    <li><a href="#" data-page="purchaseforecast.html">Previsión Compras</a></li>
+                    <li><a href="#" data-page="purchaseorder.html">Gestión Órdenes Compra</a></li>
+                    <li><a href="#" data-page="purchaseorderinstocklist.html">Entrada Compras</a></li>
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#sales" class="dropdown-toggle">销售管理</a>
+                <a href="#sales" class="dropdown-toggle">Gestión Ventas</a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" data-page="cotation.html">报价管理</a></li>
-                    <li><a href="#" data-page="order.html">订单管理</a></li>
-                    <li><a href="#" data-page="despatch.html">出货管理</a></li>
+                    <li><a href="#" data-page="cotation.html">Gestión Cotizaciones</a></li>
+                    <li><a href="#" data-page="order.html">Gestión Pedidos</a></li>
+                    <li><a href="#" data-page="despatch.html">Gestión Envíos</a></li>
                 </ul>
             </li>
-            <li><a href="#" data-page="stockmanagement.html">库存管理</a></li>
+            <li><a href="#" data-page="stockmanagement.html">Gestión Inventario</a></li>
             <li class="dropdown">
-                <a href="#invoice" class="dropdown-toggle">发票管理</a>
+                <a href="#invoice" class="dropdown-toggle">Gestión Facturas</a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" data-page="salesinvoicelist.html">销售发票</a></li>
-                    <li><a href="#" data-page="purchaseinvoice.html">采购发票</a></li>
+                    <li><a href="#" data-page="salesinvoicelist.html">Facturas Ventas</a></li>
+                    <li><a href="#" data-page="purchaseinvoice.html">Facturas Compras</a></li>
                 </ul>
             </li>
             <li class="dropdown">
-                <a href="#finance" class="dropdown-toggle">财务管理</a>
+                <a href="#finance" class="dropdown-toggle">Gestión Finanzas</a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" data-page="receivables.html">应收管理</a></li>
-                    <li><a href="#" data-page="payables.html">应付管理</a></li>
-                    <li><a href="#" data-page="financialreport.html">财务报表</a></li>
+                    <li><a href="#" data-page="receivables.html">Ctas. por Cobrar</a></li>
+                    <li><a href="#" data-page="payables.html">Ctas. por Pagar</a></li>
+                    <li><a href="#" data-page="financialreport.html">Informes Financieros</a></li>
                 </ul>
             </li>
         </ul>
@@ -196,115 +152,115 @@
     <main class="content">
         <div class="content-wrapper">
             <div class="table-header">
-                <h2>应收账款列表</h2>
+                <h2>Lista Ctas. por Cobrar</h2>
                 <div class="button-group">
-                    <button class="search-btn">查询</button>
-                    <button class="add-btn">添加应收</button>
+                    <button class="search-btn">Buscar</button>
+                    <button class="add-btn">Añadir Cuenta</button>
                 </div>
             </div>
             <div class="table-container">
                 <table class="receivables-table">
                     <thead>
                         <tr>
-                            <th>发票号</th>
-                            <th>客户</th>
-                            <th>日期</th>
-                            <th>到期日期</th>
-                            <th>金额</th>
-                            <th>付款状态</th>
-                            <th>操作</th>
+                            <th>Nº Factura</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th>Fecha Venc.</th>
+                            <th>Monto</th>
+                            <th>Estado Pago</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
                     <tbody id="receivables-body">
-                        <!-- 数据将由 JavaScript 动态填充 -->
+                        <!-- Datos generados por JS -->
                     </tbody>
                 </table>
             </div>
             <div class="pagination">
-                <button class="page-btn prev-btn" disabled>上一页</button>
-                <span>第 1 页 / 共 1 页</span>
-                <button class="page-btn next-btn" disabled>下一页</button>
+                <button class="page-btn prev-btn" disabled>Anterior</button>
+                <span>Pág. 1 / Total 1</span>
+                <button class="page-btn next-btn" disabled>Siguiente</button>
             </div>
         </div>
 
-        <!-- 筛选框 -->
+        <!-- Panel Filtros -->
         <div class="filter-panel" id="filterPanel">
             <div class="filter-header">
-                <h3>筛选条件</h3>
+                <h3>Filtros</h3>
                 <span class="close-filter"><i class="fas fa-arrow-right"></i></span>
             </div>
             <form id="filterForm">
                 <div class="filter-content">
                     <div class="form-group">
-                        <label for="filterCustomerName">客户名称</label>
-                        <input type="text" id="filterCustomerName" name="customerName" placeholder="请输入客户名称">
+                        <label for="filterCustomerName">Nombre Cliente</label>
+                        <input type="text" id="filterCustomerName" name="customerName" placeholder="Ingresa nombre cliente">
                     </div>
                     <div class="form-group">
-                        <label>发票日期</label>
+                        <label>Fecha Factura</label>
                         <div class="date-range">
-                            <input type="date" id="filterInvoiceDateFrom" name="invoiceDateFrom" placeholder="从">
-                            <span>至</span>
-                            <input type="date" id="filterInvoiceDateTo" name="invoiceDateTo" placeholder="到">
+                            <input type="date" id="filterInvoiceDateFrom" name="invoiceDateFrom" placeholder="Desde">
+                            <span>a</span>
+                            <input type="date" id="filterInvoiceDateTo" name="invoiceDateTo" placeholder="Hasta">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>到期日期</label>
+                        <label>Fecha Venc.</label>
                         <div class="date-range">
-                            <input type="date" id="filterDueDateFrom" name="dueDateFrom" placeholder="从">
-                            <span>至</span>
-                            <input type="date" id="filterDueDateTo" name="dueDateTo" placeholder="到">
+                            <input type="date" id="filterDueDateFrom" name="dueDateFrom" placeholder="Desde">
+                            <span>a</span>
+                            <input type="date" id="filterDueDateTo" name="dueDateTo" placeholder="Hasta">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="filterStatus">付款状态</label>
+                        <label for="filterStatus">Estado Pago</label>
                         <select id="filterStatus" name="status">
-                            <option value="">全部</option>
-                            <option value="未付款">未付款</option>
-                            <option value="已付款">已付款</option>
-                            <option value="部分结账">部分结账</option>
+                            <option value="">Todos</option>
+                            <option value="No Pagado">No Pagado</option>
+                            <option value="Pagado">Pagado</option>
+                            <option value="Parcial">Parcial</option>
                         </select>
                     </div>
                 </div>
                 <div class="filter-footer">
                     <div class="filter-buttons">
-                        <button type="button" class="reset-btn">重置</button>
-                        <button type="submit" class="confirm-btn">确认</button>
+                        <button type="button" class="reset-btn">Reiniciar</button>
+                        <button type="submit" class="confirm-btn">Confirmar</button>
                     </div>
                 </div>
             </form>
         </div>
 
-        <!-- 添加应收模态框 -->
+        <!-- Modal Añadir Cuenta -->
         <div class="modal" id="addReceivableModal">
             <div class="modal-content">
-                <h3>添加应收</h3>
+                <h3>Añadir Cuenta</h3>
                 <form id="addReceivableForm">
                     <div class="form-group">
-                        <label for="invoiceNo">发票号</label>
-                        <input type="text" id="invoiceNo" name="invoiceNo" placeholder="请输入发票号" required>
+                        <label for="invoiceNo">Nº Factura</label>
+                        <input type="text" id="invoiceNo" name="invoiceNo" placeholder="Ingresa nº factura" required>
                     </div>
                     <div class="form-group">
-                        <label for="invoiceDate">发票日期</label>
+                        <label for="invoiceDate">Fecha Factura</label>
                         <input type="date" id="invoiceDate" name="invoiceDate" required>
                     </div>
                     <div class="form-group">
-                        <label for="dueDate">发票到期日期</label>
+                        <label for="dueDate">Fecha Venc.</label>
                         <input type="date" id="dueDate" name="dueDate" required>
                     </div>
                     <div class="form-group">
-                        <label for="amount">金额</label>
-                        <input type="number" id="amount" name="amount" placeholder="请输入金额" step="0.01" required>
+                        <label for="amount">Monto</label>
+                        <input type="number" id="amount" name="amount" placeholder="Ingresa monto" step="0.01" required>
                     </div>
                     <div class="form-group">
-                        <label for="status">付款状态</label>
+                        <label for="status">Estado Pago</label>
                         <select id="status" name="status" required>
-                            <option value="未付款">未付款</option>
-                            <option value="已付款">已付款</option>
+                            <option value="No Pagado">No Pagado</option>
+                            <option value="Pagado">Pagado</option>
                         </select>
                     </div>
                     <div class="modal-buttons">
-                        <button type="button" class="cancel-btn">取消</button>
-                        <button type="submit" class="save-btn">保存</button>
+                        <button type="button" class="cancel-btn">Cancelar</button>
+                        <button type="submit" class="save-btn">Guardar</button>
                     </div>
                 </form>
             </div>
@@ -312,7 +268,5 @@
     </main>
     <script src="common.js"></script>
     <script src="receivables.js"></script>
-
-
 </body>
 </html>

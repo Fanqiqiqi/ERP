@@ -1,5 +1,4 @@
-
-/* 主内容区域 */
+/* Área de contenido principal */
 .content {
     margin-left: 220px;
     margin-top: 60px;
@@ -9,11 +8,11 @@
 .content-wrapper {
     position: relative;
     min-height: calc(100vh - 60px);
-    padding-bottom: 60px; /* 为分页控件留出空间 */
+    padding-bottom: 60px; /* Espacio para controles de paginación */
 }
 
 .table-container {
-    min-height: 360px; /* 每行约40px，9行约为360px，即使列表为空也保持高度 */
+    min-height: 360px; /* Cada fila aprox. 40px, 9 filas = 360px, mantiene altura incluso si la lista está vacía */
 }
 
 .table-header {
@@ -25,8 +24,8 @@
 
 .button-group {
     display: flex;
-    gap: 5px; /* 按钮之间的间距设置为 5px */
-    margin-left: auto; /* 将按钮组推到右侧 */
+    gap: 5px; /* Espacio entre botones = 5px */
+    margin-left: auto; /* Empuja el grupo de botones a la derecha */
 }
 
 .table-header h2 {
@@ -66,7 +65,7 @@
     transform: scale(1.05);
 }
 
-/* 表格样式 */
+/* Estilos de la tabla */
 .invoice-table {
     width: 100%;
     border-collapse: collapse;
@@ -89,18 +88,18 @@
     border-bottom: 1px solid #ddd;
 }
 
-.invoice-table th:nth-child(1), .invoice-table td:nth-child(1) { width: 15%; } /* 发票号码 */
-.invoice-table th:nth-child(2), .invoice-table td:nth-child(2) { width: 25%; } /* 客户名称 */
-.invoice-table th:nth-child(3), .invoice-table td:nth-child(3) { width: 15%; } /* 发票日期 */
-.invoice-table th:nth-child(4), .invoice-table td:nth-child(4) { width: 15%; } /* 到期日期 */
-.invoice-table th:nth-child(5), .invoice-table td:nth-child(5) { width: 15%; } /* 发票金额 */
-.invoice-table th:nth-child(6), .invoice-table td:nth-child(6) { width: 15%; } /* 操作 */
+.invoice-table th:nth-child(1), .invoice-table td:nth-child(1) { width: 15%; } /* Nº de Factura */
+.invoice-table th:nth-child(2), .invoice-table td:nth-child(2) { width: 25%; } /* Nombre del Cliente */
+.invoice-table th:nth-child(3), .invoice-table td:nth-child(3) { width: 15%; } /* Fecha de Factura */
+.invoice-table th:nth-child(4), .invoice-table td:nth-child(4) { width: 15%; } /* Fecha de Vencimiento */
+.invoice-table th:nth-child(5), .invoice-table td:nth-child(5) { width: 15%; } /* Monto de Factura */
+.invoice-table th:nth-child(6), .invoice-table td:nth-child(6) { width: 15%; } /* Operaciones */
 
 .invoice-table tr:hover {
     background-color: #f9f9f9;
 }
 
-/* 操作图标 */
+/* Iconos de acción */
 .action-icon {
     margin: 0 8px;
     cursor: pointer;
@@ -117,16 +116,16 @@
     transform: scale(1.2);
 }
 
-.edit-icon {
-    color: #ff9800;
+.einvoice-icon {
+    color: #4caf50; /* Verde para factura electrónica */
 }
 
-.edit-icon:hover {
-    color: #e68900;
+.einvoice-icon:hover {
+    color: #45a049;
     transform: scale(1.2);
 }
 
-/* 模态框样式 */
+/* Estilos del modal */
 .modal {
     display: none;
     position: fixed;
@@ -142,7 +141,7 @@
 
 .modal-content {
     background-color: #fff;
-    width: 700px; /* 增加宽度以容纳更多内容 */
+    width: 700px; /* Ancho mayor para más contenido */
     max-height: 85vh;
     overflow-y: auto;
     padding: 20px;
@@ -187,7 +186,7 @@
     margin-right: 5px;
 }
 
-/* 详情表格样式 */
+/* Estilos de la tabla de detalles */
 .detail-table {
     width: 100%;
     border-collapse: collapse;
@@ -213,7 +212,7 @@
     background-color: #f9f9f9;
 }
 
-/* 关闭按钮样式 */
+/* Estilos del botón de cerrar */
 .modal-buttons {
     text-align: center;
 }
@@ -235,7 +234,7 @@
     transform: translateY(-2px);
 }
 
-/* 分页控件样式 */
+/* Estilos de los controles de paginación */
 .pagination {
     position: fixed;
     bottom: 0;
@@ -277,7 +276,7 @@
     color: #2e3b3e;
 }
 
-/* 滑入动画 */
+/* Animación de entrada */
 @keyframes slideIn {
     from {
         transform: translateY(-50px);
@@ -289,11 +288,11 @@
     }
 }
 
-/* 筛选框样式 */
+/* Estilos del panel de filtros */
 .filter-panel {
     position: fixed;
-    top: 60px; /* 与顶部横条对齐 */
-    right: -400px; /* 默认隐藏在右侧 */
+    top: 60px; /* Alineado con la barra superior */
+    right: -400px; /* Oculto por defecto a la derecha */
     width: 400px;
     height: calc(100vh - 60px);
     background-color: #fff;
@@ -307,7 +306,7 @@
 }
 
 .filter-panel.active {
-    right: 0; /* 激活时滑入 */
+    right: 0; /* Se desliza al activarse */
 }
 
 .filter-header {
@@ -335,8 +334,8 @@
 }
 
 .filter-content {
-    flex: 1; /* 占据剩余空间 */
-    overflow-y: auto; /* 内容超出时滚动 */
+    flex: 1; /* Ocupa el espacio restante */
+    overflow-y: auto; /* Desplazamiento si el contenido excede */
 }
 
 .form-group {
@@ -375,8 +374,8 @@
 }
 
 .filter-footer {
-    padding-top: 120px; /* 与上方内容保持间距 */
-    padding-bottom: 0px; /* 底部留出合理间距 */
+    padding-top: 120px; /* Espacio con el contenido superior */
+    padding-bottom: 0px; /* Espacio razonable en la parte inferior */
 }
 
 .filter-buttons {
@@ -419,7 +418,7 @@
     transform: scale(1.05);
 }
 
-/* 响应式 */
+/* Responsive */
 @media (max-width: 768px) {
     .sidebar {
         width: 80px;
@@ -457,8 +456,8 @@
     }
     .button-group {
         margin-top: 10px;
-        margin-left: 0; /* 重置 margin-left */
-        align-self: flex-end; /* 按钮组靠右 */
+        margin-left: 0; /* Resetea margin-left */
+        align-self: flex-end; /* Grupo de botones a la derecha */
     }
     .modal-content {
         width: 90%;
@@ -470,11 +469,11 @@
         font-size: 12px;
     }
     .pagination {
-        left: 80px; /* 与响应式 sidebar 宽度一致 */
+        left: 80px; /* Consistente con el ancho responsive del sidebar */
     }
     .filter-panel {
-        width: 300px; /* 在小屏幕上缩小宽度 */
-        right: -300px; /* 调整隐藏位置 */
+        width: 300px; /* Reduce ancho en pantallas pequeñas */
+        right: -300px; /* Ajusta posición oculta */
     }
     .filter-panel.active {
         right: 0;
@@ -488,7 +487,8 @@
         width: 100%;
     }
 }
-/* 针对公司资料模态框的特定样式 */
+
+/* Estilos específicos del modal de datos de la empresa */
 #companyProfileModal {
     display: none;
     position: fixed;
@@ -506,7 +506,7 @@
 #companyProfileModal .modal-content {
     background-color: #fff;
     width: 90%;
-    max-width: 1200px; /* 与 supplier.css 一致 */
+    max-width: 1200px; /* Consistente con supplier.css */
     max-height: 80vh;
     padding: 20px;
     border-radius: 10px;
@@ -522,15 +522,15 @@
     text-align: center;
 }
 
-/* 表单容器 */
+/* Contenedor del formulario */
 #companyProfileModal .form-container {
     display: flex;
-    flex-wrap: nowrap; /* 与 supplier.html 一致 */
+    flex-wrap: nowrap; /* Consistente con supplier.html */
     gap: 20px;
     justify-content: space-between;
 }
 
-/* 表单分组 */
+/* Sección del formulario */
 #companyProfileModal .form-section {
     flex: 1;
     min-width: 250px;
@@ -572,7 +572,7 @@
     box-shadow: 0 0 5px rgba(0,180,216,0.3);
 }
 
-/* 按钮样式 */
+/* Estilos de botones */
 #companyProfileModal .modal-buttons {
     display: flex;
     justify-content: flex-end;
@@ -610,14 +610,14 @@
     transform: translateY(-2px);
 }
 
-/* 响应式设计 */
+/* Diseño responsive */
 @media (max-width: 768px) {
     #companyProfileModal .modal-content {
         width: 95%;
         max-height: 90vh;
     }
     #companyProfileModal .form-container {
-        flex-wrap: wrap; /* 与 supplier.css 一致 */
+        flex-wrap: wrap; /* Consistente con supplier.css */
     }
     #companyProfileModal .form-section {
         min-width: 100%;

@@ -1,5 +1,3 @@
-
-
 /* 主内容区域 */
 .content {
     margin-left: 220px;
@@ -54,48 +52,47 @@
 }
 
 .receivables-table th {
-    padding: 12px 10px; /* 减小内边距以适应更多列 */
+    padding: 12px 10px;
     text-align: center;
     border-bottom: 1px solid #ddd;
     background-color: #f8f8f8;
     font-weight: 600;
     color: #2e3b3e;
-    width: 14%; /* 设置每列平均宽度，7列共100% */
+    width: 14%;
 }
 
 .receivables-table td {
-    padding: 12px 10px; /* 减小内边距以适应更多列 */
+    padding: 12px 10px;
     text-align: center;
     border-bottom: 1px solid #ddd;
-    width: 14%; /* 设置每列平均宽度，7列共100% */
+    width: 14%;
 }
 
-/* 针对特定列微调宽度 */
-.receivables-table th:nth-child(1), /* 发票号 */
+.receivables-table th:nth-child(1),
 .receivables-table td:nth-child(1) {
     width: 15%;
 }
-.receivables-table th:nth-child(2), /* 客户 */
+.receivables-table th:nth-child(2),
 .receivables-table td:nth-child(2) {
     width: 20%;
 }
-.receivables-table th:nth-child(3), /* 日期 */
+.receivables-table th:nth-child(3),
 .receivables-table td:nth-child(3) {
     width: 15%;
 }
-.receivables-table th:nth-child(4), /* 到期日期 */
+.receivables-table th:nth-child(4),
 .receivables-table td:nth-child(4) {
     width: 15%;
 }
-.receivables-table th:nth-child(5), /* 金额 */
+.receivables-table th:nth-child(5),
 .receivables-table td:nth-child(5) {
     width: 15%;
 }
-.receivables-table th:nth-child(6), /* 付款状态 */
+.receivables-table th:nth-child(6),
 .receivables-table td:nth-child(6) {
     width: 15%;
 }
-.receivables-table th:nth-child(7), /* 操作 */
+.receivables-table th:nth-child(7),
 .receivables-table td:nth-child(7) {
     width: 10%;
 }
@@ -253,7 +250,7 @@
 .pagination {
     position: fixed;
     bottom: 0;
-    left: 220px; /* 与 sidebar 宽度一致 */
+    left: 220px;
     right: 0;
     background-color: #fff;
     padding: 10px 0;
@@ -313,9 +310,9 @@
     }
     .receivables-table th,
     .receivables-table td {
-        font-size: 12px; /* 减小字体以适应更多列 */
+        font-size: 12px;
         padding: 8px 5px;
-        width: 14%; /* 保持平均分配 */
+        width: 14%;
     }
     .action-icon {
         font-size: 14px;
@@ -330,13 +327,11 @@
         align-self: flex-end;
     }
     .pagination {
-        left: 80px; /* 与响应式 sidebar 宽度一致 */
+        left: 80px;
     }
 }
-/* receivables.css */
-/* 保持原有样式不变，仅追加以下内容 */
 
-/* 添加 button-group 和 search-btn 样式 */
+/* receivables.css */
 .button-group {
     display: flex;
     gap: 5px;
@@ -516,58 +511,58 @@
         align-self: flex-end;
     }
 }
-/* 针对公司资料模态框的特定样式 */
+
+/* 公司资料模态框样式 */
 #companyProfileModal .modal-content {
     width: 90%;
-    max-width: 1200px; /* 与 supplier.css 一致 */
+    max-width: 1200px;
     max-height: 80vh;
-    overflow-x: auto; /* 支持水平滚动 */
-  }
-  
-  #companyProfileModal .form-container {
+    overflow-x: auto;
+}
+
+#companyProfileModal .form-container {
     display: flex;
-    flex-wrap: nowrap; /* 不换行，与 supplier.css 一致 */
+    flex-wrap: nowrap;
     gap: 20px;
     justify-content: space-between;
-  }
-  
-  #companyProfileModal .form-section {
+}
+
+#companyProfileModal .form-section {
     flex: 1;
-    min-width: 250px; /* 与 supplier.css 一致 */
-  }
-  
-  #companyProfileModal .form-section h4 {
-    font-size: 16px; /* 与 supplier.css 一致 */
+    min-width: 250px;
+}
+
+#companyProfileModal .form-section h4 {
+    font-size: 16px;
     color: #2e3b3e;
     margin-bottom: 15px;
-    border-bottom: 1px solid #ddd; /* 添加分隔线，与 supplier.css 一致 */
+    border-bottom: 1px solid #ddd;
     padding-bottom: 5px;
-  }
-  
-  #companyProfileModal .form-group input {
+}
+
+#companyProfileModal .form-group input {
     width: 100%;
-    padding: 8px; /* 与 supplier.css 一致 */
-    font-size: 14px; /* 与 supplier.css 一致 */
+    padding: 8px;
+    font-size: 14px;
     border: 1px solid #ddd;
     border-radius: 5px;
     outline: none;
     transition: border-color 0.3s ease;
-  }
-  
-  #companyProfileModal .form-group input:focus {
+}
+
+#companyProfileModal .form-group input:focus {
     border-color: #00b4d8;
     box-shadow: 0 0 5px rgba(0, 180, 216, 0.3);
-  }
-  
-  /* 调整模态框按钮样式 */
-  #companyProfileModal .modal-buttons {
+}
+
+#companyProfileModal .modal-buttons {
     display: flex;
-    justify-content: flex-end; /* 与 supplier.css 一致 */
+    justify-content: flex-end;
     gap: 10px;
-    margin-top: 20px; /* 与 supplier.css 一致 */
-  }
-  
-  #companyProfileModal .close-btn {
+    margin-top: 20px;
+}
+
+#companyProfileModal .close-btn {
     background-color: #e63946;
     color: #fff;
     padding: 10px 20px;
@@ -576,14 +571,14 @@
     font-size: 16px;
     cursor: pointer;
     transition: background 0.3s ease, transform 0.2s ease;
-  }
-  
-  #companyProfileModal .close-btn:hover {
+}
+
+#companyProfileModal .close-btn:hover {
     background-color: #b32d38;
     transform: translateY(-2px);
-  }
-  
-  #companyProfileModal .save-btn {
+}
+
+#companyProfileModal .save-btn {
     background-color: #00b4d8;
     color: #fff;
     padding: 10px 20px;
@@ -592,23 +587,22 @@
     font-size: 16px;
     cursor: pointer;
     transition: background 0.3s ease, transform 0.2s ease;
-  }
-  
-  #companyProfileModal .save-btn:hover {
+}
+
+#companyProfileModal .save-btn:hover {
     background-color: #0093b3;
     transform: translateY(-2px);
-  }
-  
-  /* 响应式设计 */
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     #companyProfileModal .modal-content {
       width: 95%;
       max-height: 90vh;
     }
     #companyProfileModal .form-container {
-      flex-wrap: wrap; /* 在小屏幕下允许换行，与 supplier.css 一致 */
+      flex-wrap: wrap;
     }
     #companyProfileModal .form-section {
       min-width: 100%;
     }
-  }
+}

@@ -1,5 +1,3 @@
-
-
 let stockData = JSON.parse(localStorage.getItem('stockData')) || [];
 
 const tbody = document.getElementById('stockTableBody');
@@ -12,10 +10,23 @@ const filterPanel = document.getElementById('filterPanel');
 const closeFilter = filterPanel.querySelector('.close-filter');
 const filterForm = document.getElementById('filterForm');
 const resetBtn = filterForm.querySelector('.reset-btn');
+const totalStockValue = document.getElementById('totalStockValue'); // 新增：获取总金额元素
 
 const itemsPerPage = 9;
 let currentPage = 1;
-let filteredData = [...stockData]; // 用于筛选的数据副本
+let filteredData = [...stockData];
+
+// 新增：计算库存总金额
+function calculateTotalStockValue(data) {
+  const total = data.reduce((sum, item) => {
+    const amount = parseFloat(item.amount || '0.00');
+    return sum + amount;
+  }, 0);
+  return total.toLocaleString('es-ES', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
 
 function updateTable() {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -29,16 +40,16 @@ function updateTable() {
 
   tbody.innerHTML = '';
   currentData.forEach((item, pageIndex) => {
-    const globalIndex = stockData.indexOf(item); // 使用原始数据中的索引
-    const tr = document.createElement('tr');
-    const formattedAmount = parseFloat(item.amount || '0.00').toLocaleString('zh-CN', {
+    const globalIndex = stockData.indexOf(item);
+    const formattedAmount = parseFloat(item.amount || '0.00').toLocaleString('es-ES', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
+    const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${item.productCode}</td>
       <td>${item.productName}</td>
-      <td>${item.supplierName || '未指定'}</td> <!-- 新增供应商名称 -->
+      <td>${item.supplierName || 'No especificado'}</td>
       <td>${item.quantity}</td>
       <td>${item.lote || ''}</td>
       <td>${formattedAmount} €</td>
@@ -51,6 +62,9 @@ function updateTable() {
     tbody.appendChild(tr);
   });
 
+  // 更新总金额显示
+  totalStockValue.textContent = `Total: ${calculateTotalStockValue(filteredData)} €`;
+
   updatePagination(totalPages);
   bindActionEvents();
 }
@@ -60,9 +74,9 @@ function updatePagination(totalPages) {
   if (!pagination) return;
 
   pagination.innerHTML = `
-    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-    <span>第 ${currentPage} 页 / 共 ${totalPages} 页</span>
-    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Página Anterior</button>
+    <span>Página ${currentPage} / Total ${totalPages}</span>
+    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Página Siguiente</button>
   `;
 
   pagination.querySelector('.prev-btn').addEventListener('click', () => {
@@ -82,13 +96,14 @@ function updatePagination(totalPages) {
 
 function saveStockData() {
   localStorage.setItem('stockData', JSON.stringify(stockData));
+  console.log('StockData guardado:', stockData);
 }
 
 function bindActionEvents() {
   document.querySelectorAll('.view-icon').forEach(icon => {
     icon.addEventListener('click', function() {
       const index = this.getAttribute('data-index');
-      alert(`查看库存详情: ${stockData[index].productName}`);
+      alert(`Ver detalles del inventario: ${stockData[index].productName}`);
     });
   });
 
@@ -104,17 +119,16 @@ function bindActionEvents() {
   document.querySelectorAll('.delete-icon').forEach(icon => {
     icon.addEventListener('click', function() {
       const index = this.getAttribute('data-index');
-      if (confirm(`确定要删除 ${stockData[index].productName} 吗？`)) {
+      if (confirm(`¿Seguro que desea eliminar ${stockData[index].productName}?`)) {
         stockData.splice(index, 1);
         saveStockData();
-        filteredData = [...stockData]; // 同步更新筛选数据
+        filteredData = [...stockData];
         updateTable();
       }
     });
   });
 }
 
-// 新增筛选功能：应用筛选条件
 function applyFilters(formData) {
   const filters = {
     productCode: formData.get('productCode')?.toLowerCase().trim(),
@@ -141,17 +155,14 @@ function applyFilters(formData) {
   });
 }
 
-// 显示/隐藏筛选框
 function toggleFilterPanel() {
   filterPanel.classList.toggle('active');
 }
 
-// 关闭筛选框
 function closeFilterPanel() {
   filterPanel.classList.remove('active');
 }
 
-// 重置筛选表单
 function resetFilterForm() {
   filterForm.reset();
   filteredData = [...stockData];
@@ -184,7 +195,7 @@ function init() {
     } else {
       stockData.push({
         productCode,
-        productName: `未知产品_${productCode}`,
+        productName: `Producto desconocido_${productCode}`,
         quantity: adjustQuantity,
         lote: '',
         amount: '0.00',
@@ -193,12 +204,11 @@ function init() {
     }
 
     saveStockData();
-    filteredData = [...stockData]; // 同步更新筛选数据
+    filteredData = [...stockData];
     updateTable();
     modal.style.display = 'none';
   });
 
-  // 新增筛选功能的事件绑定
   searchBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleFilterPanel();
@@ -231,6 +241,13 @@ function init() {
 
   filterPanel.addEventListener('click', (e) => {
     e.stopPropagation();
+  });
+
+  window.addEventListener('storage', function() {
+    stockData = JSON.parse(localStorage.getItem('stockData')) || [];
+    filteredData = [...stockData];
+    updateTable();
+    console.log('StockData actualizado en tiempo real:', stockData);
   });
 }
 

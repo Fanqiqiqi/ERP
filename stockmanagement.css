@@ -24,15 +24,22 @@
     margin-bottom: 20px;
 }
 
+.table-header h2 {
+    font-size: 28px;
+    color: #2e3b3e;
+    margin: 0; /* 移除默认边距 */
+}
+
+#totalStockValue {
+    font-size: 20px;
+    color: #2e3b3e;
+    margin-left: 20px;
+}
+
 .button-group {
     display: flex;
     gap: 5px;
     margin-left: auto;
-}
-
-.table-header h2 {
-    font-size: 28px;
-    color: #2e3b3e;
 }
 
 .adjust-btn {

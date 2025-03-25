@@ -3,33 +3,33 @@ const orderTableBody = document.getElementById('orderTableBody');
 const confirmBtn = document.querySelector('.confirm-btn');
 let selectedOrder = null;
 
-// 从 localStorage 获取采购订单数据
+// Obtener datos de órdenes de compra desde localStorage
 function getPurchaseOrders() {
     return JSON.parse(localStorage.getItem('purchaseOrders') || '[]');
 }
 
-// 获取供应商名字
+// Obtener nombre del proveedor
 function getSupplierName(supplierCode) {
     const suppliers = JSON.parse(localStorage.getItem('suppliers') || '[]');
     const supplier = suppliers.find(s => s.code === supplierCode);
-    return supplier ? supplier.name : '未知供应商';
+    return supplier ? supplier.name : 'Proveedor desconocido';
 }
 
-// 从 purchaseOrderList 获取订单明细
+// Obtener detalles de la orden desde purchaseOrderList
 function getOrderItems(orderCode) {
     const orderList = JSON.parse(localStorage.getItem('purchaseOrderList') || '[]');
     return orderList.filter(item => item.orderCode === orderCode);
 }
 
-// 加载采购订单列表
+// Cargar lista de órdenes de compra, filtrando las procesadas
 function loadOrderList() {
-    const orders = getPurchaseOrders();
+    const orders = getPurchaseOrders().filter(order => order.status !== 'Procesado'); // Filtro de estado
     orderTableBody.innerHTML = '';
-    confirmBtn.disabled = true; // 初始禁用确认按钮
+    confirmBtn.disabled = true; // Botón desactivado inicialmente
 
     orders.forEach((order, index) => {
         const row = document.createElement('tr');
-        const items = getOrderItems(order.orderCode); // 获取订单明细
+        const items = getOrderItems(order.orderCode); // Obtener detalles
         const totalAmount = items.reduce((sum, item) => sum + parseFloat(item.totalPrice || 0), 0).toFixed(2);
         row.innerHTML = `
             <td>${order.orderCode || ''}</td>
@@ -41,19 +41,19 @@ function loadOrderList() {
         orderTableBody.appendChild(row);
     });
 
-    // 为小圆圈添加点击事件
+    // Añadir evento de clic a los círculos
     document.querySelectorAll('.radio-circle').forEach(circle => {
         circle.addEventListener('click', function() {
             document.querySelectorAll('.radio-circle').forEach(c => c.classList.remove('selected'));
             this.classList.add('selected');
             selectedOrder = orders[this.getAttribute('data-index')];
-            selectedOrder.items = getOrderItems(selectedOrder.orderCode); // 添加订单明细到 selectedOrder
-            confirmBtn.disabled = false; // 启用确认按钮
+            selectedOrder.items = getOrderItems(selectedOrder.orderCode); // Añadir detalles a selectedOrder
+            confirmBtn.disabled = false; // Activar botón
         });
     });
 }
 
-// 确认按钮点击事件
+// Evento de clic en el botón Confirmar
 confirmBtn.addEventListener('click', function() {
     if (selectedOrder) {
         const message = {
@@ -68,7 +68,7 @@ confirmBtn.addEventListener('click', function() {
             })),
             supplierCode: selectedOrder.supplierCode
         };
-        console.log('Sending message from selectPurchaseOrder:', message); // 调试日志
+        console.log('Enviando mensaje desde selectPurchaseOrder:', message); // Log de depuración
         window.opener.postMessage(message, '*');
         window.close();
     }

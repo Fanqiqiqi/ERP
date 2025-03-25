@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>创建应收账款</title>
+    <title>Crear Cuenta por Cobrar</title>
     <link rel="stylesheet" href="receivableslist.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <main class="content">
         <div class="table-header">
-            <button class="back-btn"><i class="fas fa-arrow-left"></i> 返回</button>
-            <h2>应收账款明细列表</h2>
+            <button class="back-btn"><i class="fas fa-arrow-left"></i> Volver</button>
+            <h2>Lista Detalle Ctas. por Cobrar</h2>
             <div class="button-group">
                 <button class="add-btn"><i class="fas fa-plus"></i></button>
                 <button class="save-all-btn"><i class="fas fa-save"></i></button>
@@ -19,28 +19,28 @@
         </div>
         <div class="invoice-info">
             <div class="form-group">
-                <label for="receivableNumber">应收编号:</label>
+                <label for="receivableNumber">Nº Cuenta:</label>
                 <div style="position: relative;">
-                    <input type="text" id="receivableNumber" name="receivableNumber" placeholder="请输入应收编号" required>
-                    <button type="button" id="generateReceivableBtn" class="generate-btn">生成</button>
+                    <input type="text" id="receivableNumber" name="receivableNumber" placeholder="Ingresa nº cuenta" required>
+                    <button type="button" id="generateReceivableBtn" class="generate-btn">Generar</button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="customerCode">客户代码:</label>
+                <label for="customerCode">Cód. Cliente:</label>
                 <select id="customerCode" name="customerCode" required>
-                    <option value="">请选择客户</option>
+                    <option value="">Elige cliente</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="customerName">客户名称:</label>
-                <input type="text" id="customerName" name="customerName" placeholder="请输入客户名称" readonly>
+                <label for="customerName">Nombre Cliente:</label>
+                <input type="text" id="customerName" name="customerName" placeholder="Ingresa nombre cliente" readonly>
             </div>
             <div class="form-group">
-                <label for="invoiceDate">应收日期:</label>
+                <label for="invoiceDate">Fecha Cuenta:</label>
                 <input type="date" id="invoiceDate" name="invoiceDate" required>
             </div>
             <div class="form-group">
-                <label for="dueDate">到期日期:</label>
+                <label for="dueDate">Fecha Venc.:</label>
                 <input type="date" id="dueDate" name="dueDate" required>
             </div>
         </div>
@@ -48,23 +48,23 @@
             <table class="receivables-table">
                 <thead>
                     <tr>
-                        <th>发票号码</th>
-                        <th>金额</th>
-                        <th>已付金额</th>
-                        <th>未付金额</th>
-                        <th>结款日期</th> <!-- 新增列 -->
-                        <th>操作</th>
+                        <th>Nº Factura</th>
+                        <th>Total</th>
+                        <th>Importe Pagado</th>
+                        <th>Importe Pendiente</th>
+                        <th>Fecha Pago</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- 动态加载应收账款明细 -->
+                    <!-- Detalles generados dinámicamente -->
                 </tbody>
             </table>
         </div>
         <div class="totals-section">
-            <h3>应收总额: <span class="grand-total">0.00</span></h3>
+            <h3>Total Cuenta: <span class="grand-total">0.00</span></h3>
             <div id="totals-container">
-                <!-- 动态生成总额信息 -->
+                <!-- Totales generados dinámicamente -->
             </div>
         </div>
     </main>

@@ -1,8 +1,8 @@
 // salesinvoicelist.js
-// 初始化发票数据
+// Inicializar datos de facturas
 let invoiceData = JSON.parse(localStorage.getItem('invoiceData')) || [];
 
-// DOM 元素
+// Elementos del DOM
 const tbody = document.getElementById('invoiceTableBody');
 const createBtn = document.querySelector('.create-btn');
 const searchBtn = document.querySelector('.search-btn');
@@ -11,17 +11,17 @@ const closeFilter = filterPanel.querySelector('.close-filter');
 const filterForm = document.getElementById('filterForm');
 const resetBtn = filterForm.querySelector('.reset-btn');
 
-// 分页相关变量
-const itemsPerPage = 9; // 每页显示9条
-let currentPage = 1; // 当前页码
-let filteredData = [...invoiceData]; // 用于存储筛选后的数据
+// Variables relacionadas con la paginación
+const itemsPerPage = 9; // Mostrar 9 ítems por página
+let currentPage = 1; // Página actual
+let filteredData = [...invoiceData]; // Almacena datos filtrados
 
-// 格式化金额为千位制
+// Formatear monto con separador de miles
 function formatNumber(number) {
-  return Number(number).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return Number(number).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-// 应用筛选条件
+// Aplicar condiciones de filtro
 function applyFilters(formData) {
   const filters = {
     invoiceNumber: formData.get('invoiceNumber')?.toLowerCase().trim(),
@@ -72,7 +72,7 @@ function applyFilters(formData) {
   });
 }
 
-// 更新表格（带分页）
+// Actualizar tabla (con paginación)
 function updateTable() {
   filteredData.sort((a, b) => new Date(b.invoiceDate) - new Date(a.invoiceDate));
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -84,7 +84,7 @@ function updateTable() {
 
   tbody.innerHTML = '';
   currentData.forEach((item, pageIndex) => {
-    const globalIndex = invoiceData.indexOf(item); // 使用原始数据中的索引
+    const globalIndex = invoiceData.indexOf(item); // Usar índice de datos originales
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${item.invoiceNumber}</td>
@@ -94,7 +94,7 @@ function updateTable() {
       <td>${formatNumber(item.invoiceAmount)} €</td>
       <td>
         <span class="action-icon view-icon" data-index="${globalIndex}"><i class="fas fa-eye"></i></span>
-        <span class="action-icon edit-icon" data-index="${globalIndex}"><i class="fas fa-edit"></i></span>
+        <span class="action-icon einvoice-icon" data-index="${globalIndex}" title="Generar factura electrónica"><i class="fas fa-file-invoice"></i></span>
       </td>
     `;
     tbody.appendChild(tr);
@@ -104,15 +104,15 @@ function updateTable() {
   bindActionEvents();
 }
 
-// 更新分页控件
+// Actualizar controles de paginación
 function updatePagination(totalPages) {
   const pagination = document.querySelector('.pagination');
   if (!pagination) return;
 
   pagination.innerHTML = `
-    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-    <span>第 ${currentPage} 页 / 共 ${totalPages} 页</span>
-    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Pág. Anterior</button>
+    <span>Pág. ${currentPage} / Total ${totalPages}</span>
+    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Pág. Siguiente</button>
   `;
 
   pagination.querySelector('.prev-btn').addEventListener('click', () => {
@@ -130,81 +130,88 @@ function updatePagination(totalPages) {
   });
 }
 
-// 保存到 localStorage
+// Guardar en localStorage
 function saveInvoiceData() {
   localStorage.setItem('invoiceData', JSON.stringify(invoiceData));
+  syncAllInvoicesToReceivables(); // 保存后同步所有发票
 }
 
-// 获取客户数据
+// Obtener datos de clientes
 function getCustomers() {
   return JSON.parse(localStorage.getItem('customers') || '[]');
 }
 
-// 显示发票详情的模态框
+// Mostrar detalles de la factura en un modal
 function showInvoiceDetails(index) {
   const invoice = invoiceData[index];
-  const invoiceList = JSON.parse(localStorage.getItem('invoiceList') || '[]');
-  const details = invoiceList.filter(item => item.invoiceNumber === invoice.invoiceNumber);
   const customers = getCustomers();
   const customer = customers.find(c => c.name === invoice.customerName) || {};
 
   let detailsHTML = `
-    <h3>发票详情 - ${invoice.invoiceNumber}</h3>
+    <h3>Detalles de Factura - ${invoice.invoiceNumber}</h3>
     <div class="invoice-info-section">
-      <h4>基本信息</h4>
-      <p><strong>发票号码:</strong> ${invoice.invoiceNumber}</p>
-      <p><strong>发票日期:</strong> ${invoice.invoiceDate}</p>
-      <p><strong>到期日期:</strong> ${invoice.dueDate}</p>
-      <p><strong>发票金额:</strong> ${invoice.invoiceAmount}</p>
+      <h4>Info Básica</h4>
+      <p><strong>Nº de Factura:</strong> ${invoice.invoiceNumber}</p>
+      <p><strong>Fecha de Factura:</strong> ${invoice.invoiceDate}</p>
+      <p><strong>Fecha de Vencimiento:</strong> ${invoice.dueDate}</p>
+      <p><strong>Monto de Factura:</strong> ${formatNumber(invoice.invoiceAmount)} ${invoice.currency || 'Desconocido'}</p>
     </div>
     <div class="customer-info-section">
-      <h4>客户公司信息</h4>
-      <p><strong>公司名称:</strong> ${customer.name || invoice.customerName || '未知'}</p>
-      <p><strong>税号:</strong> ${customer.taxNumber || '未提供'}</p>
-      <p><strong>地址:</strong> ${customer.address || '未提供'}</p>
-      <p><strong>城市:</strong> ${customer.city || '未提供'}</p>
-      <p><strong>省份:</strong> ${customer.province || '未提供'}</p>
-      <p><strong>电话:</strong> ${customer.phone || '未提供'}</p>
+      <h4>Info de la Empresa Cliente</h4>
+      <p><strong>Nombre de la Empresa:</strong> ${customer.name || invoice.customerName || 'Desconocido'}</p>
+      <p><strong>Nº de Impuesto:</strong> ${customer.taxNumber || 'No proporcionado'}</p>
+      <p><strong>Dirección:</strong> ${customer.address || 'No proporcionado'}</p>
+      <p><strong>Ciudad:</strong> ${customer.city || 'No proporcionado'}</p>
+      <p><strong>Provincia:</strong> ${customer.province || 'No proporcionado'}</p>
+      <p><strong>Teléfono:</strong> ${customer.phone || 'No proporcionado'}</p>
     </div>
     <div class="product-details-section">
-      <h4>产品明细</h4>
+      <h4>Detalles de Productos</h4>
       <table class="detail-table">
         <thead>
           <tr>
-            <th>产品代码</th>
-            <th>产品名称</th>
+            <th>Código de Producto</th>
+            <th>Nombre de Producto</th>
             <th>LOTE</th>
-            <th>数量</th>
-            <th>销售价格</th>
-            <th>税率</th>
-            <th>总价</th>
-            <th>货币单位</th>
+            <th>Cantidad</th>
+            <th>Precio de Venta</th>
+            <th>Tasa de Impuesto</th>
+            <th>Total</th>
+            <th>Moneda</th>
           </tr>
         </thead>
         <tbody>
   `;
 
-  details.forEach(item => {
+  if (invoice.items && invoice.items.length > 0) {
+    invoice.items.forEach(item => {
+      detailsHTML += `
+        <tr>
+          <td>${item.productCode || 'Desconocido'}</td>
+          <td>${item.productName || 'Desconocido'}</td>
+          <td>${item.lote || 'Ninguno'}</td>
+          <td>${item.quantity || '0'}</td>
+          <td>${item.salePrice || '0.00'}</td>
+          <td>${item.taxRate || '0'}%</td>
+          <td>${item.totalPrice || '0.00'}</td>
+          <td>${item.currency || invoice.currency || 'Desconocido'}</td>
+        </tr>
+      `;
+    });
+  } else {
     detailsHTML += `
       <tr>
-        <td>${item.productCode || '未知'}</td>
-        <td>${item.productName || '未知'}</td>
-        <td>${item.lote || '无'}</td>
-        <td>${item.quantity || '0'}</td>
-        <td>${item.salePrice || '0.00'}</td>
-        <td>${item.taxRate || '0'}%</td>
-        <td>${item.totalPrice || '0.00'}</td>
-        <td>${item.currency || '未知'}</td>
+        <td colspan="8">Sin datos de detalles de productos</td>
       </tr>
     `;
-  });
+  }
 
   detailsHTML += `
         </tbody>
       </table>
     </div>
     <div class="modal-buttons">
-      <button class="close-btn">关闭</button>
+      <button class="close-btn">Cerrar</button>
     </div>
   `;
 
@@ -219,7 +226,7 @@ function showInvoiceDetails(index) {
   });
 }
 
-// 绑定操作事件
+// Vincular eventos de acción
 function bindActionEvents() {
   document.querySelectorAll('.view-icon').forEach(icon => {
     icon.addEventListener('click', function() {
@@ -228,7 +235,7 @@ function bindActionEvents() {
     });
   });
 
-  document.querySelectorAll('.edit-icon').forEach(icon => {
+  document.querySelectorAll('.einvoice-icon').forEach(icon => {
     icon.addEventListener('click', function() {
       const index = this.getAttribute('data-index');
       window.location.href = `createinvoice.html?invoiceNumber=${encodeURIComponent(invoiceData[index].invoiceNumber)}&edit=true`;
@@ -236,17 +243,17 @@ function bindActionEvents() {
   });
 }
 
-// 显示/隐藏筛选框
+// Mostrar/Ocultar panel de filtros
 function toggleFilterPanel() {
   filterPanel.classList.toggle('active');
 }
 
-// 关闭筛选框
+// Cerrar panel de filtros
 function closeFilterPanel() {
   filterPanel.classList.remove('active');
 }
 
-// 重置筛选表单
+// Restablecer formulario de filtros
 function resetFilterForm() {
   filterForm.reset();
   filteredData = [...invoiceData];
@@ -254,8 +261,98 @@ function resetFilterForm() {
   updateTable();
 }
 
+// Generar número de cuenta por cobrar (与 receivableslist.js 一致)
+function generateReceivableNumber() {
+  const codeRules = JSON.parse(localStorage.getItem('codeRules') || '{}');
+  const receivableRule = codeRules['receivables'] || { prefix: 'REC', digits: 4, suffix: '', counter: 0 };
+  const receivablesData = JSON.parse(localStorage.getItem('receivablesData') || '[]');
+  const existingNumbers = receivablesData.map(r => r.receivableNo);
+
+  let counter = receivableRule.counter || 0;
+  let newNumber;
+  do {
+    counter++;
+    const number = String(counter).padStart(receivableRule.digits, '0');
+    newNumber = `${receivableRule.prefix}${number}${receivableRule.suffix}`;
+  } while (existingNumbers.includes(newNumber));
+
+  receivableRule.counter = counter;
+  codeRules['receivables'] = receivableRule;
+  localStorage.setItem('codeRules', JSON.stringify(codeRules));
+  return newNumber;
+}
+
+// 同步所有发票到应收账款
+function syncAllInvoicesToReceivables() {
+  invoiceData.forEach(invoice => {
+    syncInvoiceToReceivables(invoice);
+  });
+}
+
+// 同步单个发票到应收账款
+function syncInvoiceToReceivables(invoice) {
+  let receivablesData = JSON.parse(localStorage.getItem('receivablesData') || '[]');
+  let receivablesList = JSON.parse(localStorage.getItem('receivablesList') || '[]');
+
+  // 检查是否已存在该发票的应收账款
+  const existingReceivable = receivablesData.find(r => r.receivableNo === `REC-${invoice.invoiceNumber}`);
+  if (existingReceivable) {
+    // 更新现有记录
+    existingReceivable.invoiceDate = invoice.invoiceDate;
+    existingReceivable.dueDate = invoice.dueDate;
+    existingReceivable.customerName = invoice.customerName;
+    existingReceivable.amount = invoice.invoiceAmount;
+    existingReceivable.currency = invoice.currency || '€';
+
+    const existingDetail = receivablesList.find(r => r.invoiceNo === invoice.invoiceNumber);
+    if (existingDetail) {
+      existingDetail.amount = invoice.invoiceAmount;
+      existingDetail.unpaidAmount = invoice.invoiceAmount - existingDetail.paidAmount;
+      existingDetail.invoiceDate = invoice.invoiceDate;
+      existingDetail.dueDate = invoice.dueDate;
+      existingDetail.customerName = invoice.customerName;
+      existingDetail.currency = invoice.currency || '€';
+    }
+  } else {
+    // 生成新的应收账款编号
+    const receivableNo = `REC-${invoice.invoiceNumber}`; // 使用发票号生成唯一编号
+
+    const receivable = {
+      receivableNo: receivableNo,
+      invoiceDate: invoice.invoiceDate,
+      dueDate: invoice.dueDate,
+      customerName: invoice.customerName,
+      amount: invoice.invoiceAmount,
+      status: 'No Pagado',
+      currency: invoice.currency || '€'
+    };
+
+    const receivableDetail = {
+      invoiceNo: invoice.invoiceNumber,
+      amount: invoice.invoiceAmount,
+      paidAmount: 0,
+      unpaidAmount: invoice.invoiceAmount,
+      paymentDate: null,
+      receivableNo: receivableNo,
+      customerCode: '', // 可从客户数据获取
+      customerName: invoice.customerName,
+      invoiceDate: invoice.invoiceDate,
+      dueDate: invoice.dueDate,
+      status: 'No Pagado',
+      currency: invoice.currency || '€'
+    };
+
+    receivablesData.push(receivable);
+    receivablesList.push(receivableDetail);
+  }
+
+  localStorage.setItem('receivablesData', JSON.stringify(receivablesData));
+  localStorage.setItem('receivablesList', JSON.stringify(receivablesList));
+}
+
 // 初始化页面
 function init() {
+  syncAllInvoicesToReceivables(); // 初始化时同步现有发票
   updateTable();
 
   createBtn.addEventListener('click', () => {
@@ -295,7 +392,19 @@ function init() {
   filterPanel.addEventListener('click', (e) => {
     e.stopPropagation();
   });
+
+  // 处理从 createinvoice.html 返回的新发票
+  const urlParams = new URLSearchParams(window.location.search);
+  const newInvoice = urlParams.get('newInvoice');
+  if (newInvoice) {
+    const invoice = JSON.parse(decodeURIComponent(newInvoice));
+    if (!invoiceData.some(i => i.invoiceNumber === invoice.invoiceNumber)) { // 避免重复添加
+      invoiceData.push(invoice);
+      saveInvoiceData(); // 保存并同步
+      updateTable();
+    }
+  }
 }
 
-// 页面加载时初始化
+// 初始化 al cargar la página
 document.addEventListener('DOMContentLoaded', init);

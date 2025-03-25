@@ -1,6 +1,4 @@
-
-
-// 模态框及相关元素
+// Modal y elementos relacionados
 const modal = document.getElementById('addScategoryModal');
 const modalTitle = modal.querySelector('.modal-content h3');
 const addBtn = document.querySelector('.add-btn');
@@ -10,33 +8,33 @@ const scategoryCodeInput = document.getElementById('scategoryCode');
 const scategoryNameInput = document.getElementById('scategoryName');
 const tbody = document.querySelector('.category-table tbody');
 
-// 分页相关变量
-const itemsPerPage = 9; // 每页显示9条
-let currentPage = 1; // 当前页码
+// Variables de paginación
+const itemsPerPage = 9; // Mostrar 9 ítems por página
+let currentPage = 1; // Página actual
 
 let isEditing = false;
 let editingRow = null;
 
-// 加载供应商类别数据（带分页）
+// Cargar categorías de proveedores (con paginación)
 function loadScategories() {
   const scategories = JSON.parse(localStorage.getItem('scategories') || '[]');
   tbody.innerHTML = '';
 
-  // 计算总页数
+  // Calcular total de páginas
   const totalPages = Math.ceil(scategories.length / itemsPerPage);
 
-  // 确保当前页码有效
+  // Asegurar que la página actual sea válida
   if (currentPage < 1) currentPage = 1;
   if (currentPage > totalPages) currentPage = totalPages;
 
-  // 计算当前页的数据范围
+  // Calcular rango de datos para la página actual
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, scategories.length);
   const currentData = scategories.slice(startIndex, endIndex);
 
   if (Array.isArray(scategories)) {
     currentData.forEach((scategory, pageIndex) => {
-      const globalIndex = startIndex + pageIndex; // 计算全局索引
+      const globalIndex = startIndex + pageIndex; // Calcular índice global
       if (scategory.code && scategory.name) {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -52,13 +50,13 @@ function loadScategories() {
     });
   }
 
-  // 更新分页控件
+  // Actualizar controles de paginación
   updatePagination(totalPages);
 
   bindIconEvents();
 }
 
-// 更新分页控件
+// Actualizar controles de paginación
 function updatePagination(totalPages) {
   let pagination = document.querySelector('.pagination');
   if (!pagination) {
@@ -68,9 +66,9 @@ function updatePagination(totalPages) {
   }
 
   pagination.innerHTML = `
-    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>上一页</button>
-    <span>第 ${currentPage} 页 / 共 ${totalPages} 页</span>
-    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>下一页</button>
+    <button class="page-btn prev-btn" ${currentPage === 1 ? 'disabled' : ''}>Pág. Anterior</button>
+    <span>Pág. ${currentPage} / Total ${totalPages}</span>
+    <button class="page-btn next-btn" ${currentPage === totalPages ? 'disabled' : ''}>Pág. Siguiente</button>
   `;
 
   pagination.querySelector('.prev-btn').addEventListener('click', () => {
@@ -88,6 +86,7 @@ function updatePagination(totalPages) {
   });
 }
 
+// Guardar categorías
 function saveScategories() {
   const rows = Array.from(tbody.querySelectorAll('tr'));
   const scategories = rows.map(row => ({
@@ -97,16 +96,16 @@ function saveScategories() {
   localStorage.setItem('scategories', JSON.stringify(scategories));
 }
 
-// 添加类别 - 显示模态框
+// Agregar categoría - Mostrar modal
 addBtn.addEventListener('click', function() {
   isEditing = false;
-  modalTitle.textContent = '添加新类别';
+  modalTitle.textContent = 'Agregar Nueva Categoría';
   scategoryForm.reset();
   scategoryCodeInput.removeAttribute('readonly');
   modal.style.display = 'flex';
 });
 
-// 取消按钮 - 关闭模态框
+// Botón cancelar - Cerrar modal
 cancelBtn.addEventListener('click', function() {
   modal.style.display = 'none';
   scategoryForm.reset();
@@ -114,7 +113,7 @@ cancelBtn.addEventListener('click', function() {
   editingRow = null;
 });
 
-// 保存或更新类别
+// Guardar o actualizar categoría
 scategoryForm.addEventListener('submit', function(e) {
   e.preventDefault();
   const code = scategoryCodeInput.value.trim();
@@ -125,7 +124,7 @@ scategoryForm.addEventListener('submit', function(e) {
     } else {
       const existingCodes = Array.from(tbody.querySelectorAll('td:first-child')).map(td => td.textContent);
       if (existingCodes.includes(code)) {
-        alert('类别编码已存在，请使用唯一的编码！');
+        alert('¡El código de categoría ya existe, usa un código único!');
         return;
       }
       const newRow = document.createElement('tr');
@@ -144,11 +143,11 @@ scategoryForm.addEventListener('submit', function(e) {
     scategoryForm.reset();
     isEditing = false;
     editingRow = null;
-    loadScategories(); // 刷新表格以更新分页
+    loadScategories(); // Refrescar tabla para actualizar paginación
   }
 });
 
-// 绑定操作图标的事件
+// Vincular eventos a los iconos de acción
 function bindIconEvents() {
   document.querySelectorAll('.view-icon').forEach(icon => {
     icon.removeEventListener('click', viewHandler);
@@ -164,8 +163,8 @@ const viewHandler = function() {
   const index = this.getAttribute('data-index');
   const scategories = JSON.parse(localStorage.getItem('scategories') || '[]');
   isEditing = true;
-  editingRow = tbody.children[index - (currentPage - 1) * itemsPerPage]; // 调整为当前页的相对索引
-  modalTitle.textContent = '编辑类别';
+  editingRow = tbody.children[index - (currentPage - 1) * itemsPerPage]; // Ajustar al índice relativo de la página
+  modalTitle.textContent = 'Editar Categoría';
   scategoryCodeInput.value = scategories[index].code;
   scategoryNameInput.value = scategories[index].name;
   scategoryCodeInput.setAttribute('readonly', 'readonly');
@@ -176,7 +175,7 @@ const deleteHandler = function() {
   const index = this.getAttribute('data-index');
   const scategories = JSON.parse(localStorage.getItem('scategories') || '[]');
   const code = scategories[index].code;
-  if (confirm(`确定删除类别：${code} 吗？`)) {
+  if (confirm(`¿Seguro que quieres eliminar la categoría: ${code}?`)) {
     scategories.splice(index, 1);
     localStorage.setItem('scategories', JSON.stringify(scategories));
     loadScategories();
