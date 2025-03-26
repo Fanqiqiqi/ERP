@@ -129,7 +129,7 @@ body {
     border-left: 4px solid #00b4d8;
 }
 
-/* Estilo modal (修改部分) */
+/* Estilo modal */
 .modal {
     display: none;
     position: fixed;
@@ -346,7 +346,7 @@ body {
 .dropdown-option {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between; /* Ensures text and icon are spaced apart */
     padding: 0.5rem 1rem;
     color: #333;
     cursor: pointer;
@@ -356,6 +356,54 @@ body {
 
 .dropdown-option:hover {
     background: #f0f0f0;
+}
+
+/* Stylish "i" Icon */
+.info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, #3498db, #2980b9); /* Gradient background */
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: italic; /* Stylish italic "i" */
+    border-radius: 50%; /* Circular shape */
+    margin-left: 8px; /* Space between text and icon */
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+/* Hover effect for interactivity */
+.dropdown-option:hover .info-icon {
+    transform: scale(1.1); /* Slight zoom on hover */
+    background: linear-gradient(135deg, #2980b9, #1f6692); /* Darker gradient on hover */
+}
+
+/* Tooltip styles */
+.tooltip {
+    position: absolute;
+    background: #2e3b3e; /* Dark background matching sidebar */
+    color: #fff; /* White text */
+    padding: 8px 12px; /* Comfortable padding */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 12px; /* Readable but compact */
+    font-weight: normal; /* Normal weight for readability */
+    font-style: normal; /* Remove italic for clarity */
+    white-space: nowrap; /* Prevent text wrapping */
+    z-index: 2001; /* Higher than modal (2000) and dropdown (1001) */
+}
+
+.tooltip::before {
+    content: "";
+    position: absolute;
+    top: 50%; /* Align with the icon */
+    right: 100%; /* Position to the left of the tooltip */
+    transform: translateY(-50%); /* Center vertically */
+    border-width: 5px; /* Size of the triangle */
+    border-style: solid;
+    border-color: transparent #2e3b3e transparent transparent; /* Triangle pointing left */
 }
 
 /* Next Button */
